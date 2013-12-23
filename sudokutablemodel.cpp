@@ -34,6 +34,9 @@ int SudokuTableModel::columnCount(const QModelIndex &/*parent*/ ) const
 // data
 QVariant SudokuTableModel::data(const QModelIndex &index, int role) const
 {
+	if (!index.isValid())
+		return QVariant();
+
 	int row = index.row();
 	int col = index.column();
 	// generate a log message when this method gets called
@@ -80,14 +83,15 @@ QVariant SudokuTableModel::data(const QModelIndex &index, int role) const
 // set data
 bool SudokuTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-	int row = index.row();
-	int col = index.column();
-	if (role == Qt::EditRole)
+	if (index.isValid() && role == Qt::EditRole)
 	{
 		//save value from editor to member m_gridData
-		mGridData[dd(row,col)] = value.toString();
+		mGridData[dd(index.row(),index.column())] = value.toString();
+
+		emit dataChanged(index, index);
+		return true;
 	}
-	return true;
+	return false;
 }
 
 // flags
@@ -103,3 +107,23 @@ Qt::ItemFlags SudokuTableModel::flags(const QModelIndex & index) const
 
 }
 
+
+// set given data
+void SudokuTableModel::setGivenData(const int *givenData){
+	if(givenData != NULL){
+		memcpy(mGivenData, givenData, N4*sizeof(int));
+	}
+	for(int i = 0; i < N4; i++){
+		if(mGivenData[i] == 0) {
+			mGridData[i] = "";
+		}else{
+			mGridData[i] = QString::number(mGivenData[i]);
+		}
+	}
+	reset();
+}
+
+// get given data
+int *SudokuTableModel::givenData() const{
+	return mGivenData;
+}

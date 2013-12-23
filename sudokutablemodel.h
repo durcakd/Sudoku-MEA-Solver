@@ -25,7 +25,8 @@ public:
 				 int role = Qt::EditRole);
 	Qt::ItemFlags flags(const QModelIndex & index) const ;
 
-
+	void setGivenData(const int *givenData);
+	int *givenData() const;
 
 private:
 	QString *mGridData;

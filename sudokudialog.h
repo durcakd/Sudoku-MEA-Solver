@@ -19,8 +19,13 @@ public:
 signals:
 
 public slots:
+	bool open();
 
 private:
+	bool openFile(const QString &fileName);
+
+
+
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
 
@@ -37,6 +42,10 @@ private:
 	QLineEdit	*milestonePeriodLE;
 	QLineEdit	*localTrialsLE;
 	QLineEdit	*maxCallsLE;
+
+
+	int *givenData;
+
 
 	};
 

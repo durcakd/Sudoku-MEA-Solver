@@ -1,10 +1,14 @@
 #include "sudokudialog.h"
 #include <QHeaderView>
+#include <QFileDialog>
+#include <QDebug>
 
 
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
+	givenData = new int[81];
+
 
 	tableView = new QTableView;
 	sudokuTableModel = new SudokuTableModel;
@@ -82,5 +86,53 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	setWindowTitle(tr("Sudoku MEA Solver"));
 
 	//
+	connect(this->openFileB, SIGNAL(clicked()),
+			this, SLOT(open()));
+}
 
+
+bool SudokuDialog::open(){
+	QString fileFilters = tr("Text files (*.txt)\n"
+							 "Sudoku files (*.sud)\n"
+							 "All files (*)");
+
+	QString fileName =
+			QFileDialog::getOpenFileName(this, tr("Open"), ".",
+										 fileFilters);
+	if (fileName.isEmpty())
+		return false;
+	if( openFile(fileName)){
+		sudokuTableModel->setGivenData(givenData);
+		return true;
+	}
+	return false;
+}
+
+// open file
+bool SudokuDialog::openFile(const QString &fileName){
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly)) {
+		qDebug() << "Cannot open file for reading: "
+				 << qPrintable(file.errorString());
+		return false;
+	}
+
+	QTextStream in(&file);
+	int counter = 0;
+
+	while (!in.atEnd()) {
+		QString line = in.readLine();
+		QStringList fields = line.trimmed().split(' ');
+		//qDebug() << line.trimmed() << " size: " << fields.size();
+		if (fields.size() == 9) {
+
+			for (int j = 0; j < 9; j++){
+				givenData[counter++] = fields.at(j).toInt();
+			}
+			if(counter >= 81){
+				return true;
+			}
+		}
+	}
+	return true;
 }
