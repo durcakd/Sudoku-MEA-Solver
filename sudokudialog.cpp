@@ -21,6 +21,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	tableView->verticalHeader()->setVisible(false);
 	tableView->horizontalHeader()->setVisible(false);
 
+	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
 	openFileB	= new QPushButton(tr("Open from file"));
 	saveToFileB	= new QPushButton(tr("Save to File"));

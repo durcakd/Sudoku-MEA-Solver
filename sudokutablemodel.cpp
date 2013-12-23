@@ -86,7 +86,20 @@ bool SudokuTableModel::setData(const QModelIndex & index, const QVariant & value
 	if (index.isValid() && role == Qt::EditRole)
 	{
 		//save value from editor to member m_gridData
-		mGridData[dd(index.row(),index.column())] = value.toString();
+
+		//QRegExp regExp("[A-Za-z][1-9][0-9]{0,2}");
+		//lineEdit->setValidator(new QRegExpValidator(regExp, this));
+		QString str = value.toString();
+		bool ok = false;
+		int num = str.toInt(&ok);
+
+		if(str.size() != 1 || !ok){
+			return false;
+		} else if(num == 0){
+			str = "";
+		}
+
+		mGridData[dd(index.row(),index.column())] = str;
 
 		emit dataChanged(index, index);
 		return true;
