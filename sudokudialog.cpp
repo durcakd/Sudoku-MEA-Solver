@@ -1,10 +1,13 @@
 #include "sudokudialog.h"
 
+
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
 
 	tableView = new QTableView;
+	sudokuTableModel = new SudokuTableModel;
+	tableView->setModel(sudokuTableModel);
 
 	openFileB	= new QPushButton(tr("Open from file"));
 	saveToFileB	= new QPushButton(tr("Save to File"));

@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QLineEdit>
 
+#include "sudokutablemodel.h"
+
 class SudokuDialog : public QDialog
 	{
 	Q_OBJECT
@@ -20,6 +22,7 @@ public slots:
 
 private:
 	QTableView	*tableView;
+	SudokuTableModel *sudokuTableModel;
 
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
