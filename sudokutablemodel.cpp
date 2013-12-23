@@ -7,7 +7,16 @@
 SudokuTableModel::SudokuTableModel(QObject *parent)
 	: QAbstractTableModel(parent)
 {
-	m_gridData = new QString[ROWS * COLS];
+	mGridData = new QString[ROWS * COLS];
+	mGivenData = new int[ROWS * COLS];
+	for(int i = 0; i < N4; i++){
+		mGivenData[i] = 0;
+		mGridData[i] = "";
+		if(i % 5 == 0) {
+			mGivenData[i] = 5;
+			mGridData[i] = "5";
+		}
+	}
 }
 
 // row count
@@ -28,45 +37,42 @@ QVariant SudokuTableModel::data(const QModelIndex &index, int role) const
 	int row = index.row();
 	int col = index.column();
 	// generate a log message when this method gets called
-	qDebug() << QString("%1 x %2 ->r  %3")
-				.arg(row).arg(col).arg(role);
+	//qDebug() << QString("%1 x %2 ->r  %3").arg(row).arg(col).arg(role);
 
 	switch(role) {
 	case Qt::DisplayRole:
-		if (row == 0 && col == 1) return QString("<--left");
-		if (row == 1 && col == 1) return QString("right-->");
-
-		return m_gridData[dd(row,col)];
+		return mGridData[dd(row,col)];
 		break;
+
+		// change font only for given cell
 	case Qt::FontRole:
-		if (row == 0 && col == 0) //change font only for cell(0,0)
-		{
+		if (mGivenData[dd(row,col)] != 0) {
 			QFont boldFont;
 			boldFont.setBold(true);
 			return boldFont;
 		}
 		break;
+
+		// background NxN cells together
 	case Qt::BackgroundRole:
-
-		if (row == 1 && col == 2)  //change background only for cell(1,2)
-		{
-			QBrush redBackground(Qt::red);
-			return redBackground;
+		if(row < 3 || row > 5){
+			if(col < 3 || col > 5){
+				return QBrush(Qt::gray);
+			}
+		} else if(col > 2 && col < 6){
+			return QBrush(Qt::gray);
 		}
 		break;
+
+		// all cell are centered
 	case Qt::TextAlignmentRole:
-
-		if (row == 1 && col == 1) //change text alignment only for cell(1,1)
-		{
-			return Qt::AlignRight + Qt::AlignVCenter;
-		}
+		return Qt::AlignCenter | Qt::AlignVCenter;
 		break;
-	case Qt::CheckStateRole:
 
-		if (row == 1 && col == 0) //add a checkbox to cell(1,0)
-		{
-			return Qt::Checked;
-		}
+		/*//add a checkbox to cell
+	case Qt::CheckStateRole:
+		return Qt::Checked;
+*/
 	}
 	return QVariant();
 }
@@ -79,7 +85,7 @@ bool SudokuTableModel::setData(const QModelIndex & index, const QVariant & value
 	if (role == Qt::EditRole)
 	{
 		//save value from editor to member m_gridData
-		m_gridData[dd(row,col)] = value.toString();
+		mGridData[dd(row,col)] = value.toString();
 	}
 	return true;
 }
@@ -87,6 +93,13 @@ bool SudokuTableModel::setData(const QModelIndex & index, const QVariant & value
 // flags
 Qt::ItemFlags SudokuTableModel::flags(const QModelIndex & index) const
 {
-	return Qt::ItemIsSelectable |  Qt::ItemIsEditable | Qt::ItemIsEnabled ;
+	int row = index.row();
+	int col = index.column();
+	if (mGivenData[dd(row,col)] == 0) {
+		return Qt::ItemIsSelectable |  Qt::ItemIsEditable | Qt::ItemIsEnabled ;
+	} else {
+		return  Qt::ItemIsEnabled  ;
+	}
+
 }
 

@@ -5,8 +5,11 @@
 
 #define dd(r,c) ((r)*COLS + (c))
 
-enum { COLS= 9,
-	   ROWS= 9 };
+enum { N	= 3 ,
+	   N2	= N*N ,
+	   N4	= N2*N2 ,
+	   COLS	= N2 ,
+	   ROWS = N2 };
 
 class SudokuTableModel : public QAbstractTableModel
 	{
@@ -22,8 +25,11 @@ public:
 				 int role = Qt::EditRole);
 	Qt::ItemFlags flags(const QModelIndex & index) const ;
 
+
+
 private:
-	QString *m_gridData;//= new QString[81];
+	QString *mGridData;
+	int *mGivenData;
 
 
 	};

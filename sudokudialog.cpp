@@ -1,4 +1,5 @@
 #include "sudokudialog.h"
+#include <QHeaderView>
 
 
 SudokuDialog::SudokuDialog(QWidget *parent) :
@@ -8,6 +9,14 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	tableView = new QTableView;
 	sudokuTableModel = new SudokuTableModel;
 	tableView->setModel(sudokuTableModel);
+	//tableView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	tableView->resizeColumnsToContents();
+	tableView->resizeRowsToContents();
+	tableView->setFixedHeight(tableView->rowHeight(0)*9 + 2);
+	tableView->setFixedWidth(tableView->columnWidth(0)*9 + 2);
+	tableView->verticalHeader()->setVisible(false);
+	tableView->horizontalHeader()->setVisible(false);
+
 
 	openFileB	= new QPushButton(tr("Open from file"));
 	saveToFileB	= new QPushButton(tr("Save to File"));
