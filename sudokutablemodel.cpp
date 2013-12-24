@@ -87,8 +87,6 @@ bool SudokuTableModel::setData(const QModelIndex & index, const QVariant & value
 	{
 		//save value from editor to member m_gridData
 
-		//QRegExp regExp("[A-Za-z][1-9][0-9]{0,2}");
-		//lineEdit->setValidator(new QRegExpValidator(regExp, this));
 		QString str = value.toString();
 		bool ok = false;
 		int num = str.toInt(&ok);

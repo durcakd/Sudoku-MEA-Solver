@@ -1,3 +1,10 @@
+/**
+  \author Dávid Durčák
+  \date 20. December 2013
+  Project: Sudoku MEA Solver
+  */
+
+
 #include <QApplication>
 
 #include "sudokudialog.h"

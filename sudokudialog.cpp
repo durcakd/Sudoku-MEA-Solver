@@ -2,8 +2,10 @@
 #include <QHeaderView>
 #include <QFileDialog>
 #include <QDebug>
+#include <QGroupBox>
+#include <QGridLayout>
 
-
+// constructor
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
@@ -26,7 +28,10 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	openFileB	= new QPushButton(tr("Open from file"));
 	saveToFileB	= new QPushButton(tr("Save to File"));
 	startB		= new QPushButton(tr("Start"));
-	statusBarLE		= new QLineEdit;
+	parametersB	= new QPushButton(tr("Par"));
+	listB		= new QPushButton(tr("Info"));
+	statusBarLE	= new QLineEdit;
+	listWidged	= new QListWidget;
 
 	popSizeLE		= new QLineEdit;
 	elitSizeLE		= new QLineEdit;
@@ -46,52 +51,144 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 
 	// layovting
-	QVBoxLayout *labelLayout = new QVBoxLayout;
-	labelLayout->addWidget( popSizeL );
-	labelLayout->addWidget( elitSizeL );
-	labelLayout->addWidget( lifespanL );
-	labelLayout->addWidget( birthPeriodL );
-	labelLayout->addWidget( milestonePeriodL );
-	labelLayout->addWidget( localTrialsL );
-	labelLayout->addWidget( maxCallsL );
+	QGridLayout *paramLayout = new QGridLayout;
+	paramLayout->addWidget( popSizeL,0,0 );
+	paramLayout->addWidget( elitSizeL,1,0 );
+	paramLayout->addWidget( lifespanL,2,0 );
+	paramLayout->addWidget( birthPeriodL,3,0 );
+	paramLayout->addWidget( milestonePeriodL,4,0 );
+	paramLayout->addWidget( localTrialsL,5,0 );
+	paramLayout->addWidget( maxCallsL,6,0 );
+	//labelLayout->addStretch();
 
-	QVBoxLayout *editLineLayout = new QVBoxLayout;
-	editLineLayout->addWidget( popSizeLE );
-	editLineLayout->addWidget( elitSizeLE );
-	editLineLayout->addWidget( lifespanLE );
-	editLineLayout->addWidget( birthPeriodLE );
-	editLineLayout->addWidget( milestonePeriodLE );
-	editLineLayout->addWidget( localTrialsLE );
-	editLineLayout->addWidget( maxCallsLE );
+	paramLayout->addWidget( popSizeLE,0,1 );
+	paramLayout->addWidget( elitSizeLE,1,1 );
+	paramLayout->addWidget( lifespanLE,2,1 );
+	paramLayout->addWidget( birthPeriodLE,3,1 );
+	paramLayout->addWidget( milestonePeriodLE,4,1 );
+	paramLayout->addWidget( localTrialsLE,5,1 );
+	paramLayout->addWidget( maxCallsLE,6,1 );
+	//editLineLayout->addStretch();
 
-	QVBoxLayout *buttonLayout = new QVBoxLayout;
-	buttonLayout->addWidget( openFileB );
-	buttonLayout->addWidget( saveToFileB );
-	buttonLayout->addWidget( startB );
-	buttonLayout->addStretch();
+	QGroupBox *parametersGroup = new QGroupBox("MEA parameters" );
+	parametersGroup->setLayout(paramLayout);
+
 
 	QHBoxLayout *controlLayout = new QHBoxLayout;
-	controlLayout->addLayout( labelLayout );
-	controlLayout->addLayout( editLineLayout );
-	controlLayout->addLayout( buttonLayout );
+	controlLayout->addWidget( tableView );
+	controlLayout->addWidget( parametersGroup);
+
+	// ----
+	QHBoxLayout *buttonLayout = new QHBoxLayout;
+	buttonLayout->addWidget( openFileB );
+	buttonLayout->addWidget( startB );
+	buttonLayout->addStretch();
+	buttonLayout->addWidget( parametersB );
+
+	QHBoxLayout *button2Layout = new QHBoxLayout;
+	button2Layout->addWidget( saveToFileB );
+	button2Layout->addStretch();
+	button2Layout->addWidget( listB );
+	// -----
+
 
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addWidget( tableView );
 	mainLayout->addLayout( controlLayout );
+	mainLayout->addLayout( buttonLayout );
+	mainLayout->addLayout( button2Layout );
 	mainLayout->addWidget( statusBarLE );
+	mainLayout->addWidget( listWidged );
 
 	setLayout(mainLayout);
-
+	layout()->setSizeConstraint(QLayout::SetFixedSize);
 	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
-
 	//
+	parametersB->setCheckable(true);
+	parametersGroup->hide();
+
+	listB->setCheckable(true);
+	listWidged->hide();
+
+
+	connect( this->parametersB, SIGNAL(toggled(bool)),
+			 parametersGroup, SLOT(setVisible(bool)));
+	connect( listB, SIGNAL(toggled(bool)),
+			 listWidged, SLOT(setVisible(bool)));
+
 	connect(this->openFileB, SIGNAL(clicked()),
 			this, SLOT(open()));
+
+
+	// parameter's line edit seting validator
+	QIntValidator *validator = new QIntValidator(1, 1000000000, this);
+	popSizeLE->setValidator(validator);
+	elitSizeLE->setValidator(validator);
+	lifespanLE->setValidator(validator);
+	birthPeriodLE->setValidator(validator);
+	milestonePeriodLE->setValidator(validator);
+	localTrialsLE->setValidator(validator);
+	maxCallsLE->setValidator(validator);
+
+	// connect parameter's line edit to change parameter's variables
+	connect( popSizeLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_popSizeLE_textChanged(QString)));
+	connect( elitSizeLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_elitSizeLE_textChanged(QString)));
+	connect( lifespanLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_lifespanLE_textChanged(QString)));
+	connect( birthPeriodLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_birthPeriodLE_textChanged(QString)));
+	connect( milestonePeriodLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_milestonePeriodLE_textChanged(QString)));
+	connect( localTrialsLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_localTrialsLE_textChanged(QString)));
+	connect( maxCallsLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_maxCallsLE_textChanged(QString)));
+
+}
+
+// SLOTs for parametre's line edits to change parameters variables
+void SudokuDialog::on_popSizeLE_textChanged(const QString &str){
+	if(popSizeLE->hasAcceptableInput()){
+		popSize = str.toInt();
+	}
+}
+void SudokuDialog::on_elitSizeLE_textChanged(const QString &str){
+	if(elitSizeLE->hasAcceptableInput()){
+		elitSize = str.toInt();
+	}
+}
+void SudokuDialog::on_lifespanLE_textChanged(const QString &str){
+	if(lifespanLE->hasAcceptableInput()){
+		lifespan = str.toInt();
+	}
+}
+void SudokuDialog::on_birthPeriodLE_textChanged(const QString &str){
+	if(birthPeriodLE->hasAcceptableInput()){
+		birthPeriod = str.toInt();
+	}
+}
+void SudokuDialog::on_milestonePeriodLE_textChanged(const QString &str){
+	if(milestonePeriodLE->hasAcceptableInput()){
+		milestonePeriod = str.toInt();
+	}
+}
+void SudokuDialog::on_localTrialsLE_textChanged(const QString &str){
+	if(localTrialsLE->hasAcceptableInput()){
+		localTrials = str.toInt();
+	}
+}
+void SudokuDialog::on_maxCallsLE_textChanged(const QString &str){
+	if(maxCallsLE->hasAcceptableInput()){
+		maxCalls = str.toInt();
+	}
 }
 
 
+
+// open SLOT
 bool SudokuDialog::open(){
 	QString fileFilters = tr("Text files (*.txt)\n"
 							 "Sudoku files (*.sud)\n"
