@@ -33,6 +33,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	statusBarLE	= new QLineEdit;
 	listWidged	= new QListWidget;
 
+
 	popSizeLE		= new QLineEdit;
 	elitSizeLE		= new QLineEdit;
 	lifespanLE		= new QLineEdit;
@@ -111,7 +112,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	listB->setCheckable(true);
 	listWidged->hide();
 
-
 	connect( this->parametersB, SIGNAL(toggled(bool)),
 			 parametersGroup, SLOT(setVisible(bool)));
 	connect( listB, SIGNAL(toggled(bool)),
@@ -187,6 +187,12 @@ void SudokuDialog::on_maxCallsLE_textChanged(const QString &str){
 }
 
 
+void SudokuDialog::addStrToListWidged(const QString &str){
+	if(!str.isEmpty()){
+		listWidged->addItem(str);
+		listWidged->scrollToBottom();
+	}
+}
 
 // open SLOT
 bool SudokuDialog::open(){

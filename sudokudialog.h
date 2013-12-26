@@ -21,6 +21,7 @@ signals:
 
 public slots:
 	bool open();
+	void addStrToListWidged(const QString &str);
 
 private slots:
 	void on_popSizeLE_textChanged(const QString &str);
