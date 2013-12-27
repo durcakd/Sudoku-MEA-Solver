@@ -1,9 +1,9 @@
 #include "sudokudialog.h"
 #include <QHeaderView>
-#include <QFileDialog>
 #include <QDebug>
 #include <QGroupBox>
 #include <QGridLayout>
+#include <QFileDialog>
 
 // constructor
 SudokuDialog::SudokuDialog(QWidget *parent) :
@@ -14,16 +14,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	tableView = new QTableView;
 	sudokuTableModel = new SudokuTableModel;
-	tableView->setModel(sudokuTableModel);
-	//tableView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	tableView->resizeColumnsToContents();
-	tableView->resizeRowsToContents();
-	tableView->setFixedHeight(tableView->rowHeight(0)*9 + 2);
-	tableView->setFixedWidth(tableView->columnWidth(0)*9 + 2);
-	tableView->verticalHeader()->setVisible(false);
-	tableView->horizontalHeader()->setVisible(false);
-
-	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
 	openFileB	= new QPushButton(tr("Open from file"));
 	saveToFileB	= new QPushButton(tr("Save to File"));
@@ -117,9 +107,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( listB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
 
-	connect(this->openFileB, SIGNAL(clicked()),
-			this, SLOT(open()));
-
 
 	// parameter's line edit seting validator
 	QIntValidator *validator = new QIntValidator(1, 1000000000, this);
@@ -147,6 +134,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( maxCallsLE, SIGNAL(textChanged(QString)),
 			 this, SLOT(on_maxCallsLE_textChanged(QString)));
 
+	// contect slots
+	connect( openFileB, SIGNAL(clicked()),
+			 this, SLOT(open()));
 }
 
 // SLOTs for parametre's line edits to change parameters variables
@@ -186,13 +176,27 @@ void SudokuDialog::on_maxCallsLE_textChanged(const QString &str){
 	}
 }
 
+void SudokuDialog::setTableModel(QAbstractTableModel *model ) const{
+	tableView->setModel( model );
+	//tableView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	tableView->resizeColumnsToContents();
+	tableView->resizeRowsToContents();
+	tableView->setFixedHeight(tableView->rowHeight(0)*9 + 2);
+	tableView->setFixedWidth(tableView->columnWidth(0)*9 + 2);
+	tableView->verticalHeader()->setVisible(false);
+	tableView->horizontalHeader()->setVisible(false);
 
+	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+
+}
+// SLOT add str to list widged
 void SudokuDialog::addStrToListWidged(const QString &str){
 	if(!str.isEmpty()){
 		listWidged->addItem(str);
 		listWidged->scrollToBottom();
 	}
 }
+
 
 // open SLOT
 bool SudokuDialog::open(){
@@ -201,42 +205,11 @@ bool SudokuDialog::open(){
 							 "All files (*)");
 
 	QString fileName =
-			QFileDialog::getOpenFileName(this, tr("Open"), ".",
-										 fileFilters);
-	if (fileName.isEmpty())
-		return false;
-	if( openFile(fileName)){
-		sudokuTableModel->setGivenData(givenData);
-		return true;
-	}
-	return false;
-}
-
-// open file
-bool SudokuDialog::openFile(const QString &fileName){
-	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly)) {
-		qDebug() << "Cannot open file for reading: "
-				 << qPrintable(file.errorString());
+			QFileDialog::getOpenFileName(this, tr("Open"), ".", fileFilters);
+	if (fileName.isEmpty()){
 		return false;
 	}
 
-	QTextStream in(&file);
-	int counter = 0;
-
-	while (!in.atEnd()) {
-		QString line = in.readLine();
-		QStringList fields = line.trimmed().split(' ');
-		//qDebug() << line.trimmed() << " size: " << fields.size();
-		if (fields.size() == 9) {
-
-			for (int j = 0; j < 9; j++){
-				givenData[counter++] = fields.at(j).toInt();
-			}
-			if(counter >= 81){
-				return true;
-			}
-		}
-	}
+	emit requestForReadFile(fileName);
 	return true;
 }

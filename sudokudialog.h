@@ -17,13 +17,22 @@ class SudokuDialog : public QDialog
 public:
 	explicit SudokuDialog(QWidget *parent = 0);
 
+	QTableView	*getTableView()	const	{ return tableView; }
+	QListWidget *getListWidged() const	{ return listWidged; }
+	QPushButton *getstartB() const		{ return startB; }
+	QPushButton *getsaveToFileB() const	{ return saveToFileB; }
+	QPushButton *getopenFileB() const	{ return openFileB; }
+	void setTableModel(QAbstractTableModel *model ) const;
+
 signals:
+	void requestForReadFile(const QString &);
 
 public slots:
-	bool open();
 	void addStrToListWidged(const QString &str);
 
 private slots:
+	bool open();
+
 	void on_popSizeLE_textChanged(const QString &str);
 	void on_elitSizeLE_textChanged(const QString &str);
 	void on_lifespanLE_textChanged(const QString &str);
@@ -33,10 +42,10 @@ private slots:
 	void on_maxCallsLE_textChanged(const QString &str);
 
 private:
-	bool openFile(const QString &fileName);
 
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
+	QListWidget *listWidged;
 
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
@@ -44,7 +53,7 @@ private:
 	QPushButton *parametersB;
 	QPushButton *listB;
 	QLineEdit	*progresLE;
-	QListWidget *listWidged;
+
 
 	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;

@@ -13,6 +13,8 @@ public:
 	~SudokuController();
 
 private:
+	void createConnections();
+
 	QApplication *mApp;
 	SudokuDialog *mSudokuDialog;
 	SudokuTableModel *mSudokuTableModel;

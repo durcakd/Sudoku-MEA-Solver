@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QFont>
 #include <QBrush>
+#include <QFile>
 
 // constructor
 SudokuTableModel::SudokuTableModel(QObject *parent)
@@ -137,4 +138,37 @@ void SudokuTableModel::setGivenData(const int *givenData){
 // get given data
 int *SudokuTableModel::givenData() const{
 	return mGivenData;
+}
+
+
+
+// SLOT open file
+bool SudokuTableModel::openFile(const QString &fileName){
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly)) {
+		qDebug() << "Cannot open file for reading: "
+				 << qPrintable(file.errorString());
+		return false;
+	}
+
+	QTextStream in(&file);
+	int counter = 0;
+	int given[N4];
+
+	while (!in.atEnd()) {
+		QString line = in.readLine();
+		QStringList fields = line.trimmed().split(' ');
+		//qDebug() << line.trimmed() << " size: " << fields.size();
+		if (fields.size() == N2) {
+			for (int j = 0; j < N2; j++){
+				given[counter++] = fields.at(j).toInt();
+			}
+			if(counter >= N4){
+				setGivenData(given);
+				return true;
+			}
+		}
+	}
+	setGivenData(given);
+	return true;
 }
