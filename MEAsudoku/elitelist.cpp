@@ -9,6 +9,8 @@
 
 
 #include "elitelist.h"
+#include <QString>
+#include <QDebug>
 
 
 // Constructor & Destructor
@@ -33,9 +35,9 @@ void EliteList:: setParameters(int nparElitelistSize){
 // push state to Elit list, (deleting the worst state, if new is better)
 // states are sorted
 int EliteList:: pushState(int fitness, int *state){
-	CString outstr;
+	QString outstr;
 
-	if(list.size() < parElitelistSize){
+	if(list.size() < (unsigned) parElitelistSize){
 		list.push_back(std::make_pair(fitness, state));
 		fitnessSum += fitness;
 		std::sort(list.begin(), list.end(), compare());
@@ -63,7 +65,7 @@ STATE EliteList:: getRandomState(){
 	//CString outstr;
 
 	if(list.empty()){
-		CLogger::Instance()->write("Warning: EliteList:: getRandomState(): list is empty");
+		qWarning() << "Warning: EliteList:: getRandomState(): list is empty";
 		randomState.state = NULL;
 		return randomState;
 	}
@@ -84,7 +86,7 @@ STATE EliteList:: getRuletState(){
 
 
 	if(list.empty()){
-		CLogger::Instance()->write("Warning: EliteList:: getRandomState(): list is empty");
+		qWarning() << "Warning: EliteList:: getRandomState(): list is empty";
 		randomState.state = NULL;
 		return randomState;
 	}
@@ -120,7 +122,7 @@ STATE EliteList:: getTournamentState(){
 	//CString outstr;
 
 	if(list.empty()){
-		CLogger::Instance()->write("Warning: EliteList:: getRandomState(): list is empty");
+		qWarning() << "Warning: EliteList:: getRandomState(): list is empty";
 		randomState.state = NULL;
 		return randomState;
 	}
@@ -161,16 +163,15 @@ int EliteList:: getMeanFitness(){
 }
 void EliteList:: printEliteList(){
 	std::vector< std::pair< int, int*>  >::iterator  it;
-	CString outstr;
-
 	if(list.empty()){
-		CLogger::Instance()->write("Warning: Elite List is empty");
+		qWarning() << "Warning: Elite List is empty";
 	}else{
-		outstr.Format("Elite List %d (%d) :", list.size(), parElitelistSize );
-		CLogger::Instance()->write(outstr);
+		qDebug() << "Elite List %d (%d) :" << list.size() << parElitelistSize;
 		for(it = list.begin(); it != list.end(); ++it){
-			outstr.Format("  %3d    %p", it->first, it->second   );
-			CLogger::Instance()->write(outstr);
+			//outstr.Format("  %3d    %p", it->first, it->second   );
+			qDebug() << "  %3d    %p" << it->first << it->second ;
+
+
 		}
 	}
 }

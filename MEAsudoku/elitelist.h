@@ -10,12 +10,8 @@
 #ifndef ELITELIST_H
 #define ELITELIST_H
 
-
 #include <queue>
 #include <algorithm>
-#include "Display.h"
-
-//#define MAX_ELITE_STATES		200
 
 
 // compare methods
