@@ -1,15 +1,13 @@
 #ifndef SUDOKUTABLEMODEL_H
 #define SUDOKUTABLEMODEL_H
 
+#include "constants.h"
 #include <QAbstractTableModel>
+
 
 #define dd(r,c) ((r)*COLS + (c))
 
-enum { N	= 3 ,
-	   N2	= N*N ,
-	   N4	= N2*N2 ,
-	   COLS	= N2 ,
-	   ROWS = N2 };
+
 
 class SudokuTableModel : public QAbstractTableModel
 	{

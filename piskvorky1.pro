@@ -3,7 +3,8 @@ QT += core gui
 HEADERS += \
 	sudokudialog.h \
     sudokutablemodel.h \
-    sudokucontroller.h
+    sudokucontroller.h \
+    constants.h
 
 SOURCES += \
 	main.cpp \

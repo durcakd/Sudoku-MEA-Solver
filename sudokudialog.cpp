@@ -200,9 +200,9 @@ void SudokuDialog::addStrToListWidged(const QString &str){
 
 // open SLOT
 bool SudokuDialog::open(){
-	QString fileFilters = tr("Text files (*.txt)\n"
-							 "Sudoku files (*.sud)\n"
-							 "All files (*)");
+	const QString fileFilters = tr("Text files (*.txt)\n"
+								   "Sudoku files (*.sud)\n"
+								   "All files (*)");
 
 	QString fileName =
 			QFileDialog::getOpenFileName(this, tr("Open"), ".", fileFilters);
