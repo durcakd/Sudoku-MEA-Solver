@@ -107,36 +107,11 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( listB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
 
-
-	// parameter's line edit seting validator
-	QIntValidator *validator = new QIntValidator(1, 1000000000, this);
-	popSizeLE->setValidator(validator);
-	elitSizeLE->setValidator(validator);
-	lifespanLE->setValidator(validator);
-	birthPeriodLE->setValidator(validator);
-	milestonePeriodLE->setValidator(validator);
-	localTrialsLE->setValidator(validator);
-	maxCallsLE->setValidator(validator);
-
-	// connect parameter's line edit to change parameter's variables
-	connect( popSizeLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_popSizeLE_textChanged(QString)));
-	connect( elitSizeLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_elitSizeLE_textChanged(QString)));
-	connect( lifespanLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_lifespanLE_textChanged(QString)));
-	connect( birthPeriodLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_birthPeriodLE_textChanged(QString)));
-	connect( milestonePeriodLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_milestonePeriodLE_textChanged(QString)));
-	connect( localTrialsLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_localTrialsLE_textChanged(QString)));
-	connect( maxCallsLE, SIGNAL(textChanged(QString)),
-			 this, SLOT(on_maxCallsLE_textChanged(QString)));
-
 	// contect slots
 	connect( openFileB, SIGNAL(clicked()),
 			 this, SLOT(open()));
+
+	pripareParametersLE();
 }
 
 // SLOTs for parametre's line edits to change parameters variables
@@ -176,6 +151,46 @@ void SudokuDialog::on_maxCallsLE_textChanged(const QString &str){
 	}
 }
 
+// preparing parameters edit lines
+void SudokuDialog::pripareParametersLE(){
+
+	// parameter's line edit seting validator
+	QIntValidator *validator = new QIntValidator(1, 1000000000, this);
+	popSizeLE->setValidator(validator);
+	elitSizeLE->setValidator(validator);
+	lifespanLE->setValidator(validator);
+	birthPeriodLE->setValidator(validator);
+	milestonePeriodLE->setValidator(validator);
+	localTrialsLE->setValidator(validator);
+	maxCallsLE->setValidator(validator);
+
+	// connect parameter's line edit to change parameter's variables
+	connect( popSizeLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_popSizeLE_textChanged(QString)));
+	connect( elitSizeLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_elitSizeLE_textChanged(QString)));
+	connect( lifespanLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_lifespanLE_textChanged(QString)));
+	connect( birthPeriodLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_birthPeriodLE_textChanged(QString)));
+	connect( milestonePeriodLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_milestonePeriodLE_textChanged(QString)));
+	connect( localTrialsLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_localTrialsLE_textChanged(QString)));
+	connect( maxCallsLE, SIGNAL(textChanged(QString)),
+			 this, SLOT(on_maxCallsLE_textChanged(QString)));
+
+	// set default values of parameters
+	popSizeLE->setText( QString::number( POPSIZE ));
+	elitSizeLE->setText( QString::number( ELITESIZE ));
+	lifespanLE->setText( QString::number( LIFESPAN ));
+	birthPeriodLE->setText( QString::number( BIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( MILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( LOCALTRIALS ));
+	maxCallsLE->setText( QString::number( MAXCALLS ));
+
+}
+
 void SudokuDialog::setTableModel(QAbstractTableModel *model ) const{
 	tableView->setModel( model );
 	//tableView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -189,6 +204,7 @@ void SudokuDialog::setTableModel(QAbstractTableModel *model ) const{
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
 }
+
 // SLOT add str to list widged
 void SudokuDialog::addStrToListWidged(const QString &str){
 	if(!str.isEmpty()){

@@ -9,14 +9,14 @@ enum { N	= 3 ,
 	   ROWS = N2 };
 
 // MEA deafault parameters
-enum { NUMAGENTS		= 80,
-	   MAXGENERATIONS	= 100000,
-	   MAXTRIALS		= 2,
-	   LIFEPOINTS		= 300,
-	   BIRTHSTEP		= 60,
-	   MILESTONESTEP	= 60,
-	   ELITELISTSIZE	= 80,
-	   NUMTESTS			= 100 };
+enum { POPSIZE		= 80,		// start nums of agents
+	   ELITESIZE	= 80,		// max size of elite list
+	   LIFESPAN		= 300,		// life points of agent
+	   BIRTHPERIOD		= 60,	// calls between birth
+	   MILESTONEPERIOD	= 60,	// calls between best milestone reseting
+	   LOCALTRIALS		= 2,	// max calls in local search
+	   MAXCALLS			= 100000,	// max calls together
+	   NUMTESTS			= 100 };	//
 
 
 

@@ -42,6 +42,7 @@ private slots:
 	void on_maxCallsLE_textChanged(const QString &str);
 
 private:
+	void pripareParametersLE();
 
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
