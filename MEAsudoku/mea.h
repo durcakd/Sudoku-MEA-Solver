@@ -7,23 +7,22 @@
 * datum: 13.05.2013
 */
 
-
 #ifndef MEA_H
 #define MEA_H
+
 
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <list>
-#include "Agent_sudoku.h"
-#include "Elite_list.h"
-#include "Display.h"
+#include "agentsudoku.h"
+#include "elitelist.h"
 
 
 /*
 * Class MEA represent implemetation of MEA Sudoku algorithm.
   Main method is optimaze(), whitch is MEA algorithm, and this methods use other implemented methods .
-  Agents are represented by list of Agent_sudoku objects
+  Agents are represented by list of AgentSudoku objects
   Elite_list object represent elite list data structure.
 * autor: David Durcak
 */
@@ -32,12 +31,12 @@ class MEA
 private:
 	EliteList eliteList;   // elite list
 	//int *fixedState;
-	//std::list< Agent_sudoku * >  agents; 
-	
+	//std::list< AgentSudoku * >  agents;
+
 	int counterAgents;
 	static int counterTrial;
 
-	
+
 	// Parameters
 	double	parMutProbability; ///
 	int		parNumAgents,
@@ -47,8 +46,8 @@ private:
 			parBirthStep,
 			parMilestoneStep,
 			parElitelistSize; //// ??
-	char *sudokuFile; 
-	
+	char *sudokuFile;
+
 
 	int *tabuList;
 	int *fixedState;
@@ -57,22 +56,22 @@ private:
 	bool testMode;
 
 public:
-	std::list< Agent_sudoku * >  agents;    // list of agents
-	
-	
-	
-	
+	std::list< AgentSudoku * >  agents;    // list of agents
+
+
+
+
 	// Constructor & Destructor
 	MEA();
 	~MEA();
 	void setParameters(double nmutProbability, int nnumAgents,int nmaxGenrations,int nmaxTrials,
 							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
 							int nelitelistSize, char *nsudokuFile, bool ntestMode);
-	
+
 
 
 	// main MEA optimalization method ( function of MEA)
-	int optimize(); 
+	int optimize();
 	// start initialization, load & prepare data
 	int initialization();
 	// generate initial ppopulation of agents
@@ -86,7 +85,7 @@ public:
 	int birthNewAgent();
 	//   local search
 	int localSearch(int generation);
-	
+
 	// aux methods
 
 	// aux print agents information
@@ -97,7 +96,7 @@ public:
 	void testEliteList();
 
 	static void addCounterTrials();
-	
+
 };
 
 

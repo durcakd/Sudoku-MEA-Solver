@@ -2,20 +2,16 @@
 * Bakalarsky projekt
 * Využitie multiagentového evolučného algoritmu v probléme z umelej inteligencie
 * FIIT-5212-5799
-* subor: Agent_sudoku.h
+* subor: AgentSudoku.h
 * autor: Dávid Durčák,  ič:5799
 * datum: 13.05.2013
 */
 
-
-
 #ifndef AGENTSUDOKU_H
 #define AGENTSUDOKU_H
 
-#include <Windows.h>
-#include <cstdio>
-#include "Display.h"
 
+#include <cstdio>
 
 
 #define TABU				1
@@ -31,14 +27,14 @@
 
 
 /*
-* Class Agent_sudoku represent implemetation of Sudoku agent, which is used by MEA Sudoku algorithm.
-  Its provide all needed methods(generate new state, mutation, fitness function , local search methods) 
+* Class AgentSudoku represent implemetation of Sudoku agent, which is used by MEA Sudoku algorithm.
+  Its provide all needed methods(generate new state, mutation, fitness function , local search methods)
   for searching in states space of Sudoku agent.
 * autor: David Durcak
 */
 
 class AgentSudoku
-{	
+{
 private:
 	int *fixed;
 	int *tabuList;
@@ -49,7 +45,7 @@ private:
 	int currentFitness;
 	int bestMilestoneFitness;
 	int lifePoints;
-	
+
 	int *mutState;
 	int *mutFitnessList;
 	int *localBestMutState;
@@ -61,11 +57,11 @@ private:
 	double	parMutProbability;
 
 public:
-	//Agent_sudoku();
-	Agent_sudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, double nparMutProbability, int *parTabuList);
-	Agent_sudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, double nparMutProbability, int *parTabuList);
-	~Agent_sudoku();
-	
+	//AgentSudoku();
+	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, double nparMutProbability, int *parTabuList);
+	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, double nparMutProbability, int *parTabuList);
+	~AgentSudoku();
+
 
 
 
@@ -75,11 +71,11 @@ public:
 	void setCurrentFitness(int newFitness);
 
 	int *getCurrentState();
-	void Agent_sudoku:: setCurrentState(int *newState);
+	void setCurrentState(int *newState);
 	static void printState(int *state);
-	static void scprintState(int *state, int *fixed, CListBox	*listbox );
+	static void scprintState(int *state, int *fixed);
 
-	
+
 	//LifePoints
 	void setLifePoints(int points);
 	int getLifePoints();
@@ -91,18 +87,18 @@ public:
 	void setBestMilestoneFitness(int newFitness);
 	int *getBestMilestoneState();
 	void setBestMilestoneState(int *newState);
-	void Agent_sudoku:: copyToBestMilestoneState(int *state);
-	int  Agent_sudoku:: resetMilestoneState();
+	void copyToBestMilestoneState(int *state);
+	int  resetMilestoneState();
 
 
 	int getName();
 	void setName(int newName);
-	
+
 	// most importatnt metods
 
 	// generate new state for new agents
 	int generateNewState();
-	// fitness funcion 
+	// fitness funcion
 	static int fitnessFunctionAllOverState(int *actualState, int *fitnessList);
 	// mutation + heuristic + fast fitness function (via change)
 	int	 mutationUseHeurRetFitness(int *newState, int *newFitnessList);
@@ -110,15 +106,15 @@ public:
 	int	localSearchUseHeuristic();
 	// 2. version of local search, not use in final version
 	int localSearchUseFitList();
-	
+
 
 	// old methods (dont use some features (are slower, than new))
-	
+
 	/// int mutation(int *newState);
 	/// int	 mutationReturnFitness(int *newState, int *newFitnessList);
 	/// static int fitnessFunction(int *actualState);
 	/// int localSearch();
-	
+
 
 };
 
