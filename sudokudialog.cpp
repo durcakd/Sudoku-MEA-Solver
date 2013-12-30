@@ -15,29 +15,27 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	tableView = new QTableView;
 	sudokuTableModel = new SudokuTableModel;
 
-	openFileTB	= new QToolButton;
-	saveToFileTB = new QToolButton;
+	//openFileTB	= new QToolButton;
+	//saveToFileTB = new QToolButton;
+	startTB		= new QToolButton;
 	confirmTB	= new QToolButton;
 	newTB		= new QToolButton;
-	startTB		= new QToolButton;
 	parametersTB = new QToolButton;
 	listTB		= new QToolButton;
 
 
-	openFileTB->setIcon(QIcon(":/images/open.png"));
-	saveToFileTB->setIcon(QIcon(":/images/save.png"));
+	//openFileTB->setIcon(QIcon(":/images/open.png"));
+	//saveToFileTB->setIcon(QIcon(":/images/save.png"));
+	startTB->setIcon(QIcon(":/images/start.png"));
 	confirmTB->setIcon(QIcon(":/images/confirm.png"));
 	newTB->setIcon(QIcon(":/images/new.png"));
-	startTB->setIcon(QIcon(":/images/start.png"));
 	parametersTB->setIcon(QIcon(":/images/parameters.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
 
 
+	startB		= new QPushButton(tr("Start"));
 	openFileB	= new QPushButton(tr("Open from file"));
 	saveToFileB	= new QPushButton(tr("Save to File"));
-	startB		= new QPushButton(tr("Start"));
-	parametersB	= new QPushButton(tr("Par"));
-	listB		= new QPushButton(tr("Info"));
 	statusBarLE	= new QLineEdit;
 	listWidged	= new QListWidget;
 
@@ -91,8 +89,8 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	QHBoxLayout *buttonLayout = new QHBoxLayout;
 	buttonLayout->addWidget( newTB );
-	buttonLayout->addWidget( openFileTB );
-	buttonLayout->addWidget( saveToFileTB );
+	//buttonLayout->addWidget( openFileTB );
+	//buttonLayout->addWidget( saveToFileTB );
 	buttonLayout->addWidget( confirmTB );
 
 	buttonLayout->addWidget( openFileB );
@@ -100,7 +98,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	buttonLayout->addStretch();
 
 	buttonLayout->addWidget( parametersTB );
-	buttonLayout->addWidget( parametersB );
 
 
 	QHBoxLayout *button2Layout = new QHBoxLayout;
@@ -109,7 +106,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	button2Layout->addStretch();
 	button2Layout->addWidget( listTB );
-	button2Layout->addWidget( listB );
 
 	// -----
 
@@ -127,20 +123,25 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
 	//
-	parametersB->setCheckable(true);
+	//parametersB->setCheckable(true);
+	parametersTB->setCheckable(true);
 	parametersGroup->hide();
 
-	listB->setCheckable(true);
+	//listB->setCheckable(true);
+	listTB->setCheckable(true);
 	listWidged->hide();
 
-	connect( this->parametersB, SIGNAL(toggled(bool)),
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
 			 parametersGroup, SLOT(setVisible(bool)));
-	connect( listB, SIGNAL(toggled(bool)),
+	connect( listTB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
+
 
 	// contect slots
 	connect( openFileB, SIGNAL(clicked()),
 			 this, SLOT(open()));
+	connect( saveToFileB, SIGNAL(clicked()),
+			 this, SLOT(save()));
 
 	pripareParametersLE();
 }
@@ -267,7 +268,7 @@ bool SudokuDialog::save(){
 								   "Sudoku files (*.sud)\n");
 
 	QString fileName =
-			QFileDialog::getSaveFileName(this, tr("Open"), ".", fileFilters);
+			QFileDialog::getSaveFileName(this, tr("Save"), ".", fileFilters);
 	if (fileName.isEmpty()){
 		return false;
 	}

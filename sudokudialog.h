@@ -21,8 +21,10 @@ public:
 	QTableView	*getTableView()	const	{ return tableView; }
 	QListWidget *getListWidged() const	{ return listWidged; }
 	QPushButton *getstartB() const		{ return startB; }
-	QPushButton *getsaveToFileB() const	{ return saveToFileB; }
 	QPushButton *getopenFileB() const	{ return openFileB; }
+	QPushButton *getsaveToFileB() const	{ return saveToFileB; }
+	//QToolButton *getopenFileTB() const	{ return openFileTB; }
+	//QPushButton *getsaveToFileTB() const	{ return saveToFileTB; }
 	void setTableModel(QAbstractTableModel *model ) const;
 
 signals:
@@ -51,19 +53,17 @@ private:
 	SudokuTableModel *sudokuTableModel;
 	QListWidget *listWidged;
 
-	QToolButton *openFileTB;
-	QToolButton *saveToFileTB;
+	//QToolButton *openFileTB;
+	//QToolButton *saveToFileTB;
 	QToolButton *confirmTB;
 	QToolButton *newTB;
 	QToolButton *startTB;
 	QToolButton *parametersTB;
 	QToolButton *listTB;
 
+	QPushButton *startB;
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
-	QPushButton *startB;
-	QPushButton *parametersB;
-	QPushButton *listB;
 	QLineEdit	*progresLE;
 
 	QLineEdit	*statusBarLE;

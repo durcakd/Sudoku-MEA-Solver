@@ -165,10 +165,47 @@ bool SudokuTableModel::openFile(const QString &fileName){
 			}
 			if(counter >= N4){
 				setGivenData(given);
+				file.close();
 				return true;
 			}
 		}
 	}
 	setGivenData(given);
+	file.close();
+	return true;
+}
+
+
+bool SudokuTableModel::saveToFile(const QString &fileName){
+
+	// prepare output fileName
+	//QFileInfo fileInfo(fileName);
+	//QString outFileName = fileInfo.absolutePath() + "/" +
+	//		fileInfo.completeBaseName() + "_converted." + fileInfo.suffix();
+
+
+	QFile outFile(fileName);
+	if (!outFile.open(QIODevice::WriteOnly)) {
+		qDebug() << "Cannot open file for writing: "
+				 << qPrintable(outFile.errorString());
+		return false;
+	}
+
+	QTextStream out(&outFile);
+	out.setCodec("UTF-8");
+
+	for(int i = 0; i < N4; i++){
+		if (mGridData[i] == ""){
+			out << "0 ";
+		}else{
+			out << mGridData[i] << " ";
+		}
+
+		if((i+1)%N2 == 0){
+			out << endl;
+		}
+	}
+
+	outFile.close();
 	return true;
 }
