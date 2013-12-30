@@ -31,6 +31,7 @@ void SudokuController::createConnections(){
 	// cleaning model for new sudoku
 	QObject::connect( mSudokuDialog->getNewTB(), SIGNAL(clicked()),
 					  mSudokuTableModel, SLOT(clean()));
+
 	// confirm / unconfirm model in sudoku
 	QObject::connect( mSudokuDialog, SIGNAL(requestForConfirm(bool)),
 					  mSudokuTableModel, SLOT(confirm(bool)));

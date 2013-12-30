@@ -124,11 +124,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
 	//
-	//parametersB->setCheckable(true);
 	parametersTB->setCheckable(true);
 	parametersGroup->hide();
 
-	//listB->setCheckable(true);
 	listTB->setCheckable(true);
 	listWidged->hide();
 
@@ -147,6 +145,8 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	confirmTB->setCheckable(true);
 	connect( confirmTB, SIGNAL(toggled(bool)),
 			 this, SLOT(confirm(bool)));
+	connect( newTB, SIGNAL(clicked()),
+			 this, SLOT(on_newTB_clicked()));
 
 	pripareParametersLE();
 }
@@ -263,7 +263,9 @@ bool SudokuDialog::open(){
 		return false;
 	}
 
+	confirmTB->setChecked(false);
 	emit requestForReadFile(fileName);
+
 	return true;
 }
 
@@ -283,7 +285,6 @@ bool SudokuDialog::save(){
 }
 
 // confirm
-
 void SudokuDialog::confirm(const bool ok){
 	if(ok){
 		confirmTB->setIcon(*unconfirmIcon);
@@ -291,4 +292,9 @@ void SudokuDialog::confirm(const bool ok){
 		confirmTB->setIcon(*confirmIcon);
 	}
 	emit requestForConfirm(!ok);
+}
+
+// new clear
+void SudokuDialog::on_newTB_clicked(){
+	confirmTB->setChecked(true);
 }
