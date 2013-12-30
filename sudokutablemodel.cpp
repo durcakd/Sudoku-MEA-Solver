@@ -142,7 +142,8 @@ int *SudokuTableModel::givenData() const{
 
 
 
-// SLOT open file
+// PUBLIC SLOTS:
+// open file
 bool SudokuTableModel::openFile(const QString &fileName){
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly)) {
@@ -165,10 +166,77 @@ bool SudokuTableModel::openFile(const QString &fileName){
 			}
 			if(counter >= N4){
 				setGivenData(given);
+				file.close();
 				return true;
 			}
 		}
 	}
 	setGivenData(given);
+	file.close();
 	return true;
 }
+
+// save to file
+bool SudokuTableModel::saveToFile(const QString &fileName){
+
+	// prepare output fileName
+	//QFileInfo fileInfo(fileName);
+	//QString outFileName = fileInfo.absolutePath() + "/" +
+	//		fileInfo.completeBaseName() + "_converted." + fileInfo.suffix();
+
+
+	QFile outFile(fileName);
+	if (!outFile.open(QIODevice::WriteOnly)) {
+		qDebug() << "Cannot open file for writing: "
+				 << qPrintable(outFile.errorString());
+		return false;
+	}
+
+	QTextStream out(&outFile);
+	out.setCodec("UTF-8");
+
+	for(int i = 0; i < N4; i++){
+		if (mGridData[i] == ""){
+			out << "0 ";
+		}else{
+			out << mGridData[i] << " ";
+		}
+
+		if((i+1)%N2 == 0){
+			out << endl;
+		}
+	}
+
+	outFile.close();
+	return true;
+}
+
+// clean
+void SudokuTableModel::clean(){
+	for(int i = 0; i < N4; i++){
+		mGivenData[i] = 0;
+		mGridData[i] = "";
+	}
+	reset();
+}
+
+// confirm
+void SudokuTableModel::confirm(const bool ok){
+
+	// confirm - have to be always
+	for(int i = 0; i < N4; i++){
+		if (mGridData[i] == ""){
+			mGivenData[i] = 0;
+		}else{
+			mGivenData[i] = mGridData[i].toInt();
+		}
+	}
+
+	if (!ok) {  // if unconfirm
+		for(int i = 0; i < N4; i++){
+			mGivenData[i] = 0;
+		}
+	}
+	reset();
+}
+

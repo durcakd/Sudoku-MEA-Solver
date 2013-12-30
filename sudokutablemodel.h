@@ -27,6 +27,9 @@ public:
 
 public slots:
 	bool openFile(const QString &fileName);
+	bool saveToFile(const QString &fileName);
+	void clean();
+	void confirm(const bool ok);
 
 
 private:

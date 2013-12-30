@@ -1,0 +1,13 @@
+<RCC>
+	<qresource>
+		<file>images/icon.png</file>
+		<file>images/confirm.png</file>
+		<file>images/list.png</file>
+		<file>images/new.png</file>
+		<file>images/open.png</file>
+		<file>images/parameters.png</file>
+		<file>images/save.png</file>
+		<file>images/start.png</file>
+		<file>images/unconfirm.png</file>
+	</qresource>
+</RCC>

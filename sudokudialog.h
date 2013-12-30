@@ -4,10 +4,12 @@
 #include <QDialog>
 #include <QTableView>
 #include <QPushButton>
+#include <QToolButton>
 #include <QLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QIcon>
 
 #include "sudokutablemodel.h"
 
@@ -19,19 +21,28 @@ public:
 
 	QTableView	*getTableView()	const	{ return tableView; }
 	QListWidget *getListWidged() const	{ return listWidged; }
-	QPushButton *getstartB() const		{ return startB; }
-	QPushButton *getsaveToFileB() const	{ return saveToFileB; }
-	QPushButton *getopenFileB() const	{ return openFileB; }
+	QPushButton *getStartB() const		{ return startB; }
+	QPushButton *getOpenFileB() const	{ return openFileB; }
+	QPushButton *getSaveToFileB() const	{ return saveToFileB; }
+	//QToolButton *getopenFileTB() const	{ return openFileTB; }
+	//QToolButton *getsaveToFileTB() const	{ return saveToFileTB; }
+	QToolButton *getNewTB() const	{ return newTB; }
+	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	void setTableModel(QAbstractTableModel *model ) const;
 
 signals:
 	void requestForReadFile(const QString &);
+	void requestForSaveFile(const QString &);
+	void requestForConfirm(const bool ok);
 
 public slots:
 	void addStrToListWidged(const QString &str);
 
 private slots:
 	bool open();
+	bool save();
+	void confirm(const bool ok);
+	void on_newTB_clicked();
 
 	void on_popSizeLE_textChanged(const QString &str);
 	void on_elitSizeLE_textChanged(const QString &str);
@@ -48,13 +59,20 @@ private:
 	SudokuTableModel *sudokuTableModel;
 	QListWidget *listWidged;
 
+	//QToolButton *openFileTB;
+	//QToolButton *saveToFileTB;
+	QToolButton *confirmTB;
+	QToolButton *newTB;
+	QToolButton *startTB;
+	QToolButton *parametersTB;
+	QToolButton *listTB;
+	QIcon *confirmIcon;
+	QIcon *unconfirmIcon;
+
+	QPushButton *startB;
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
-	QPushButton *startB;
-	QPushButton *parametersB;
-	QPushButton *listB;
 	QLineEdit	*progresLE;
-
 
 	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;
