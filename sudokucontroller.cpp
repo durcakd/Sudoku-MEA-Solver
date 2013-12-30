@@ -28,6 +28,12 @@ void SudokuController::createConnections(){
 	// saving sudoku to file
 	QObject::connect( mSudokuDialog, SIGNAL(requestForSaveFile(QString)),
 					  mSudokuTableModel, SLOT(saveToFile(QString)));
-	//
+	// cleaning model for new sudoku
+	QObject::connect( mSudokuDialog->getNewTB(), SIGNAL(clicked()),
+					  mSudokuTableModel, SLOT(clean()));
+	// confirm / unconfirm model in sudoku
+	QObject::connect( mSudokuDialog, SIGNAL(requestForConfirm(bool)),
+					  mSudokuTableModel, SLOT(confirm(bool)));
+
 
 }

@@ -24,14 +24,15 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	listTB		= new QToolButton;
 
 
+	confirmIcon		= new QIcon(":/images/confirm.png");
+	unconfirmIcon	= new QIcon(":/images/unconfirm.png");
 	//openFileTB->setIcon(QIcon(":/images/open.png"));
 	//saveToFileTB->setIcon(QIcon(":/images/save.png"));
 	startTB->setIcon(QIcon(":/images/start.png"));
-	confirmTB->setIcon(QIcon(":/images/confirm.png"));
+	confirmTB->setIcon(*confirmIcon);
 	newTB->setIcon(QIcon(":/images/new.png"));
 	parametersTB->setIcon(QIcon(":/images/parameters.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
-
 
 	startB		= new QPushButton(tr("Start"));
 	openFileB	= new QPushButton(tr("Open from file"));
@@ -143,6 +144,10 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( saveToFileB, SIGNAL(clicked()),
 			 this, SLOT(save()));
 
+	confirmTB->setCheckable(true);
+	connect( confirmTB, SIGNAL(toggled(bool)),
+			 this, SLOT(confirm(bool)));
+
 	pripareParametersLE();
 }
 
@@ -245,8 +250,8 @@ void SudokuDialog::addStrToListWidged(const QString &str){
 	}
 }
 
-
-// open SLOT
+// PRIVATE SLOTS:
+// open
 bool SudokuDialog::open(){
 	const QString fileFilters = tr("Text files (*.txt)\n"
 								   "Sudoku files (*.sud)\n"
@@ -262,7 +267,7 @@ bool SudokuDialog::open(){
 	return true;
 }
 
-// open SLOT
+// save
 bool SudokuDialog::save(){
 	const QString fileFilters = tr("Text files (*.txt)\n"
 								   "Sudoku files (*.sud)\n");
@@ -275,4 +280,15 @@ bool SudokuDialog::save(){
 
 	emit requestForSaveFile(fileName);
 	return true;
+}
+
+// confirm
+
+void SudokuDialog::confirm(const bool ok){
+	if(ok){
+		confirmTB->setIcon(*unconfirmIcon);
+	}else{
+		confirmTB->setIcon(*confirmIcon);
+	}
+	emit requestForConfirm(!ok);
 }

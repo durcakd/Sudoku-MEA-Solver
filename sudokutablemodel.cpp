@@ -142,7 +142,8 @@ int *SudokuTableModel::givenData() const{
 
 
 
-// SLOT open file
+// PUBLIC SLOTS:
+// open file
 bool SudokuTableModel::openFile(const QString &fileName){
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly)) {
@@ -175,7 +176,7 @@ bool SudokuTableModel::openFile(const QString &fileName){
 	return true;
 }
 
-
+// save to file
 bool SudokuTableModel::saveToFile(const QString &fileName){
 
 	// prepare output fileName
@@ -209,3 +210,33 @@ bool SudokuTableModel::saveToFile(const QString &fileName){
 	outFile.close();
 	return true;
 }
+
+// clean
+void SudokuTableModel::clean(){
+	for(int i = 0; i < N4; i++){
+		mGivenData[i] = 0;
+		mGridData[i] = "";
+	}
+	reset();
+}
+
+// confirm
+void SudokuTableModel::confirm(const bool ok){
+
+	// confirm - have to be always
+	for(int i = 0; i < N4; i++){
+		if (mGridData[i] == ""){
+			mGivenData[i] = 0;
+		}else{
+			mGivenData[i] = mGridData[i].toInt();
+		}
+	}
+
+	if (!ok) {  // if unconfirm
+		for(int i = 0; i < N4; i++){
+			mGivenData[i] = 0;
+		}
+	}
+	reset();
+}
+

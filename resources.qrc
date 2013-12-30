@@ -8,5 +8,6 @@
 		<file>images/parameters.png</file>
 		<file>images/save.png</file>
 		<file>images/start.png</file>
+		<file>images/unconfirm.png</file>
 	</qresource>
 </RCC>
