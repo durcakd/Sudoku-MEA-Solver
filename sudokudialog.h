@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QTableView>
 #include <QPushButton>
+#include <QToolButton>
 #include <QLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -26,12 +27,14 @@ public:
 
 signals:
 	void requestForReadFile(const QString &);
+	void requestForSaveFile(const QString &);
 
 public slots:
 	void addStrToListWidged(const QString &str);
 
 private slots:
 	bool open();
+	bool save();
 
 	void on_popSizeLE_textChanged(const QString &str);
 	void on_elitSizeLE_textChanged(const QString &str);
@@ -48,13 +51,20 @@ private:
 	SudokuTableModel *sudokuTableModel;
 	QListWidget *listWidged;
 
+	QToolButton *openFileTB;
+	QToolButton *saveToFileTB;
+	QToolButton *confirmTB;
+	QToolButton *newTB;
+	QToolButton *startTB;
+	QToolButton *parametersTB;
+	QToolButton *listTB;
+
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
 	QPushButton *startB;
 	QPushButton *parametersB;
 	QPushButton *listB;
 	QLineEdit	*progresLE;
-
 
 	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;

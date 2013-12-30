@@ -17,3 +17,6 @@ SOURCES += \
     MEAsudoku/elitelist.cpp \
     MEAsudoku/agentsudoku.cpp \
     MEAsudoku/mea.cpp
+
+RESOURCES += \
+    resources.qrc
