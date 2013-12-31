@@ -35,6 +35,9 @@ void SudokuController::createConnections(){
 	// confirm / unconfirm model in sudoku
 	QObject::connect( mSudokuDialog, SIGNAL(requestForConfirm(bool)),
 					  mSudokuTableModel, SLOT(confirm(bool)));
+	//
+	QObject::connect( mSudokuDialog->getThread(), SIGNAL(done(QString)),
+					  mSudokuDialog, SLOT(threadDone(QString)));
 
 
 }

@@ -148,6 +148,11 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( newTB, SIGNAL(clicked()),
 			 this, SLOT(on_newTB_clicked()));
 
+	connect( startB, SIGNAL(clicked()),
+			 this, SLOT(start()));
+	connect( startTB, SIGNAL(clicked()),
+			 this, SLOT(start()));
+
 	pripareParametersLE();
 }
 
@@ -297,4 +302,20 @@ void SudokuDialog::confirm(const bool ok){
 // new clear
 void SudokuDialog::on_newTB_clicked(){
 	confirmTB->setChecked(true);
+}
+
+// start thread
+void  SudokuDialog::start(){
+	startB->setEnabled(false);
+	startTB->setEnabled(false);
+	if( !thread.isRunning()){
+		thread.start();
+	}
+}
+// get result from thread
+void  SudokuDialog::threadDone(const QString msg){
+	addStrToListWidged(msg);
+	startB->setEnabled(true);
+	startTB->setEnabled(true);
+
 }

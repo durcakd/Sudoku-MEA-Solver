@@ -7,7 +7,8 @@ HEADERS += \
     constants.h \
     MEAsudoku/elitelist.h \
     MEAsudoku/agentsudoku.h \
-    MEAsudoku/mea.h
+    MEAsudoku/mea.h \
+    sudokuthread.h
 
 SOURCES += \
 	main.cpp \
@@ -16,7 +17,8 @@ SOURCES += \
     sudokucontroller.cpp \
     MEAsudoku/elitelist.cpp \
     MEAsudoku/agentsudoku.cpp \
-    MEAsudoku/mea.cpp
+    MEAsudoku/mea.cpp \
+    sudokuthread.cpp
 
 RESOURCES += \
     resources.qrc

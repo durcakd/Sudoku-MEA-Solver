@@ -12,6 +12,7 @@
 #include <QIcon>
 
 #include "sudokutablemodel.h"
+#include "sudokuthread.h"
 
 class SudokuDialog : public QDialog
 	{
@@ -26,8 +27,9 @@ public:
 	QPushButton *getSaveToFileB() const	{ return saveToFileB; }
 	//QToolButton *getopenFileTB() const	{ return openFileTB; }
 	//QToolButton *getsaveToFileTB() const	{ return saveToFileTB; }
-	QToolButton *getNewTB() const	{ return newTB; }
+	QToolButton *getNewTB() const		{ return newTB; }
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
+	const SudokuThread *getThread() const		{ return &thread; }
 	void setTableModel(QAbstractTableModel *model ) const;
 
 signals:
@@ -37,12 +39,14 @@ signals:
 
 public slots:
 	void addStrToListWidged(const QString &str);
+	void threadDone(const QString msg);
 
 private slots:
 	bool open();
 	bool save();
 	void confirm(const bool ok);
 	void on_newTB_clicked();
+	void start();
 
 	void on_popSizeLE_textChanged(const QString &str);
 	void on_elitSizeLE_textChanged(const QString &str);
@@ -55,9 +59,11 @@ private slots:
 private:
 	void pripareParametersLE();
 
+	SudokuThread thread;
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
 	QListWidget *listWidged;
+
 
 	//QToolButton *openFileTB;
 	//QToolButton *saveToFileTB;
