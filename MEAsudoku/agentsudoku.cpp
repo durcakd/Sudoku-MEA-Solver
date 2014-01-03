@@ -21,7 +21,7 @@
 // ================================================
 
 // Constructors & Destructors
-AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, double nparMutProbability, int *parTabuList){
+AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials,  int *parTabuList){
 	tabuList			= parTabuList;
 	fixed				= fixedState;
 	fixedList			= nfixedLists;
@@ -38,11 +38,10 @@ AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, 
 	lifePoints				= newLifePoints;
 	//parLifePoints			= newLifePoints;
 	parMaxTrials			= nparMaxTrials;
-	parMutProbability		= nparMutProbability;
 
 	//swapState				= NULL;
 }
-AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, double nparMutProbability, int *parTabuList){
+AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, int *parTabuList){
 	tabuList				= parTabuList;
 	fixed					= fixedState;
 	fixedList				= nfixedLists;
@@ -57,7 +56,6 @@ AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, 
 	lifePoints				= newLifePoints;
 	//parLifePoints			= newLifePoints;
 	parMaxTrials			= nparMaxTrials;
-	parMutProbability		= nparMutProbability;
 
 
 	currentFitness			= newCurrentFitness;

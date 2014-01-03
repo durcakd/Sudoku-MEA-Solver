@@ -39,7 +39,6 @@ private:
 
 
 	// Parameters
-	double	parMutProbability; ///
 	int		parNumAgents,
 			parMaxGenrations,
 			parMaxTrials,
@@ -47,7 +46,7 @@ private:
 			parBirthStep,
 			parMilestoneStep,
 			parElitelistSize; //// ??
-	char *sudokuFile;
+
 
 
 	int *tabuList;
@@ -65,9 +64,9 @@ public:
 	// Constructor & Destructor
 	MEA();
 	~MEA();
-	void setParameters(double nmutProbability, int nnumAgents,int nmaxGenrations,int nmaxTrials,
+	void setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
 							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
-							int nelitelistSize, char *nsudokuFile, bool ntestMode);
+							int nelitelistSize, bool ntestMode);
 
 
 

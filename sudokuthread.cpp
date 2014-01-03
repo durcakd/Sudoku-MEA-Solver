@@ -11,9 +11,6 @@ void SudokuThread::setParameters( const PARAMETERS &parm,  int *givenData ){
 	this->givenData = givenData;
 
 
-	QString g = "ddd" +  QString::number( this->parm.birthPeriod) + "  " + QString::number(this->givenData[0]);
-	emit done(g);
-
 }
 
 void SudokuThread::run(){
@@ -26,20 +23,19 @@ void SudokuThread::run(){
 
 	while(result <= 0 && countTrials < 100){
 
-		//mea = new MEA();
-		/*mea->setParameters( 0,		// mutProbability ----!!!! VYHODIT
-						   parm.popSize,			// numAgents
-						   parm.maxCalls,			// maxGenrations
-						   parm.localTrials,		// maxTrials
-						   parm.lifespan,			// lifePoints
-						   parm.birthPeriod,		// birthStep
-						   parm.milestonePeriod,	// milestoneStep
-						   parm.elitSize,			// elitelistSize,
-						   NULL,			// sudokuFiles[0] ----!!!! VYHODIT
-						   false );			// testMode ----!!!! VYHODIT ????
+		mea = new MEA();
+		mea->setParameters( givenData,
+							parm.popSize,			// numAgents
+							parm.maxCalls,			// maxGenrations
+							parm.localTrials,		// maxTrials
+							parm.lifespan,			// lifePoints
+							parm.birthPeriod,		// birthStep
+							parm.milestonePeriod,	// milestoneStep
+							parm.elitSize,			// elitelistSize,
+							false );			// testMode ----!!!! VYHODIT ????
 
-		*/
-		result = 1;//mea->optimize();
+
+		result = mea->optimize();
 		delete mea;
 		countTrials++;
 	}
@@ -58,49 +54,4 @@ void SudokuThread::run(){
 	emit done( msg);
 }
 
-/*
-// normal mode (run only 1 sudoku, until solution is found & display)
-int Tests:: solving(){
-	CString outstr;
-	MEA *mea;
-	int countOk, countTrials, result;
-	clock_t runTime;
 
-	srand((unsigned int)time(NULL));
-	if(prepareOneSudokuFile()){
-		return 1;
-	}
-
-	countOk = 0;
-	countTrials = 0;
-	runTime = clock();
-	while(0 >= countOk && countTrials < 100){
-
-		mea = new MEA();
-		mea->setParameters(mutProbability, numAgents, maxGenrations, maxTrials,
-			lifePoints, birthStep, milestoneStep, elitelistSize,
-			sudokuFiles[0], testMode);
-		result = mea->optimize();
-		//mea->~MEA();
-		delete mea;
-
-		if(0 != result ){
-			countOk++;
-		}
-		countTrials++;
-
-
-	}
-	//
-	runTime = clock() - runTime;
-
-	outstr.Format("%4d. pokus (%6.3lf s)", countTrials, ((double)runTime)/(CLOCKS_PER_SEC)   );
-	CLogger::Instance()->write(outstr);
-	if(0 == countOk && 100 == countTrials){
-		CLogger::Instance()->write("Solution was not found.");
-		CLogger::Instance()->write("Try again with different parameters.");
-	}
-	return 0;
-}
-
-*/

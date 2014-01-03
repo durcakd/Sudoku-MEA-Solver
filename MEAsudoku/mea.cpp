@@ -19,6 +19,9 @@ int MEA:: counterTrial;
 MEA::MEA(){
 	counterTrial = 0;
 	srand((unsigned int)time(NULL));
+	fixedState	= NULL;
+	fixedLists	= NULL;
+	tabuList	= NULL;
 }
 MEA::~MEA(){
 	std::list< AgentSudoku * >::iterator  itAgent;
@@ -33,12 +36,12 @@ MEA::~MEA(){
 		delete (*itAgent);
 	}
 	agents.clear();
-}
-void MEA:: setParameters(double nmutProbability, int nnumAgents,int nmaxGenrations,int nmaxTrials,
-							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
-							int nelitelistSize, char *nsudokuFile, bool ntestMode){
 
-	parMutProbability = nmutProbability;
+}
+void MEA:: setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
+							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
+							int nelitelistSize, bool ntestMode){
+
 
 	parNumAgents		= nnumAgents;
 	parMaxGenrations	= nmaxGenrations;
@@ -48,9 +51,15 @@ void MEA:: setParameters(double nmutProbability, int nnumAgents,int nmaxGenratio
 	parMilestoneStep	= nmilestoneStep;
 	parElitelistSize	= nelitelistSize;
 
-	sudokuFile = nsudokuFile;
-
 	testMode = ntestMode;
+
+	if(NULL == (fixedState = new int[NN_NN + NN])){
+		qDebug() << "Error: malloc - fixedState in setParameters()";
+
+		return;
+	}
+	memcpy(fixedState, givenData, NN_NN * sizeof(int));
+
 }
 
 
@@ -64,11 +73,14 @@ int MEA:: optimize(){
 	//int meanPopSize = 0;
 	//CString outstr;
 
+
 	eliteList.setParameters(parElitelistSize);
+
 
 	//printf("\n=========INITIALIZATION========");
 	if(initialization())
 		return -1;
+
 	//printf("\n=========GENERATE AGENTS=======");
 	generateAgents();
 	//CLogger::Instance()->write("SOLVING ...");
@@ -120,42 +132,14 @@ int MEA:: initialization(){
 	int offset, j, k, counter;
 
 
-	FILE *file = NULL;
-	QString outstr;
-	//outstr.Format("%s", sudokuFile );
-	//m_listbox->AddString(outstr);
-
-	if(NULL == (fixedState = new int[NN_NN])){
-		qWarning() << "Error: malloc - fixedState in initialization()";
-		return 1;
-	}
-
-	if(NULL == (file = fopen(sudokuFile, "r"))){
-		qWarning() << "Error: cannot open file " << sudokuFile;
-
-		return 1;
-	}
 
 
-	while((fscanf(file, " %d", &oneFixed )) != EOF) {
-		fixedState[i] = oneFixed;
-		//if(i % NN == 0) putchar('\n');;
-		i++;
-		//printf(" %d", oneFixed);
-	}
-	if(EOF == fclose(file)){
-		qWarning() << "Error: cannot close file " <<  sudokuFile;
-	}
-	if(i != NN_NN){
-		qWarning() << "Error: load Sudoku frm file (no exactly 81 numbers)";
 
-		return 1;
-	}
 	//===================================================
 	// initialization of fixedLists
 	// its matrix NN rows x (NN+1) columns ,  1. in column is count non fixed positions in row
 	if(NULL == (fixedLists = new int[NN_NN + NN])){
-		qWarning() << "Error: malloc - fixedLists in initialization()";
+		qDebug() << "Error: malloc - fixedLists in initialization()";
 
 		return 1;
 	}
@@ -191,7 +175,7 @@ int MEA:: initialization(){
 	// initialization of TabuList
 	// it NNxNNxNN 3D array where is check for each cell, if every number can be there
 	if(NULL == (tabuList = new int[NN_NN*NN])){
-		qWarning() << "Error: malloc - tabuLists in initialization()";
+		qDebug() << "Error: malloc - tabuLists in initialization()";
 
 		return 1;
 	}
@@ -249,7 +233,7 @@ int MEA:: generateAgents(){
 	std::list< AgentSudoku * >::iterator  itAgent;
 
 	for(i = 0; i < parNumAgents;  ++i)
-		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, parMaxTrials,	parMutProbability, tabuList));
+		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, parMaxTrials, tabuList));
 
 	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
 		(*itAgent)->generateNewState();
@@ -312,9 +296,9 @@ int MEA:: birthNewAgent(){
 	//outstr.Format("EliteList:: getRandomState() get state %3d %p", randomState.fitness, randomState.state); CLogger::Instance()->write(outstr);
 
 	if(NULL != randomState.state)
-		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, randomState.state, randomState.fitness, parMaxTrials,	parMutProbability,tabuList));
+		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, randomState.state, randomState.fitness, parMaxTrials,	tabuList));
 	else
-		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, parMaxTrials,	parMutProbability, tabuList));
+		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, parMaxTrials, tabuList));
 
 	++counterAgents;
 	agents.back()->setName(counterAgents);
@@ -364,7 +348,7 @@ void MEA:: printAgents(){
 	std::list< AgentSudoku * >::iterator  itAgent;
 	QString outstr;
 
-	qWarning() << "Agents count = " << agents.size();
+	qDebug() << "Agents count = " << agents.size();
 
 
 	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
@@ -375,7 +359,7 @@ void MEA:: printAgents(){
 		outstr +=  ",  CS "	;
 		QString pStr;
 		pStr.sprintf("%08p",  (*itAgent)->getCurrentState()) ;
-		qWarning() << outstr << pStr;
+		qDebug() << outstr << pStr;
 	}
 
 }
@@ -393,7 +377,7 @@ void MEA:: printBestMeanFitAndAgentsSize(){
 
 
 	if(agents.empty()){
-		qWarning() << "Warning  : agents.size() == 0,  (printBestMeanFitAndAgentsSize())";
+		qDebug() << "Warning  : agents.size() == 0,  (printBestMeanFitAndAgentsSize())";
 		return;
 	}
 
@@ -429,7 +413,7 @@ void MEA:: printBestMeanFitAndAgentsSize(){
 	outstr +=  ";  " + agents.size();
 	outstr += ";  " + eliteList.getBestFitness();
 	outstr += "; " +  eliteList.getNumberOfEliteStates();
-	qWarning() << outstr;
+	qDebug() << outstr;
 }
 
 // testing metod
@@ -437,7 +421,7 @@ void MEA:: testEliteList(){
 	QString outstr;
 	std::list< AgentSudoku * >::iterator  itAgent;
 
-	qWarning() << "TEST Elite List";
+	qDebug() << "TEST Elite List";
 
 	eliteList.setParameters(parElitelistSize);
 	eliteList.printEliteList();
@@ -453,7 +437,7 @@ void MEA:: testEliteList(){
 	// test decAndEliminate---------------------
 	std::list< AgentSudoku * >::iterator   auxIt;
 	int i;
-	qWarning() << "TEST decAndEliminate()  LIFE POINTS:";
+	qDebug() << "TEST decAndEliminate()  LIFE POINTS:";
 	i = 0;
 	for(itAgent = agents.begin(); itAgent != agents.end(); ++itAgent){
 		//if(i %3 == 0)
@@ -474,7 +458,7 @@ void MEA:: testEliteList(){
 			//printf("-> agent kaput");
 			outstr += "-> agent kaput";
 		}
-		qWarning() << outstr;
+		qDebug() << outstr;
 	}
 	//=========================
 
