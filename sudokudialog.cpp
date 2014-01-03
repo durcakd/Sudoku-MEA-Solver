@@ -9,12 +9,8 @@
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
-	givenData = new int[81];
-
-
 	tableView = new QTableView;
-	sudokuTableModel = new SudokuTableModel;
-
+	sudokuTableModel = NULL;
 	//openFileTB	= new QToolButton;
 	//saveToFileTB = new QToolButton;
 	startTB		= new QToolButton;
@@ -233,7 +229,10 @@ void SudokuDialog::pripareParametersLE(){
 
 }
 
-void SudokuDialog::setTableModel(QAbstractTableModel *model ) const{
+void SudokuDialog::setTableModel( QAbstractTableModel *model ){
+
+	sudokuTableModel = static_cast<SudokuTableModel*>(model);
+
 	tableView->setModel( model );
 	//tableView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	tableView->resizeColumnsToContents();
@@ -306,11 +305,16 @@ void SudokuDialog::on_newTB_clicked(){
 
 // start thread
 void  SudokuDialog::start(){
+	if(sudokuTableModel == NULL){
+		qDebug() << "Error: dialog.start() called without set table model before";
+		return;
+	}
+
 	startB->setEnabled(false);
 	startTB->setEnabled(false);
 
 	if( !thread.isRunning()){
-		thread.setParameters(parm);
+		thread.setParameters( parm, sudokuTableModel->givenData() );
 		thread.start();
 	}
 }

@@ -30,7 +30,7 @@ public:
 	QToolButton *getNewTB() const		{ return newTB; }
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	const SudokuThread *getThread() const		{ return &thread; }
-	void setTableModel(QAbstractTableModel *model ) const;
+	void setTableModel( QAbstractTableModel *model );
 
 signals:
 	void requestForReadFile(const QString &);
@@ -100,8 +100,6 @@ private:
 	maxCalls
 	*/
 
-
-	int *givenData;
 
 
 	};

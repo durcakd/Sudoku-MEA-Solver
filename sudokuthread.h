@@ -10,7 +10,7 @@ class SudokuThread : public QThread
 public:
 	explicit SudokuThread();
 
-	void setParameters( const PARAMETERS &parm);
+	void setParameters( const PARAMETERS &parm, const int *givenData);
 
 signals:
 	void done(const QString msg);
