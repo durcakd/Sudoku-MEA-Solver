@@ -40,8 +40,6 @@ void SudokuThread::run(){
 		countTrials++;
 	}
 
-	sleep(1);
-
 	double runTime = time.elapsed() / 1000.0;
 
 	QString msg;

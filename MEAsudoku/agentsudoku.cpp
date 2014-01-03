@@ -100,7 +100,7 @@ void AgentSudoku:: printState(int *state){
 	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
 
 	if(NULL == state){
-		qWarning() << "ERROR printState(): state is NULLL";
+		qDebug() << "ERROR printState(): state is NULLL";
 		return;
 	}
 
@@ -108,15 +108,15 @@ void AgentSudoku:: printState(int *state){
 		if(i % N == 0)
 			outstr += "  ";
 		if(i % NN == 0){
-			qWarning() << outstr;
+			qDebug() << outstr;
 			outstr = "";
 		}
 		if(i % (NN*3) == 0 && 0 != i) {
-			qWarning() << " ";
+			qDebug() << " ";
 		}
-		outstr +=  state[i] ;
+		outstr +=  QString::number(state[i]) ;
 	}
-	qWarning() << outstr;
+	qDebug() << outstr;
 }
 
 void AgentSudoku:: scprintState(int *state, int *fixed){
@@ -126,7 +126,7 @@ void AgentSudoku:: scprintState(int *state, int *fixed){
 
 	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
 	if(NULL == state){
-		qWarning() << "ERROR printState(): state is NULLL";
+		qDebug() << "ERROR printState(): state is NULLL";
 		return;
 	}
 
@@ -136,11 +136,11 @@ void AgentSudoku:: scprintState(int *state, int *fixed){
 		if(i % 3 == 0 && 0 != i)
 			outstr += "   ";
 		if(i % NN == 0 && 0 != i ){
-			qWarning() << outstr;
+			qDebug() << outstr;
 			outstr = "";
 		}
 		if(i % (NN*3) == 0 && 0 != i) {
-			qWarning() << " ";
+			qDebug() << " ";
 		}
 		outstr += state[i] ;
 		// color
@@ -154,7 +154,7 @@ void AgentSudoku:: scprintState(int *state, int *fixed){
 			printf(" %d", state[i]);
 			*/
 	}
-	qWarning() << outstr;
+	qDebug() << outstr;
 	//SetConsoleTextAttribute(hConsole, 7);
 
 }

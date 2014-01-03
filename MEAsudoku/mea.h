@@ -11,6 +11,8 @@
 #define MEA_H
 
 #include <QObject>
+#include <QStringList>
+
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -96,6 +98,7 @@ public:
 	void testEliteList();
 
 	static void addCounterTrials();
+	QStringList  printState(const int *state);
 
 };
 

@@ -467,3 +467,20 @@ void MEA:: testEliteList(){
 void MEA::	addCounterTrials(){
 	MEA::counterTrial++;
 }
+
+
+
+QStringList MEA:: printState(const int *state){
+	QStringList list;
+	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
+
+	if(NULL == state){
+		qDebug() << "ERROR printState(): state is NULLL";
+		return list;
+	}
+
+	for(int i = 0; i < NN*NN; ++i){
+		list << QString::number(state[i]) ;
+	}
+	return list;
+}

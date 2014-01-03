@@ -14,6 +14,7 @@
 #include <cstdio>
 
 
+
 #define TABU				1
 #define MAX_FITNESS			243
 #define OPTIMAL_FITNESS		0
