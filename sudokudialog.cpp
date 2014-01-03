@@ -159,37 +159,37 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 // SLOTs for parametre's line edits to change parameters variables
 void SudokuDialog::on_popSizeLE_textChanged(const QString &str){
 	if(popSizeLE->hasAcceptableInput()){
-		popSize = str.toInt();
+		parm.popSize = str.toInt();
 	}
 }
 void SudokuDialog::on_elitSizeLE_textChanged(const QString &str){
 	if(elitSizeLE->hasAcceptableInput()){
-		elitSize = str.toInt();
+		parm.elitSize = str.toInt();
 	}
 }
 void SudokuDialog::on_lifespanLE_textChanged(const QString &str){
 	if(lifespanLE->hasAcceptableInput()){
-		lifespan = str.toInt();
+		parm.lifespan = str.toInt();
 	}
 }
 void SudokuDialog::on_birthPeriodLE_textChanged(const QString &str){
 	if(birthPeriodLE->hasAcceptableInput()){
-		birthPeriod = str.toInt();
+		parm.birthPeriod = str.toInt();
 	}
 }
 void SudokuDialog::on_milestonePeriodLE_textChanged(const QString &str){
 	if(milestonePeriodLE->hasAcceptableInput()){
-		milestonePeriod = str.toInt();
+		parm.milestonePeriod = str.toInt();
 	}
 }
 void SudokuDialog::on_localTrialsLE_textChanged(const QString &str){
 	if(localTrialsLE->hasAcceptableInput()){
-		localTrials = str.toInt();
+		parm.localTrials = str.toInt();
 	}
 }
 void SudokuDialog::on_maxCallsLE_textChanged(const QString &str){
 	if(maxCallsLE->hasAcceptableInput()){
-		maxCalls = str.toInt();
+		parm.maxCalls = str.toInt();
 	}
 }
 
@@ -308,7 +308,9 @@ void SudokuDialog::on_newTB_clicked(){
 void  SudokuDialog::start(){
 	startB->setEnabled(false);
 	startTB->setEnabled(false);
+
 	if( !thread.isRunning()){
+		thread.setParameters(parm);
 		thread.start();
 	}
 }

@@ -89,14 +89,7 @@ private:
 	QLineEdit	*localTrialsLE;
 	QLineEdit	*maxCallsLE;
 
-	int popSize;
-	int elitSize;
-	int lifespan;
-	int birthPeriod;
-	int milestonePeriod;
-	int localTrials;
-	int maxCalls;
-
+	PARAMETERS parm;
 	/*
 	popSize
 	elitSize

@@ -61,7 +61,7 @@ void MEA:: setParameters(double nmutProbability, int nnumAgents,int nmaxGenratio
 int MEA:: optimize(){
 	int generation;//, i;
 	int *solution;
-	int meanPopSize = 0;
+	//int meanPopSize = 0;
 	//CString outstr;
 
 	eliteList.setParameters(parElitelistSize);
@@ -80,16 +80,12 @@ int MEA:: optimize(){
 	counterTrial = 0;
 	int maxFitTrias = parMaxGenrations-2*parNumAgents;
 	generation = 0;
-	//for(generation = 0; generation < parMaxGenrations; ++generation){
+
 	while(counterTrial < maxFitTrias){
 		generation++;
-
-
 		solution = controlFitness();
 
 		if(NULL != solution){
-			//outstr.Format("      yes  %d", generation * parMaxTrials);
-			//CLogger::Instance()->write(outstr);
 			if(! testMode){
 				AgentSudoku::printState(solution);
 			}
@@ -97,28 +93,20 @@ int MEA:: optimize(){
 		}
 
 		decLifePointsAndEliminate();
-		if(0 == generation % parBirthStep ){
-			//outstr.Format("BIRTH  agent size = %d",agents.size()); CLogger::Instance()->write(outstr);
-			/*while(agents.size() < parNumAgents ){
-				birthNewAgent();
-			}*/
-			if( agents.size() < (unsigned)parNumAgents )
-				birthNewAgent();
 
+		if( (0 == generation % parBirthStep ) && ( agents.size() < (unsigned)parNumAgents )){
+				birthNewAgent();
 		}
 		//printAgents();
-		//getchar();
-		localSearch(generation);
-		//meanPopSize += agents.size();
 
+		localSearch(generation);
+
+		//meanPopSize += agents.size();
 		//printBestMeanFitAndAgentsSize();
 	}
-	//QString outstr;
 	//outstr.Format("CT   %.3d   Gen %5d", counterTrial, generation); CLogger::Instance()->write(outstr);
-
 	//CString outstr;
 	//outstr.Format("mean Pop size  (%.3lf)", ((double)meanPopSize)/parMaxGenrations); CLogger::Instance()->write(outstr);
-
 	//outstr.Format("NOT found Solution  (%d)", counterTrial); CLogger::Instance()->write(outstr);
 	//CLogger::Instance()->write("     not");
 	return 0;
