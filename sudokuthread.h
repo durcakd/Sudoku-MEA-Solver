@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include "constants.h"
+#include "MEAsudoku/mea.h"
 
 class SudokuThread : public QThread
 	{
@@ -10,7 +11,7 @@ class SudokuThread : public QThread
 public:
 	explicit SudokuThread();
 
-	void setParameters( const PARAMETERS &parm, const int *givenData);
+	void setParameters( const PARAMETERS &parm, int *givenData);
 
 signals:
 	void done(const QString msg);
@@ -19,9 +20,9 @@ protected:
 	void run();
 
 private:
-
-
-
+	PARAMETERS parm;
+	int *givenData;
+	MEA *mea;
 	};
 
 #endif // SUDOKUTHREAD_H

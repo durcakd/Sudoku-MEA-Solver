@@ -10,7 +10,7 @@
 #ifndef MEA_H
 #define MEA_H
 
-
+#include <QObject>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -26,8 +26,9 @@
   Elite_list object represent elite list data structure.
 * autor: David Durcak
 */
-class MEA
+class MEA : public QObject
 {
+	//Q_OBJECT
 private:
 	EliteList eliteList;   // elite list
 	//int *fixedState;
