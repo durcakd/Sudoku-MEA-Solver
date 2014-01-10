@@ -12,6 +12,7 @@ public:
 	explicit SudokuThread();
 
 	void setParameters( const PARAMETERS &parm, int *givenData);
+	MEA *getMea() const { return mea; }
 
 signals:
 	void done(const QString msg);

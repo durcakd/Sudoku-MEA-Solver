@@ -72,7 +72,7 @@ public:
 
 	int *getCurrentState();
 	void setCurrentState(int *newState);
-	static void printState(int *state);
+	static QStringList printState(int *state);
 	static void scprintState(int *state, int *fixed);
 
 

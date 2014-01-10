@@ -100,6 +100,7 @@ int MEA:: optimize(){
 		if(NULL != solution){
 			if(! testMode){
 				AgentSudoku::printState(solution);
+				emit pushMsg("jopjopok");
 			}
 			return counterTrial;
 		}

@@ -9,6 +9,8 @@ SudokuController::SudokuController(QApplication *app){
 	mSudokuDialog->setTableModel(mSudokuTableModel);
 
 	createConnections();   // create connecions
+	// initial open file
+	mSudokuTableModel->openFile(":images/s04b.txt");
 
 	mSudokuDialog->show();
 }
@@ -38,6 +40,10 @@ void SudokuController::createConnections(){
 	//
 	QObject::connect( mSudokuDialog->getThread(), SIGNAL(done(QString)),
 					  mSudokuDialog, SLOT(threadDone(QString)));
+
+	// !!! experimental  -> Not WORK, because cos mea is NULL, & reatly is created new instance
+	//QObject::connect( mSudokuDialog->getThread()->getMea(), SIGNAL(pushMsg(QString)),
+	//				  mSudokuDialog, SLOT(threadDone(QString)));
 
 
 }

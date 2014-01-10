@@ -30,7 +30,8 @@
 */
 class MEA : public QObject
 {
-	//Q_OBJECT
+	Q_OBJECT
+
 private:
 	EliteList eliteList;   // elite list
 	//int *fixedState;
@@ -56,6 +57,8 @@ private:
 	int *fixedLists;
 
 	bool testMode;
+
+
 
 public:
 	std::list< AgentSudoku * >  agents;    // list of agents
@@ -99,6 +102,9 @@ public:
 
 	static void addCounterTrials();
 	QStringList  printState(const int *state);
+
+signals:
+	void pushMsg(QString msg);
 
 };
 
