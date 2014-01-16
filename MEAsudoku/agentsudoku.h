@@ -14,6 +14,7 @@
 #include <cstdio>
 
 
+
 #define TABU				1
 #define MAX_FITNESS			243
 #define OPTIMAL_FITNESS		0
@@ -54,12 +55,11 @@ private:
 
 	// Parameters
 	int parMaxTrials;
-	double	parMutProbability;
 
 public:
 	//AgentSudoku();
-	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, double nparMutProbability, int *parTabuList);
-	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, double nparMutProbability, int *parTabuList);
+	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, int *parTabuList);
+	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials,  int *parTabuList);
 	~AgentSudoku();
 
 
@@ -72,7 +72,7 @@ public:
 
 	int *getCurrentState();
 	void setCurrentState(int *newState);
-	static void printState(int *state);
+	static QStringList printState(int *state);
 	static void scprintState(int *state, int *fixed);
 
 

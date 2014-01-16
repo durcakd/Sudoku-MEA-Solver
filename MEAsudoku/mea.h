@@ -10,6 +10,8 @@
 #ifndef MEA_H
 #define MEA_H
 
+#include <QObject>
+#include <QStringList>
 
 #include <cstdio>
 #include <cstdlib>
@@ -26,8 +28,10 @@
   Elite_list object represent elite list data structure.
 * autor: David Durcak
 */
-class MEA
+class MEA : public QObject
 {
+	Q_OBJECT
+
 private:
 	EliteList eliteList;   // elite list
 	//int *fixedState;
@@ -38,7 +42,6 @@ private:
 
 
 	// Parameters
-	double	parMutProbability; ///
 	int		parNumAgents,
 			parMaxGenrations,
 			parMaxTrials,
@@ -46,7 +49,7 @@ private:
 			parBirthStep,
 			parMilestoneStep,
 			parElitelistSize; //// ??
-	char *sudokuFile;
+
 
 
 	int *tabuList;
@@ -54,6 +57,8 @@ private:
 	int *fixedLists;
 
 	bool testMode;
+
+
 
 public:
 	std::list< AgentSudoku * >  agents;    // list of agents
@@ -64,9 +69,9 @@ public:
 	// Constructor & Destructor
 	MEA();
 	~MEA();
-	void setParameters(double nmutProbability, int nnumAgents,int nmaxGenrations,int nmaxTrials,
+	void setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
 							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
-							int nelitelistSize, char *nsudokuFile, bool ntestMode);
+							int nelitelistSize, bool ntestMode);
 
 
 
@@ -96,6 +101,10 @@ public:
 	void testEliteList();
 
 	static void addCounterTrials();
+	QStringList  printState(const int *state);
+
+signals:
+	void pushMsg(QString msg);
 
 };
 

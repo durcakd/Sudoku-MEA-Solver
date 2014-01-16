@@ -9,12 +9,8 @@
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
-	givenData = new int[81];
-
-
 	tableView = new QTableView;
-	sudokuTableModel = new SudokuTableModel;
-
+	sudokuTableModel = NULL;
 	//openFileTB	= new QToolButton;
 	//saveToFileTB = new QToolButton;
 	startTB		= new QToolButton;
@@ -148,43 +144,48 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( newTB, SIGNAL(clicked()),
 			 this, SLOT(on_newTB_clicked()));
 
+	connect( startB, SIGNAL(clicked()),
+			 this, SLOT(start()));
+	connect( startTB, SIGNAL(clicked()),
+			 this, SLOT(start()));
+
 	pripareParametersLE();
 }
 
 // SLOTs for parametre's line edits to change parameters variables
 void SudokuDialog::on_popSizeLE_textChanged(const QString &str){
 	if(popSizeLE->hasAcceptableInput()){
-		popSize = str.toInt();
+		parm.popSize = str.toInt();
 	}
 }
 void SudokuDialog::on_elitSizeLE_textChanged(const QString &str){
 	if(elitSizeLE->hasAcceptableInput()){
-		elitSize = str.toInt();
+		parm.elitSize = str.toInt();
 	}
 }
 void SudokuDialog::on_lifespanLE_textChanged(const QString &str){
 	if(lifespanLE->hasAcceptableInput()){
-		lifespan = str.toInt();
+		parm.lifespan = str.toInt();
 	}
 }
 void SudokuDialog::on_birthPeriodLE_textChanged(const QString &str){
 	if(birthPeriodLE->hasAcceptableInput()){
-		birthPeriod = str.toInt();
+		parm.birthPeriod = str.toInt();
 	}
 }
 void SudokuDialog::on_milestonePeriodLE_textChanged(const QString &str){
 	if(milestonePeriodLE->hasAcceptableInput()){
-		milestonePeriod = str.toInt();
+		parm.milestonePeriod = str.toInt();
 	}
 }
 void SudokuDialog::on_localTrialsLE_textChanged(const QString &str){
 	if(localTrialsLE->hasAcceptableInput()){
-		localTrials = str.toInt();
+		parm.localTrials = str.toInt();
 	}
 }
 void SudokuDialog::on_maxCallsLE_textChanged(const QString &str){
 	if(maxCallsLE->hasAcceptableInput()){
-		maxCalls = str.toInt();
+		parm.maxCalls = str.toInt();
 	}
 }
 
@@ -228,7 +229,10 @@ void SudokuDialog::pripareParametersLE(){
 
 }
 
-void SudokuDialog::setTableModel(QAbstractTableModel *model ) const{
+void SudokuDialog::setTableModel( QAbstractTableModel *model ){
+
+	sudokuTableModel = static_cast<SudokuTableModel*>(model);
+
 	tableView->setModel( model );
 	//tableView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	tableView->resizeColumnsToContents();
@@ -297,4 +301,27 @@ void SudokuDialog::confirm(const bool ok){
 // new clear
 void SudokuDialog::on_newTB_clicked(){
 	confirmTB->setChecked(true);
+}
+
+// start thread
+void  SudokuDialog::start(){
+	if(sudokuTableModel == NULL){
+		qDebug() << "Error: dialog.start() called without set table model before";
+		return;
+	}
+
+	startB->setEnabled(false);
+	startTB->setEnabled(false);
+
+	if( !thread.isRunning()){
+		thread.setParameters( parm, sudokuTableModel->givenData() );
+		thread.start();
+	}
+}
+// get result from thread
+void  SudokuDialog::threadDone(const QString msg){
+	addStrToListWidged(msg);
+	startB->setEnabled(true);
+	startTB->setEnabled(true);
+
 }

@@ -16,12 +16,12 @@
 
 #include "mea.h"
 #include "agentsudoku.h"
-
+#include "resultemitersigleton.h"
 
 // ================================================
 
 // Constructors & Destructors
-AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, double nparMutProbability, int *parTabuList){
+AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials,  int *parTabuList){
 	tabuList			= parTabuList;
 	fixed				= fixedState;
 	fixedList			= nfixedLists;
@@ -38,11 +38,10 @@ AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, 
 	lifePoints				= newLifePoints;
 	//parLifePoints			= newLifePoints;
 	parMaxTrials			= nparMaxTrials;
-	parMutProbability		= nparMutProbability;
 
 	//swapState				= NULL;
 }
-AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, double nparMutProbability, int *parTabuList){
+AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials, int *parTabuList){
 	tabuList				= parTabuList;
 	fixed					= fixedState;
 	fixedList				= nfixedLists;
@@ -57,7 +56,6 @@ AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, 
 	lifePoints				= newLifePoints;
 	//parLifePoints			= newLifePoints;
 	parMaxTrials			= nparMaxTrials;
-	parMutProbability		= nparMutProbability;
 
 
 	currentFitness			= newCurrentFitness;
@@ -95,30 +93,38 @@ int	*AgentSudoku:: getCurrentState(){
 void AgentSudoku:: setCurrentState(int *newState){
 	currentState = newState;
 }
-void AgentSudoku:: printState(int *state){
+QStringList AgentSudoku:: printState(int *state){
 	int i;
 	QString outstr;
-
-	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
+	QStringList list;
 
 	if(NULL == state){
-		qWarning() << "ERROR printState(): state is NULLL";
-		return;
+		qDebug() << "ERROR printState(): state is NULLL";
+		return list;
 	}
 
 	for(i = 0; i < NN*NN; ++i){
+		// list
+		list << QString::number(state[i]) ;
+		// debug
 		if(i % N == 0)
 			outstr += "  ";
 		if(i % NN == 0){
-			qWarning() << outstr;
+			qDebug() << outstr;
 			outstr = "";
 		}
 		if(i % (NN*3) == 0 && 0 != i) {
-			qWarning() << " ";
+			qDebug() << " ";
 		}
-		outstr +=  state[i] ;
+		outstr +=  QString::number(state[i]) ;
 	}
-	qWarning() << outstr;
+
+	ResultEmiterSigleton::getInstance()->sentResultRequest(list);
+
+	qDebug() << outstr;
+
+	return list;
+
 }
 
 void AgentSudoku:: scprintState(int *state, int *fixed){
@@ -128,7 +134,7 @@ void AgentSudoku:: scprintState(int *state, int *fixed){
 
 	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
 	if(NULL == state){
-		qWarning() << "ERROR printState(): state is NULLL";
+		qDebug() << "ERROR printState(): state is NULLL";
 		return;
 	}
 
@@ -138,11 +144,11 @@ void AgentSudoku:: scprintState(int *state, int *fixed){
 		if(i % 3 == 0 && 0 != i)
 			outstr += "   ";
 		if(i % NN == 0 && 0 != i ){
-			qWarning() << outstr;
+			qDebug() << outstr;
 			outstr = "";
 		}
 		if(i % (NN*3) == 0 && 0 != i) {
-			qWarning() << " ";
+			qDebug() << " ";
 		}
 		outstr += state[i] ;
 		// color
@@ -156,7 +162,7 @@ void AgentSudoku:: scprintState(int *state, int *fixed){
 			printf(" %d", state[i]);
 			*/
 	}
-	qWarning() << outstr;
+	qDebug() << outstr;
 	//SetConsoleTextAttribute(hConsole, 7);
 
 }
@@ -216,13 +222,13 @@ void AgentSudoku:: setName(int newName){
 
 // most importatnt metods
 
- // generate new state for new agents
+// generate new state for new agents
 int	 AgentSudoku:: generateNewState(){
 	int subarray[NN];
 	int i,
-		offset,
-		sequence,
-		randomNumber;
+			offset,
+			sequence,
+			randomNumber;
 
 	// for every one subseqencie:
 	/*if(NULL == currentState){
@@ -262,12 +268,12 @@ int	 AgentSudoku:: generateNewState(){
 int  AgentSudoku:: fitnessFunctionAllOverState(int *actualState, int *fitnessList){
 	int existArray[NN];
 	int fitness = 0,
-		rowFitness,
-		k,
-		i,
-		j,
-		position,
-		offset;
+			rowFitness,
+			k,
+			i,
+			j,
+			position,
+			offset;
 
 
 	// evaluate for column
@@ -323,13 +329,13 @@ int  AgentSudoku:: fitnessFunctionAllOverState(int *actualState, int *fitnessLis
 // mutation + heuristic + fast fitness function (via change)
 int	 AgentSudoku:: mutationUseHeurRetFitness(int *newState, int *newFitnessList){          // mutation  MUT-5  only 1 row WITHOUT probability using fixedList, new fitness
 	int i,
-		position1,
-		position2,
-		offset,
-		swap,
-		counter,
-		numConflicts,
-		tabuCounter;
+			position1,
+			position2,
+			offset,
+			swap,
+			counter,
+			numConflicts,
+			tabuCounter;
 	//QString outstr;
 	int existArray[NN];
 	//CString outstr;
@@ -501,9 +507,9 @@ int	 AgentSudoku:: mutationUseHeurRetFitness(int *newState, int *newFitnessList)
 // local search (edited hill climing algorithm)
 int  AgentSudoku:: localSearchUseHeuristic(){
 	int trial,
-		mutFitness,
-		localBestMutFitness,
-		reward;
+			mutFitness,
+			localBestMutFitness,
+			reward;
 	int *swapState;
 
 	reward = currentFitness;
@@ -513,7 +519,7 @@ int  AgentSudoku:: localSearchUseHeuristic(){
 		//mutFitness = mutationReturnFitness( mutState, mutFitnessList);
 		mutFitness = mutationUseHeurRetFitness( mutState, mutFitnessList);
 		MEA::	addCounterTrials();
-			/*if(mutFitness != fitnessFunction(mutState)){
+		/*if(mutFitness != fitnessFunction(mutState)){
 				CLogger::Instance()->write("ERROR:: NEROVNA SA ");
 				int rFitness, s;
 					rFitness = 0;
@@ -522,7 +528,7 @@ int  AgentSudoku:: localSearchUseHeuristic(){
 					}
 				//mutFitness = AgentSudoku::fitnessFunction(mutState);
 			}*/
-			// preco memcopy?????  -> memcopy if parallelism
+		// preco memcopy?????  -> memcopy if parallelism
 
 		if(mutFitness <= localBestMutFitness ){
 			memcpy(localBestMutFitnessList, mutFitnessList, 2*NN*sizeof(int));
@@ -560,8 +566,8 @@ int  AgentSudoku:: localSearchUseHeuristic(){
 // 2. version of local search, not use in final version
 int  AgentSudoku:: localSearchUseFitList(){
 	int trial,
-		mutFitness,
-		reward;
+			mutFitness,
+			reward;
 	int *swapState;
 
 	reward = currentFitness;
@@ -570,7 +576,7 @@ int  AgentSudoku:: localSearchUseFitList(){
 		//mutFitness = mutationReturnFitness( mutState, mutFitnessList);
 		mutFitness = mutationUseHeurRetFitness( mutState, mutFitnessList);
 		MEA::	addCounterTrials();
-			/*if(mutFitness != fitnessFunction(mutState)){
+		/*if(mutFitness != fitnessFunction(mutState)){
 				CLogger::Instance()->write("ERROR:: NEROVNA SA ");
 				int rFitness, s;
 					rFitness = 0;
@@ -579,24 +585,24 @@ int  AgentSudoku:: localSearchUseFitList(){
 					}
 				//mutFitness = AgentSudoku::fitnessFunction(mutState);
 			}*/
-			// preco memcopy?????  -> memcopy if parallelism
-			if(mutFitness <= getCurrentFitness() ){
-				memcpy(currentFitnessList, mutFitnessList, 2*NN*sizeof(int));
+		// preco memcopy?????  -> memcopy if parallelism
+		if(mutFitness <= getCurrentFitness() ){
+			memcpy(currentFitnessList, mutFitnessList, 2*NN*sizeof(int));
 
-				reward = currentFitness + 1;
+			reward = currentFitness + 1;
 
-				currentFitness = mutFitness;
+			currentFitness = mutFitness;
 
-				swapState = mutState;
-				mutState = currentState;
-				currentState = swapState;
+			swapState = mutState;
+			mutState = currentState;
+			currentState = swapState;
 
 
 
-				//memcpy(agent->getCurrentState(), mutState, NN_NN * sizeof(int));
-				//reward = 1;
-			}
+			//memcpy(agent->getCurrentState(), mutState, NN_NN * sizeof(int));
+			//reward = 1;
 		}
+	}
 	if(reward > currentFitness)
 		return 1;
 	else

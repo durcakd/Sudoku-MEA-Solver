@@ -5,6 +5,7 @@
 
 #include "sudokudialog.h"
 #include "sudokutablemodel.h"
+#include "resultemitersigleton.h"
 
 class SudokuController
 	{
@@ -18,6 +19,7 @@ private:
 	QApplication *mApp;
 	SudokuDialog *mSudokuDialog;
 	SudokuTableModel *mSudokuTableModel;
+	ResultEmiterSigleton *resultEmiter;
 
 
 
