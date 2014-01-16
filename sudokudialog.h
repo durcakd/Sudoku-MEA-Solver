@@ -56,6 +56,10 @@ private slots:
 	void on_localTrialsLE_textChanged(const QString &str);
 	void on_maxCallsLE_textChanged(const QString &str);
 
+	void setEasy();
+	void setMedium();
+	void setHard();
+
 private:
 	void pripareParametersLE();
 
@@ -79,6 +83,9 @@ private:
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
 	QLineEdit	*progresLE;
+	QPushButton *easyB;
+	QPushButton *mediumB;
+	QPushButton *hardB;
 
 	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;

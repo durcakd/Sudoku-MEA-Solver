@@ -19,6 +19,10 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	parametersTB = new QToolButton;
 	listTB		= new QToolButton;
 
+	easyB		= new QPushButton(tr("Easy"));
+	mediumB		= new QPushButton(tr("Medium"));
+	hardB		= new QPushButton(tr("Hard"));
+
 
 	confirmIcon		= new QIcon(":/images/confirm.png");
 	unconfirmIcon	= new QIcon(":/images/unconfirm.png");
@@ -92,9 +96,12 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	buttonLayout->addWidget( openFileB );
 	buttonLayout->addWidget( saveToFileB );
+	buttonLayout->addWidget( parametersTB );
 	buttonLayout->addStretch();
 
-	buttonLayout->addWidget( parametersTB );
+	buttonLayout->addWidget( easyB );
+	buttonLayout->addWidget( mediumB );
+	buttonLayout->addWidget( hardB );
 
 
 	QHBoxLayout *button2Layout = new QHBoxLayout;
@@ -126,8 +133,19 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	listTB->setCheckable(true);
 	listWidged->hide();
 
+	easyB->hide();
+	mediumB->hide();
+	hardB->hide();
+
 	connect( this->parametersTB, SIGNAL(toggled(bool)),
 			 parametersGroup, SLOT(setVisible(bool)));
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
+			 easyB, SLOT(setVisible(bool)));
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
+			 mediumB, SLOT(setVisible(bool)));
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
+			 hardB, SLOT(setVisible(bool)));
+
 	connect( listTB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
 
@@ -148,6 +166,15 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 			 this, SLOT(start()));
 	connect( startTB, SIGNAL(clicked()),
 			 this, SLOT(start()));
+
+	// parrameters
+	connect( easyB, SIGNAL(clicked()),
+			 this, SLOT(setEasy()) );
+	connect( mediumB, SIGNAL(clicked()),
+			 this, SLOT(setMedium()) );
+	connect( hardB, SIGNAL(clicked()),
+			 this, SLOT(setHard()) );
+
 
 	pripareParametersLE();
 }
@@ -219,14 +246,35 @@ void SudokuDialog::pripareParametersLE(){
 			 this, SLOT(on_maxCallsLE_textChanged(QString)));
 
 	// set default values of parameters
-	popSizeLE->setText( QString::number( POPSIZE ));
-	elitSizeLE->setText( QString::number( ELITESIZE ));
-	lifespanLE->setText( QString::number( LIFESPAN ));
-	birthPeriodLE->setText( QString::number( BIRTHPERIOD ));
-	milestonePeriodLE->setText( QString::number( MILESTONEPERIOD ));
-	localTrialsLE->setText( QString::number( LOCALTRIALS ));
-	maxCallsLE->setText( QString::number( MAXCALLS ));
+	setEasy();
+}
 
+void SudokuDialog::setEasy(){
+	popSizeLE->setText( QString::number( EPOPSIZE ));
+	elitSizeLE->setText( QString::number( EELITESIZE ));
+	lifespanLE->setText( QString::number( ELIFESPAN ));
+	birthPeriodLE->setText( QString::number( EBIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( EMILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( ELOCALTRIALS ));
+	maxCallsLE->setText( QString::number( EMAXCALLS ));
+}
+void SudokuDialog::setMedium(){
+	popSizeLE->setText( QString::number( MPOPSIZE ));
+	elitSizeLE->setText( QString::number( MELITESIZE ));
+	lifespanLE->setText( QString::number( MLIFESPAN ));
+	birthPeriodLE->setText( QString::number( MBIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( MMILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( MLOCALTRIALS ));
+	maxCallsLE->setText( QString::number( MMAXCALLS ));
+}
+void SudokuDialog::setHard(){
+	popSizeLE->setText( QString::number( HPOPSIZE ));
+	elitSizeLE->setText( QString::number( HELITESIZE ));
+	lifespanLE->setText( QString::number( HLIFESPAN ));
+	birthPeriodLE->setText( QString::number( HBIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( HMILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( HLOCALTRIALS ));
+	maxCallsLE->setText( QString::number( HMAXCALLS ));
 }
 
 void SudokuDialog::setTableModel( QAbstractTableModel *model ){
