@@ -57,14 +57,22 @@ QVariant SudokuTableModel::data(const QModelIndex &index, int role) const
 		}
 		break;
 
+	case Qt::ForegroundRole:
+		if (mGivenData[dd(row,col)] == 0) {
+			return QBrush( Qt::darkGreen );
+		}
+		break;
+
+		// all cell are centered
+
 		// background NxN cells together
 	case Qt::BackgroundRole:
 		if(row < 3 || row > 5){
 			if(col < 3 || col > 5){
-				return QBrush(Qt::gray);
+				return QBrush( Qt::lightGray );
 			}
 		} else if(col > 2 && col < 6){
-			return QBrush(Qt::gray);
+			return QBrush( Qt::lightGray );
 		}
 		break;
 
