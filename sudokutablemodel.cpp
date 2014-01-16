@@ -52,7 +52,7 @@ QVariant SudokuTableModel::data(const QModelIndex &index, int role) const
 	case Qt::FontRole:
 		if (mGivenData[dd(row,col)] != 0) {
 			QFont boldFont;
-			boldFont.setBold(true);
+			boldFont.setWeight(QFont::Black);
 			return boldFont;
 		}
 		break;
@@ -69,6 +69,7 @@ QVariant SudokuTableModel::data(const QModelIndex &index, int role) const
 		break;
 
 		// all cell are centered
+
 	case Qt::TextAlignmentRole:
 		return Qt::AlignCenter | Qt::AlignVCenter;
 		break;
@@ -240,3 +241,16 @@ void SudokuTableModel::confirm(const bool ok){
 	reset();
 }
 
+// set grid data
+void SudokuTableModel::setGridData(const QStringList &list){
+	if(list.size() == ROWS * COLS){
+
+		for( int i = 0;  i < ROWS * COLS; i++ ){
+			mGridData[i] = list.at(i);
+		}
+
+	} else {
+		qDebug() << "SudokuTableModel:setGridData(): Error: get list with wrong size.";
+	}
+	this->reset();
+}

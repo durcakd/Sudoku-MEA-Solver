@@ -1,11 +1,14 @@
 #include "sudokucontroller.h"
 
+
 // constructor
 SudokuController::SudokuController(QApplication *app){
 	mApp = app;
 
-	mSudokuTableModel = new SudokuTableModel();
-	mSudokuDialog = new SudokuDialog();
+	mSudokuTableModel	= new SudokuTableModel();
+	mSudokuDialog		= new SudokuDialog();
+	resultEmiter		= ResultEmiterSigleton::getInstance();
+
 	mSudokuDialog->setTableModel(mSudokuTableModel);
 
 	createConnections();   // create connecions
@@ -45,5 +48,7 @@ void SudokuController::createConnections(){
 	//QObject::connect( mSudokuDialog->getThread()->getMea(), SIGNAL(pushMsg(QString)),
 	//				  mSudokuDialog, SLOT(threadDone(QString)));
 
+	QObject::connect( resultEmiter, SIGNAL(sentResult(QStringList)),
+					  mSudokuTableModel, SLOT(setGridData(QStringList)));
 
 }

@@ -12,3 +12,8 @@ ResultEmiterSigleton* ResultEmiterSigleton::getInstance()
 	}
 	return instance;
 }
+
+// sent result request
+void ResultEmiterSigleton::sentResultRequest(const QStringList &list) const {
+	emit sentResult( list );
+}

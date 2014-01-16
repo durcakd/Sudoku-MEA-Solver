@@ -10,7 +10,10 @@ class ResultEmiterSigleton : public QObject
 public:
 	~ResultEmiterSigleton() { instance = NULL; }
 	static ResultEmiterSigleton* getInstance();
+	void sentResultRequest(const QStringList &list) const;
 
+signals:
+	void sentResult(const QStringList &list) const;
 
 private:
 	ResultEmiterSigleton() {
@@ -24,3 +27,4 @@ private:
 
 
 //qRegisterMetaType<MyDataType>("MyDataType");
+// Q_DECLARE_METATYPE(cv::Mat);

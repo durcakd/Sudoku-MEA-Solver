@@ -11,6 +11,8 @@
 #include <QDebug>
 #include "mea.h"
 
+#include "resultemitersigleton.h"
+
 
 int MEA:: counterTrial;
 

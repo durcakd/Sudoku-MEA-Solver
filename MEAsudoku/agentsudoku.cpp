@@ -16,7 +16,7 @@
 
 #include "mea.h"
 #include "agentsudoku.h"
-
+#include "resultemitersigleton.h"
 
 // ================================================
 
@@ -118,6 +118,9 @@ QStringList AgentSudoku:: printState(int *state){
 		}
 		outstr +=  QString::number(state[i]) ;
 	}
+
+	ResultEmiterSigleton::getInstance()->sentResultRequest(list);
+
 	qDebug() << outstr;
 
 	return list;
