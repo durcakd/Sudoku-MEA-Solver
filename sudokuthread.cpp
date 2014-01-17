@@ -21,7 +21,7 @@ void SudokuThread::run(){
 	time.start();
 
 
-	while(result <= 0 && countTrials < 100){
+	while(result <= 0 && countTrials < NUMTESTS ){
 
 		mea = new MEA();
 		mea->setParameters( givenData,
@@ -38,8 +38,9 @@ void SudokuThread::run(){
 		result = mea->optimize();
 		delete mea;
 		countTrials++;
+		emit sendProgress( countTrials );
 	}
-
+	emit sendProgress( NUMTESTS );
 	double runTime = time.elapsed() / 1000.0;
 
 	QString msg;

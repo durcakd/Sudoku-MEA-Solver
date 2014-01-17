@@ -16,6 +16,7 @@ public:
 
 signals:
 	void done(const QString msg);
+	void sendProgress( int tryStep );
 
 protected:
 	void run();

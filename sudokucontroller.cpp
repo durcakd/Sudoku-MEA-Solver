@@ -51,4 +51,8 @@ void SudokuController::createConnections(){
 	QObject::connect( resultEmiter, SIGNAL(sentResult(QStringList)),
 					  mSudokuTableModel, SLOT(setGridData(QStringList)));
 
+	// progress
+	QObject::connect( mSudokuDialog->getThread(), SIGNAL(sendProgress(int)),
+					  mSudokuDialog->getTriesPB(), SLOT(setValue(int)) );
+
 }

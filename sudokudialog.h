@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QIcon>
+#include <QProgressBar>
 
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
@@ -30,6 +31,8 @@ public:
 	QToolButton *getNewTB() const		{ return newTB; }
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	const SudokuThread *getThread() const		{ return &thread; }
+	QProgressBar *getTriesPB() const	{ return triesPB; }
+
 	void setTableModel( QAbstractTableModel *model );
 
 signals:
@@ -95,6 +98,8 @@ private:
 	QLineEdit	*milestonePeriodLE;
 	QLineEdit	*localTrialsLE;
 	QLineEdit	*maxCallsLE;
+
+	QProgressBar *triesPB;
 
 	PARAMETERS parm;
 	/*

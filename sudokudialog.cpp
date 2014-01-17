@@ -57,6 +57,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	QLabel *localTrialsL	= new QLabel(tr("Local search trials"));
 	QLabel *maxCallsL		= new QLabel(tr("Max trials (fitness calls)"));
 
+	triesPB = new QProgressBar;
+	triesPB->setRange( 0, NUMTESTS );
+	triesPB->setSizePolicy( QSizePolicy());
 
 	// layovting
 	QGridLayout *paramLayout = new QGridLayout;
@@ -107,9 +110,10 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	QHBoxLayout *button2Layout = new QHBoxLayout;
 	button2Layout->addWidget( startTB );
 	button2Layout->addWidget( startB );
-
+	button2Layout->addWidget( triesPB );
 	button2Layout->addStretch();
 	button2Layout->addWidget( listTB );
+
 
 	// -----
 
