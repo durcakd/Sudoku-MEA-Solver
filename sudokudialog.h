@@ -12,6 +12,7 @@
 #include <QIcon>
 #include <QProgressBar>
 #include <QCheckBox>
+#include <QGroupBox>
 
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
@@ -63,6 +64,7 @@ private slots:
 	void setEasy();
 	void setMedium();
 	void setHard();
+	void autoChangeState( bool checked );
 
 private:
 	void pripareParametersLE();
@@ -102,6 +104,8 @@ private:
 	QLineEdit	*milestonePeriodLE;
 	QLineEdit	*localTrialsLE;
 	QLineEdit	*maxCallsLE;
+
+	QGroupBox	*parametersGroup;
 
 	QProgressBar *triesPB;
 

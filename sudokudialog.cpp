@@ -1,7 +1,6 @@
 #include "sudokudialog.h"
 #include <QHeaderView>
 #include <QDebug>
-#include <QGroupBox>
 #include <QGridLayout>
 #include <QFileDialog>
 
@@ -82,7 +81,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	paramLayout->addWidget( maxCallsLE,6,1 );
 	//editLineLayout->addStretch();
 
-	QGroupBox *parametersGroup = new QGroupBox("MEA parameters" );
+	parametersGroup = new QGroupBox("MEA parameters" );
 	parametersGroup->setLayout(paramLayout);
 
 
@@ -182,6 +181,10 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 			 this, SLOT(setMedium()) );
 	connect( hardB, SIGNAL(clicked()),
 			 this, SLOT(setHard()) );
+
+	connect( autoCB, SIGNAL(clicked(bool)),
+			 this, SLOT(autoChangeState(bool)) );
+
 
 
 	pripareParametersLE();
@@ -285,6 +288,26 @@ void SudokuDialog::setHard(){
 	maxCallsLE->setText( QString::number( HMAXCALLS ));
 }
 
+void SudokuDialog::autoChangeState( bool checked ){
+	if( checked ){
+		listWidged->addItem("is chcecked" );
+		parametersGroup->setEnabled( false );
+		easyB->setEnabled( false );
+		mediumB->setEnabled( false );
+		hardB->setEnabled( false );
+		setEasy();
+
+
+	} else {
+		listWidged->addItem("is NOT chcecked");
+		parametersGroup->setEnabled( true );
+		easyB->setEnabled( true );
+		mediumB->setEnabled( true );
+		hardB->setEnabled( true );
+	}
+}
+
+
 void SudokuDialog::setTableModel( QAbstractTableModel *model ){
 
 	sudokuTableModel = static_cast<SudokuTableModel*>(model);
@@ -368,6 +391,7 @@ void  SudokuDialog::start(){
 
 	startB->setEnabled(false);
 	startTB->setEnabled(false);
+	autoCB->setEnabled(false);
 
 	if( !thread.isRunning()){
 		thread.setParameters( parm, sudokuTableModel->givenData() );
@@ -379,5 +403,7 @@ void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
 	startB->setEnabled(true);
 	startTB->setEnabled(true);
+	autoCB->setEnabled(true);
 
 }
+
