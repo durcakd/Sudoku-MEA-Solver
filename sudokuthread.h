@@ -22,9 +22,13 @@ protected:
 	void run();
 
 private:
+	bool autoParams;
 	PARAMETERS parm;
 	int *givenData;
 	MEA *mea;
+
+
+	void computeParams(int trial);
 	};
 
 #endif // SUDOKUTHREAD_H

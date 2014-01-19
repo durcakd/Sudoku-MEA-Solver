@@ -1,9 +1,11 @@
 #include "sudokuthread.h"
 #include <QTime>
 #include <QElapsedTimer>
+#include <QDebug>
 
 SudokuThread::SudokuThread()
 {
+	autoParams = false;
 }
 
 void SudokuThread::setParameters( const PARAMETERS &parm,  int *givenData ){
@@ -21,7 +23,9 @@ void SudokuThread::run(){
 	time.start();
 
 
+
 	while(result <= 0 && countTrials < NUMTESTS ){
+
 
 		mea = new MEA();
 		mea->setParameters( givenData,
@@ -52,5 +56,33 @@ void SudokuThread::run(){
 
 	emit done( msg);
 }
+
+void SudokuThread::computeParams(int trial){
+	if( trial < 0 || trial >= NUMTESTS ){
+		qDebug() << "Warning: SudokuThread.computeParams(): wrong parameter: trial = " << trial;
+		return;
+	}
+
+	parm.popSize		= parm.popSize	+ trial * 5;
+	parm.elitSize		= parm.elitSize + trial * 5;
+
+	parm.lifespan		= parm.lifespan + trial * 3;
+
+	parm.birthPeriod		= parm.birthPeriod		+ trial / 5;
+	parm.milestonePeriod	= parm.milestonePeriod	+ trial / 5;
+
+	parm.localTrials	= parm.localTrials	+ trial / 15;
+	parm.maxCalls		= parm.maxCalls		* trial * 20000;
+
+}
+
+
+
+
+
+
+
+
+
 
 
