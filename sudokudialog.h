@@ -69,6 +69,7 @@ private slots:
 private:
 	void pripareParametersLE();
 
+	bool autoParams;
 	SudokuThread thread;
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;

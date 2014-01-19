@@ -8,6 +8,8 @@
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
+	autoParams = true;
+
 	tableView = new QTableView;
 	sudokuTableModel = NULL;
 	//openFileTB	= new QToolButton;
@@ -188,6 +190,8 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 
 	pripareParametersLE();
+	autoCB->setChecked( true );
+	autoChangeState( true );
 }
 
 // SLOTs for parametre's line edits to change parameters variables
@@ -290,20 +294,19 @@ void SudokuDialog::setHard(){
 
 void SudokuDialog::autoChangeState( bool checked ){
 	if( checked ){
-		listWidged->addItem("is chcecked" );
 		parametersGroup->setEnabled( false );
 		easyB->setEnabled( false );
 		mediumB->setEnabled( false );
 		hardB->setEnabled( false );
 		setEasy();
-
+		autoParams = true;
 
 	} else {
-		listWidged->addItem("is NOT chcecked");
 		parametersGroup->setEnabled( true );
 		easyB->setEnabled( true );
 		mediumB->setEnabled( true );
 		hardB->setEnabled( true );
+		autoParams = false;
 	}
 }
 
