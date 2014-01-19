@@ -11,7 +11,7 @@ class SudokuThread : public QThread
 public:
 	explicit SudokuThread();
 
-	void setParameters( const PARAMETERS &parm, int *givenData);
+	void setParameters( const PARAMETERS &parm, int *givenData, bool autoParams);
 	MEA *getMea() const { return mea; }
 
 signals:

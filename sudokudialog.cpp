@@ -397,7 +397,7 @@ void  SudokuDialog::start(){
 	autoCB->setEnabled(false);
 
 	if( !thread.isRunning()){
-		thread.setParameters( parm, sudokuTableModel->givenData() );
+		thread.setParameters( parm, sudokuTableModel->givenData(), autoParams);
 		thread.start();
 	}
 }

@@ -8,10 +8,10 @@ SudokuThread::SudokuThread()
 	autoParams = false;
 }
 
-void SudokuThread::setParameters( const PARAMETERS &parm,  int *givenData ){
+void SudokuThread::setParameters(const PARAMETERS &parm,  int *givenData , bool autoParams){
 	this->parm = parm;
 	this->givenData = givenData;
-
+	this->autoParams = autoParams;
 
 }
 
@@ -26,6 +26,9 @@ void SudokuThread::run(){
 
 	while(result <= 0 && countTrials < NUMTESTS ){
 
+		if( autoParams ){
+			computeParams( countTrials );
+		}
 
 		mea = new MEA();
 		mea->setParameters( givenData,
