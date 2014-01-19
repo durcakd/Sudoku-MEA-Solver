@@ -11,19 +11,24 @@ class SudokuThread : public QThread
 public:
 	explicit SudokuThread();
 
-	void setParameters( const PARAMETERS &parm, int *givenData);
+	void setParameters( const PARAMETERS &parm, int *givenData, bool autoParams);
 	MEA *getMea() const { return mea; }
 
 signals:
 	void done(const QString msg);
+	void sendProgress( int tryStep );
 
 protected:
 	void run();
 
 private:
+	bool autoParams;
 	PARAMETERS parm;
 	int *givenData;
 	MEA *mea;
+
+
+	void computeParams(int trial);
 	};
 
 #endif // SUDOKUTHREAD_H

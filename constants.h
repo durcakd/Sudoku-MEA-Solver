@@ -9,14 +9,33 @@ enum { N	= 3 ,
 	   ROWS = N2 };
 
 // MEA deafault parameters
-enum { POPSIZE		= 80,		// start nums of agents
-	   ELITESIZE	= 80,		// max size of elite list
-	   LIFESPAN		= 300,		// life points of agent
-	   BIRTHPERIOD		= 60,	// calls between birth
-	   MILESTONEPERIOD	= 60,	// calls between best milestone reseting
-	   LOCALTRIALS		= 2,	// max calls in local search
-	   MAXCALLS			= 100000,	// max calls together
-	   NUMTESTS			= 100 };	//
+enum { NUMTESTS			= 100,
+
+	   EPOPSIZE			= 80,	// start nums of agents
+	   EELITESIZE		= 80,	// max size of elite list
+	   ELIFESPAN		= 300,	// life points of agent
+	   EBIRTHPERIOD		= 60,	// calls between birth
+	   EMILESTONEPERIOD	= 60,	// calls between best milestone reseting
+	   ELOCALTRIALS		= 2,	// max calls in local search
+	   EMAXCALLS		= 100000,	// max calls together
+
+	   MPOPSIZE			= 150,
+	   MELITESIZE		= 150,
+	   MLIFESPAN		= 400,
+	   MBIRTHPERIOD		= 60,
+	   MMILESTONEPERIOD	= 60,
+	   MLOCALTRIALS		= 3,
+	   MMAXCALLS		= 500000,
+
+	   HPOPSIZE			= 300,
+	   HELITESIZE		= 300,
+	   HLIFESPAN		= 500,
+	   HBIRTHPERIOD		= 60,
+	   HMILESTONEPERIOD	= 60,
+	   HLOCALTRIALS		= 5,
+	   HMAXCALLS		= 1000000
+
+	 };	//
 
 
 typedef struct parameters{

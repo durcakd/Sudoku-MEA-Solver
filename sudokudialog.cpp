@@ -1,7 +1,6 @@
 #include "sudokudialog.h"
 #include <QHeaderView>
 #include <QDebug>
-#include <QGroupBox>
 #include <QGridLayout>
 #include <QFileDialog>
 
@@ -9,6 +8,8 @@
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
 {
+	autoParams = true;
+
 	tableView = new QTableView;
 	sudokuTableModel = NULL;
 	//openFileTB	= new QToolButton;
@@ -18,6 +19,11 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	newTB		= new QToolButton;
 	parametersTB = new QToolButton;
 	listTB		= new QToolButton;
+
+	easyB		= new QPushButton(tr("Easy"));
+	mediumB		= new QPushButton(tr("Medium"));
+	hardB		= new QPushButton(tr("Hard"));
+	autoCB		= new QCheckBox(tr("Auto"));
 
 
 	confirmIcon		= new QIcon(":/images/confirm.png");
@@ -53,6 +59,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	QLabel *localTrialsL	= new QLabel(tr("Local search trials"));
 	QLabel *maxCallsL		= new QLabel(tr("Max trials (fitness calls)"));
 
+	triesPB = new QProgressBar;
+	triesPB->setRange( 0, NUMTESTS );
+	triesPB->setSizePolicy( QSizePolicy());
 
 	// layovting
 	QGridLayout *paramLayout = new QGridLayout;
@@ -74,7 +83,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	paramLayout->addWidget( maxCallsLE,6,1 );
 	//editLineLayout->addStretch();
 
-	QGroupBox *parametersGroup = new QGroupBox("MEA parameters" );
+	parametersGroup = new QGroupBox("MEA parameters" );
 	parametersGroup->setLayout(paramLayout);
 
 
@@ -92,17 +101,22 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	buttonLayout->addWidget( openFileB );
 	buttonLayout->addWidget( saveToFileB );
+	buttonLayout->addWidget( parametersTB );
 	buttonLayout->addStretch();
 
-	buttonLayout->addWidget( parametersTB );
+	buttonLayout->addWidget( easyB );
+	buttonLayout->addWidget( mediumB );
+	buttonLayout->addWidget( hardB );
 
 
 	QHBoxLayout *button2Layout = new QHBoxLayout;
 	button2Layout->addWidget( startTB );
 	button2Layout->addWidget( startB );
-
+	button2Layout->addWidget( triesPB );
+	button2Layout->addWidget( autoCB );
 	button2Layout->addStretch();
 	button2Layout->addWidget( listTB );
+
 
 	// -----
 
@@ -126,8 +140,21 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	listTB->setCheckable(true);
 	listWidged->hide();
 
+	easyB->hide();
+	mediumB->hide();
+	hardB->hide();
+
 	connect( this->parametersTB, SIGNAL(toggled(bool)),
 			 parametersGroup, SLOT(setVisible(bool)));
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
+			 easyB, SLOT(setVisible(bool)));
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
+			 mediumB, SLOT(setVisible(bool)));
+	connect( this->parametersTB, SIGNAL(toggled(bool)),
+			 hardB, SLOT(setVisible(bool)));
+
+
+
 	connect( listTB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
 
@@ -149,7 +176,22 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	connect( startTB, SIGNAL(clicked()),
 			 this, SLOT(start()));
 
+	// parrameters
+	connect( easyB, SIGNAL(clicked()),
+			 this, SLOT(setEasy()) );
+	connect( mediumB, SIGNAL(clicked()),
+			 this, SLOT(setMedium()) );
+	connect( hardB, SIGNAL(clicked()),
+			 this, SLOT(setHard()) );
+
+	connect( autoCB, SIGNAL(clicked(bool)),
+			 this, SLOT(autoChangeState(bool)) );
+
+
+
 	pripareParametersLE();
+	autoCB->setChecked( true );
+	autoChangeState( true );
 }
 
 // SLOTs for parametre's line edits to change parameters variables
@@ -219,15 +261,55 @@ void SudokuDialog::pripareParametersLE(){
 			 this, SLOT(on_maxCallsLE_textChanged(QString)));
 
 	// set default values of parameters
-	popSizeLE->setText( QString::number( POPSIZE ));
-	elitSizeLE->setText( QString::number( ELITESIZE ));
-	lifespanLE->setText( QString::number( LIFESPAN ));
-	birthPeriodLE->setText( QString::number( BIRTHPERIOD ));
-	milestonePeriodLE->setText( QString::number( MILESTONEPERIOD ));
-	localTrialsLE->setText( QString::number( LOCALTRIALS ));
-	maxCallsLE->setText( QString::number( MAXCALLS ));
-
+	setEasy();
 }
+
+void SudokuDialog::setEasy(){
+	popSizeLE->setText( QString::number( EPOPSIZE ));
+	elitSizeLE->setText( QString::number( EELITESIZE ));
+	lifespanLE->setText( QString::number( ELIFESPAN ));
+	birthPeriodLE->setText( QString::number( EBIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( EMILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( ELOCALTRIALS ));
+	maxCallsLE->setText( QString::number( EMAXCALLS ));
+}
+void SudokuDialog::setMedium(){
+	popSizeLE->setText( QString::number( MPOPSIZE ));
+	elitSizeLE->setText( QString::number( MELITESIZE ));
+	lifespanLE->setText( QString::number( MLIFESPAN ));
+	birthPeriodLE->setText( QString::number( MBIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( MMILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( MLOCALTRIALS ));
+	maxCallsLE->setText( QString::number( MMAXCALLS ));
+}
+void SudokuDialog::setHard(){
+	popSizeLE->setText( QString::number( HPOPSIZE ));
+	elitSizeLE->setText( QString::number( HELITESIZE ));
+	lifespanLE->setText( QString::number( HLIFESPAN ));
+	birthPeriodLE->setText( QString::number( HBIRTHPERIOD ));
+	milestonePeriodLE->setText( QString::number( HMILESTONEPERIOD ));
+	localTrialsLE->setText( QString::number( HLOCALTRIALS ));
+	maxCallsLE->setText( QString::number( HMAXCALLS ));
+}
+
+void SudokuDialog::autoChangeState( bool checked ){
+	if( checked ){
+		parametersGroup->setEnabled( false );
+		easyB->setEnabled( false );
+		mediumB->setEnabled( false );
+		hardB->setEnabled( false );
+		setEasy();
+		autoParams = true;
+
+	} else {
+		parametersGroup->setEnabled( true );
+		easyB->setEnabled( true );
+		mediumB->setEnabled( true );
+		hardB->setEnabled( true );
+		autoParams = false;
+	}
+}
+
 
 void SudokuDialog::setTableModel( QAbstractTableModel *model ){
 
@@ -312,9 +394,10 @@ void  SudokuDialog::start(){
 
 	startB->setEnabled(false);
 	startTB->setEnabled(false);
+	autoCB->setEnabled(false);
 
 	if( !thread.isRunning()){
-		thread.setParameters( parm, sudokuTableModel->givenData() );
+		thread.setParameters( parm, sudokuTableModel->givenData(), autoParams);
 		thread.start();
 	}
 }
@@ -323,5 +406,7 @@ void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
 	startB->setEnabled(true);
 	startTB->setEnabled(true);
+	autoCB->setEnabled(true);
 
 }
+

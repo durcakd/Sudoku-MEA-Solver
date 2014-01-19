@@ -10,6 +10,9 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QIcon>
+#include <QProgressBar>
+#include <QCheckBox>
+#include <QGroupBox>
 
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
@@ -30,6 +33,8 @@ public:
 	QToolButton *getNewTB() const		{ return newTB; }
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	const SudokuThread *getThread() const		{ return &thread; }
+	QProgressBar *getTriesPB() const	{ return triesPB; }
+
 	void setTableModel( QAbstractTableModel *model );
 
 signals:
@@ -56,9 +61,15 @@ private slots:
 	void on_localTrialsLE_textChanged(const QString &str);
 	void on_maxCallsLE_textChanged(const QString &str);
 
+	void setEasy();
+	void setMedium();
+	void setHard();
+	void autoChangeState( bool checked );
+
 private:
 	void pripareParametersLE();
 
+	bool autoParams;
 	SudokuThread thread;
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
@@ -79,6 +90,12 @@ private:
 	QPushButton *openFileB;
 	QPushButton *saveToFileB;
 	QLineEdit	*progresLE;
+	QPushButton *easyB;
+	QPushButton *mediumB;
+	QPushButton *hardB;
+
+
+	QCheckBox *autoCB;
 
 	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;
@@ -88,6 +105,10 @@ private:
 	QLineEdit	*milestonePeriodLE;
 	QLineEdit	*localTrialsLE;
 	QLineEdit	*maxCallsLE;
+
+	QGroupBox	*parametersGroup;
+
+	QProgressBar *triesPB;
 
 	PARAMETERS parm;
 	/*
