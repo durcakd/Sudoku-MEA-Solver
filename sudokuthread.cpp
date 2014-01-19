@@ -66,16 +66,16 @@ void SudokuThread::computeParams(int trial){
 		return;
 	}
 
-	parm.popSize		= parm.popSize	+ trial * 5;
-	parm.elitSize		= parm.elitSize + trial * 5;
+	parm.popSize		= parm.popSize	+ trial * 3;
+	parm.elitSize		= parm.elitSize + trial * 3;
 
 	parm.lifespan		= parm.lifespan + trial * 3;
 
-	parm.birthPeriod		= parm.birthPeriod		+ trial / 5;
-	parm.milestonePeriod	= parm.milestonePeriod	+ trial / 5;
+	parm.birthPeriod		= parm.birthPeriod		;//+ trial / 5;
+	parm.milestonePeriod	= parm.milestonePeriod	;//+ trial / 5;
 
-	parm.localTrials	= parm.localTrials	+ trial / 15;
-	parm.maxCalls		= parm.maxCalls		* trial * 20000;
+	parm.localTrials	= parm.localTrials	+ trial / 25;
+	parm.maxCalls		= parm.maxCalls		+ trial * 10000;
 
 }
 
