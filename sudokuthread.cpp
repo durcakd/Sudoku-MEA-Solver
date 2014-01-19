@@ -1,15 +1,17 @@
 #include "sudokuthread.h"
 #include <QTime>
 #include <QElapsedTimer>
+#include <QDebug>
 
 SudokuThread::SudokuThread()
 {
+	autoParams = false;
 }
 
-void SudokuThread::setParameters( const PARAMETERS &parm,  int *givenData ){
+void SudokuThread::setParameters(const PARAMETERS &parm,  int *givenData , bool autoParams){
 	this->parm = parm;
 	this->givenData = givenData;
-
+	this->autoParams = autoParams;
 
 }
 
@@ -21,7 +23,12 @@ void SudokuThread::run(){
 	time.start();
 
 
-	while(result <= 0 && countTrials < 100){
+
+	while(result <= 0 && countTrials < NUMTESTS ){
+
+		if( autoParams ){
+			computeParams( countTrials );
+		}
 
 		mea = new MEA();
 		mea->setParameters( givenData,
@@ -38,8 +45,9 @@ void SudokuThread::run(){
 		result = mea->optimize();
 		delete mea;
 		countTrials++;
+		emit sendProgress( countTrials );
 	}
-
+	emit sendProgress( NUMTESTS );
 	double runTime = time.elapsed() / 1000.0;
 
 	QString msg;
@@ -51,5 +59,33 @@ void SudokuThread::run(){
 
 	emit done( msg);
 }
+
+void SudokuThread::computeParams(int trial){
+	if( trial < 0 || trial >= NUMTESTS ){
+		qDebug() << "Warning: SudokuThread.computeParams(): wrong parameter: trial = " << trial;
+		return;
+	}
+
+	parm.popSize		= parm.popSize	+ trial * 3;
+	parm.elitSize		= parm.elitSize + trial * 3;
+
+	parm.lifespan		= parm.lifespan + trial * 3;
+
+	parm.birthPeriod		= parm.birthPeriod		;//+ trial / 5;
+	parm.milestonePeriod	= parm.milestonePeriod	;//+ trial / 5;
+
+	parm.localTrials	= parm.localTrials	+ trial / 25;
+	parm.maxCalls		= parm.maxCalls		+ trial * 10000;
+
+}
+
+
+
+
+
+
+
+
+
 
 
