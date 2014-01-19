@@ -22,6 +22,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	easyB		= new QPushButton(tr("Easy"));
 	mediumB		= new QPushButton(tr("Medium"));
 	hardB		= new QPushButton(tr("Hard"));
+	autoCB		= new QCheckBox(tr("Auto"));
 
 
 	confirmIcon		= new QIcon(":/images/confirm.png");
@@ -111,6 +112,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	button2Layout->addWidget( startTB );
 	button2Layout->addWidget( startB );
 	button2Layout->addWidget( triesPB );
+	button2Layout->addWidget( autoCB );
 	button2Layout->addStretch();
 	button2Layout->addWidget( listTB );
 
@@ -149,6 +151,8 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 			 mediumB, SLOT(setVisible(bool)));
 	connect( this->parametersTB, SIGNAL(toggled(bool)),
 			 hardB, SLOT(setVisible(bool)));
+
+
 
 	connect( listTB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));

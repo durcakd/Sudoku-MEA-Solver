@@ -11,6 +11,7 @@
 #include <QListWidget>
 #include <QIcon>
 #include <QProgressBar>
+#include <QCheckBox>
 
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
@@ -89,6 +90,9 @@ private:
 	QPushButton *easyB;
 	QPushButton *mediumB;
 	QPushButton *hardB;
+
+
+	QCheckBox *autoCB;
 
 	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;
