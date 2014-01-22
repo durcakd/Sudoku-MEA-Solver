@@ -17,6 +17,7 @@
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
 
+
 class SudokuDialog : public QDialog
 	{
 	Q_OBJECT
@@ -36,6 +37,7 @@ public:
 	QProgressBar *getTriesPB() const	{ return triesPB; }
 
 	void setTableModel( QAbstractTableModel *model );
+	void setTableItemDelegate( QAbstractItemDelegate *delegate );
 
 signals:
 	void requestForReadFile(const QString &);

@@ -1,5 +1,5 @@
 #include "sudokucontroller.h"
-
+#include "sudokuitemdelegate.h"
 
 // constructor
 SudokuController::SudokuController(QApplication *app){
@@ -9,7 +9,8 @@ SudokuController::SudokuController(QApplication *app){
 	mSudokuDialog		= new SudokuDialog();
 	resultEmiter		= ResultEmiterSigleton::getInstance();
 
-	mSudokuDialog->setTableModel(mSudokuTableModel);
+	mSudokuDialog->setTableModel( mSudokuTableModel );
+	mSudokuDialog->setTableItemDelegate( new SudokuItemDelegate );
 
 	createConnections();   // create connecions
 	// initial open file
