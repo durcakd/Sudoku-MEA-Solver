@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QFileDialog>
 
+
 // constructor
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
@@ -11,6 +12,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	autoParams = true;
 
 	tableView = new QTableView;
+
 	sudokuTableModel = NULL;
 	//openFileTB	= new QToolButton;
 	//saveToFileTB = new QToolButton;
@@ -326,6 +328,11 @@ void SudokuDialog::setTableModel( QAbstractTableModel *model ){
 
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
+}
+
+
+void SudokuDialog::setTableItemDelegate( QAbstractItemDelegate *delegate ){
+	tableView->setItemDelegate( delegate );
 }
 
 // SLOT add str to list widged
