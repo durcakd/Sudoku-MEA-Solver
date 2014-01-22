@@ -19,7 +19,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	startTB		= new QToolButton;
 	confirmTB	= new QToolButton;
 	newTB		= new QToolButton;
-	parametersTB = new QToolButton;
 	listTB		= new QToolButton;
 
 	easyB		= new QPushButton(tr("Easy"));
@@ -35,7 +34,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	startTB->setIcon(QIcon(":/images/start.png"));
 	confirmTB->setIcon(*confirmIcon);
 	newTB->setIcon(QIcon(":/images/new.png"));
-	parametersTB->setIcon(QIcon(":/images/parameters.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
 
 	startB		= new QPushButton(tr("Start"));
@@ -103,7 +101,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	buttonLayout->addWidget( openFileB );
 	buttonLayout->addWidget( saveToFileB );
-	buttonLayout->addWidget( parametersTB );
 	buttonLayout->addStretch();
 
 	buttonLayout->addWidget( easyB );
@@ -136,7 +133,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
 	//
-	parametersTB->setCheckable(true);
 	parametersGroup->hide();
 
 	listTB->setCheckable(true);

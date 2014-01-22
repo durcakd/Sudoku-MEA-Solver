@@ -83,7 +83,6 @@ private:
 	QToolButton *confirmTB;
 	QToolButton *newTB;
 	QToolButton *startTB;
-	QToolButton *parametersTB;
 	QToolButton *listTB;
 	QIcon *confirmIcon;
 	QIcon *unconfirmIcon;
