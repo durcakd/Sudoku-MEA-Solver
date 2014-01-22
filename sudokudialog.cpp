@@ -16,7 +16,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	sudokuTableModel = NULL;
 	//openFileTB	= new QToolButton;
 	//saveToFileTB = new QToolButton;
-	startTB		= new QToolButton;
 	confirmTB	= new QToolButton;
 	newTB		= new QToolButton;
 	listTB		= new QToolButton;
@@ -31,7 +30,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	unconfirmIcon	= new QIcon(":/images/unconfirm.png");
 	//openFileTB->setIcon(QIcon(":/images/open.png"));
 	//saveToFileTB->setIcon(QIcon(":/images/save.png"));
-	startTB->setIcon(QIcon(":/images/start.png"));
 	confirmTB->setIcon(*confirmIcon);
 	newTB->setIcon(QIcon(":/images/new.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
@@ -109,7 +107,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 
 	QHBoxLayout *button2Layout = new QHBoxLayout;
-	button2Layout->addWidget( startTB );
 	button2Layout->addWidget( startB );
 	button2Layout->addWidget( triesPB );
 	button2Layout->addWidget( autoCB );
@@ -161,8 +158,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	connect( startB, SIGNAL(clicked()),
 			 this, SLOT(start()));
-	connect( startTB, SIGNAL(clicked()),
-			 this, SLOT(start()));
+
 
 	// parrameters
 	connect( easyB, SIGNAL(clicked()),
@@ -390,7 +386,6 @@ void  SudokuDialog::start(){
 	}
 
 	startB->setEnabled(false);
-	startTB->setEnabled(false);
 	autoCB->setEnabled(false);
 
 	if( !thread.isRunning()){
@@ -402,7 +397,6 @@ void  SudokuDialog::start(){
 void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
 	startB->setEnabled(true);
-	startTB->setEnabled(true);
 	autoCB->setEnabled(true);
 
 }
