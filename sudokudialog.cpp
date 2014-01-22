@@ -146,16 +146,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	mediumB->hide();
 	hardB->hide();
 
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 parametersGroup, SLOT(setVisible(bool)));
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 easyB, SLOT(setVisible(bool)));
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 mediumB, SLOT(setVisible(bool)));
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 hardB, SLOT(setVisible(bool)));
-
-
 
 	connect( listTB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
@@ -310,6 +300,10 @@ void SudokuDialog::autoChangeState( bool checked ){
 		hardB->setEnabled( true );
 		autoParams = false;
 	}
+	parametersGroup->setVisible( ! checked );
+	easyB->setVisible( ! checked );
+	mediumB->setVisible( ! checked );
+	hardB->setVisible( ! checked );
 }
 
 
