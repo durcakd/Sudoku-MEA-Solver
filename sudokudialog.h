@@ -52,6 +52,7 @@ private slots:
 	void confirm(const bool ok);
 	void on_newTB_clicked();
 	void start();
+	void abort();
 
 	void on_popSizeLE_textChanged(const QString &str);
 	void on_elitSizeLE_textChanged(const QString &str);
