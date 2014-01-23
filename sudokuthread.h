@@ -12,6 +12,7 @@ public:
 	explicit SudokuThread();
 
 	void setParameters( const PARAMETERS &parm, int *givenData, bool autoParams);
+	void setAbort();
 	MEA *getMea() const { return mea; }
 
 signals:
@@ -22,7 +23,8 @@ protected:
 	void run();
 
 private:
-	bool autoParams;
+	bool mAutoParams;
+	bool mAbort;
 	PARAMETERS parm;
 	int *givenData;
 	MEA *mea;
