@@ -392,13 +392,6 @@ void  SudokuDialog::start(){
 	}
 }
 
-// stop thread
-void  SudokuDialog::abort(){
-	if( thread.isRunning()){
-		thread.setAbort();	//Tell the thread to abort
-		//thread.wait();		//Wait until it actually has terminated (waits infinitely)
-	}
-}
 // get result from thread
 void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
