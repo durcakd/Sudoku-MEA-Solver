@@ -102,8 +102,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	buttonDownLayout->addStretch();
 	buttonDownLayout->addWidget( startB );
 
-
-
 	QHBoxLayout *buttonProfilesLayout = new QHBoxLayout;
 	buttonProfilesLayout->addWidget( easyB );
 	buttonProfilesLayout->addWidget( mediumB );
@@ -154,7 +152,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	connect( startB, SIGNAL(clicked()),
 			 this, SLOT(start()));
-
 
 	// parrameters
 	connect( easyB, SIGNAL(clicked()),
@@ -381,10 +378,15 @@ void  SudokuDialog::start(){
 		return;
 	}
 
-	startB->setEnabled(false);
-	autoCB->setEnabled(false);
+	if( thread.isRunning()){
+		thread.setAbort();	//Tell the thread to abort
+		//thread.wait();		//Wait until it actually has terminated (waits infinitely)
 
-	if( !thread.isRunning()){
+
+	} else {
+		autoCB->setEnabled(false);
+		startB->setText(tr("Stop"));
+
 		thread.setParameters( parm, sudokuTableModel->givenData(), autoParams);
 		thread.start();
 	}
@@ -400,8 +402,9 @@ void  SudokuDialog::abort(){
 // get result from thread
 void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
-	startB->setEnabled(true);
 	autoCB->setEnabled(true);
+	startB->setText(tr("Start"));
+
 
 }
 
