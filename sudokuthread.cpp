@@ -27,6 +27,7 @@ void SudokuThread::run(){
 	QTime time;
 	time.start();
 
+	emit sendProgress( countTrials );
 	mAbort = false;
 	while(result <= 0  &&  countTrials < NUMTESTS  &&  !mAbort ){
 

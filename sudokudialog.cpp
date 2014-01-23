@@ -379,9 +379,8 @@ void  SudokuDialog::start(){
 	}
 
 	if( thread.isRunning()){
-		thread.setAbort();	//Tell the thread to abort
-		//thread.wait();		//Wait until it actually has terminated (waits infinitely)
-
+		thread.setAbort();	// Tell the thread to abort
+		//thread.wait();	// wait could block event loop
 
 	} else {
 		autoCB->setEnabled(false);
