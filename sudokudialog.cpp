@@ -14,6 +14,11 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	tableView = new QTableView;
 
 	sudokuTableModel = NULL;
+
+	startB		= new QPushButton(tr("Start"));
+	statusBarLE	= new QLineEdit;
+	listWidged	= new QListWidget;
+
 	openFileTB	= new QToolButton;
 	saveToFileTB = new QToolButton;
 	confirmTB	= new QToolButton;
@@ -34,9 +39,7 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	newTB->setIcon(QIcon(":/images/new.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
 
-	startB		= new QPushButton(tr("Start"));
-	statusBarLE	= new QLineEdit;
-	listWidged	= new QListWidget;
+
 
 
 	popSizeLE		= new QLineEdit;
@@ -89,14 +92,17 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	buttonUpLayout->addWidget( confirmTB );
 	buttonUpLayout->addWidget( openFileTB );
 	buttonUpLayout->addWidget( saveToFileTB );
-
+	buttonUpLayout->addWidget( listTB );
+	buttonUpLayout->addStretch();
+	buttonUpLayout->addWidget( autoCB );
+	listTB->hide();
 
 	QHBoxLayout *buttonDownLayout = new QHBoxLayout;
 	buttonDownLayout->addWidget( triesPB );
 	buttonDownLayout->addStretch();
 	buttonDownLayout->addWidget( startB );
-	buttonDownLayout->addWidget( autoCB );
-	buttonDownLayout->addWidget( listTB );
+
+
 
 	QHBoxLayout *buttonProfilesLayout = new QHBoxLayout;
 	buttonProfilesLayout->addWidget( easyB );
