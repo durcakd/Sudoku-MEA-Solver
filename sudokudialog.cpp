@@ -14,8 +14,8 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	tableView = new QTableView;
 
 	sudokuTableModel = NULL;
-	//openFileTB	= new QToolButton;
-	//saveToFileTB = new QToolButton;
+	openFileTB	= new QToolButton;
+	saveToFileTB = new QToolButton;
 	confirmTB	= new QToolButton;
 	newTB		= new QToolButton;
 	listTB		= new QToolButton;
@@ -28,15 +28,13 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	confirmIcon		= new QIcon(":/images/confirm.png");
 	unconfirmIcon	= new QIcon(":/images/unconfirm.png");
-	//openFileTB->setIcon(QIcon(":/images/open.png"));
-	//saveToFileTB->setIcon(QIcon(":/images/save.png"));
+	openFileTB->setIcon(QIcon(":/images/open.png"));
+	saveToFileTB->setIcon(QIcon(":/images/save.png"));
 	confirmTB->setIcon(*confirmIcon);
 	newTB->setIcon(QIcon(":/images/new.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
 
 	startB		= new QPushButton(tr("Start"));
-	openFileB	= new QPushButton(tr("Open from file"));
-	saveToFileB	= new QPushButton(tr("Save to File"));
 	statusBarLE	= new QLineEdit;
 	listWidged	= new QListWidget;
 
@@ -89,8 +87,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	QHBoxLayout *buttonUpLayout = new QHBoxLayout;
 	buttonUpLayout->addWidget( newTB );
 	buttonUpLayout->addWidget( confirmTB );
-	buttonUpLayout->addWidget( openFileB );
-	buttonUpLayout->addWidget( saveToFileB );
+	buttonUpLayout->addWidget( openFileTB );
+	buttonUpLayout->addWidget( saveToFileTB );
+
 
 	QHBoxLayout *buttonDownLayout = new QHBoxLayout;
 	buttonDownLayout->addWidget( triesPB );
@@ -107,13 +106,13 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	// main layout
 	QGridLayout *mainGridLayout = new QGridLayout;
-	mainGridLayout->addWidget( tableView, 0, 0 );
-	mainGridLayout->addWidget( parametersGroup, 0, 1 );
-	mainGridLayout->addLayout( buttonUpLayout, 1, 0 );
-	mainGridLayout->addLayout( buttonDownLayout, 2, 0 );
-	mainGridLayout->addLayout( buttonProfilesLayout, 1, 1 );
-	mainGridLayout->addWidget( statusBarLE, 3, 0, 1, 0  );
-	mainGridLayout->addWidget( listWidged, 4, 0, 1, 0 );
+	mainGridLayout->addWidget( tableView,				0, 0 );
+	mainGridLayout->addWidget( parametersGroup,			0, 1 );
+	mainGridLayout->addLayout( buttonUpLayout,			1, 0 );
+	mainGridLayout->addLayout( buttonDownLayout,		2, 0 );
+	mainGridLayout->addLayout( buttonProfilesLayout,	1, 1 );
+	mainGridLayout->addWidget( statusBarLE,				3, 0, 1, 0  );
+	mainGridLayout->addWidget( listWidged,				4, 0, 1, 0 );
 
 
 	setLayout( mainGridLayout );
@@ -136,9 +135,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 
 	// contect slots
-	connect( openFileB, SIGNAL(clicked()),
+	connect( openFileTB, SIGNAL(clicked()),
 			 this, SLOT(open()));
-	connect( saveToFileB, SIGNAL(clicked()),
+	connect( saveToFileTB, SIGNAL(clicked()),
 			 this, SLOT(save()));
 
 	confirmTB->setCheckable(true);
