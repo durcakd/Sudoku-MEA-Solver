@@ -5,14 +5,19 @@
 
 SudokuThread::SudokuThread()
 {
-	autoParams = false;
+	mAutoParams = false;
+	mAbort		= false;
 }
 
 void SudokuThread::setParameters(const PARAMETERS &parm,  int *givenData , bool autoParams){
 	this->parm = parm;
 	this->givenData = givenData;
-	this->autoParams = autoParams;
+	this->mAutoParams = autoParams;
 
+}
+
+void SudokuThread::setAbort(){
+	mAbort = true;
 }
 
 void SudokuThread::run(){
@@ -22,11 +27,11 @@ void SudokuThread::run(){
 	QTime time;
 	time.start();
 
+	emit sendProgress( countTrials );
+	mAbort = false;
+	while(result <= 0  &&  countTrials < NUMTESTS  &&  !mAbort ){
 
-
-	while(result <= 0 && countTrials < NUMTESTS ){
-
-		if( autoParams ){
+		if( mAutoParams ){
 			computeParams( countTrials );
 		}
 

@@ -3,3 +3,5 @@ _build
 _install
 CMakeLists.txt.user
 piskvorky1.pro.user
+/images/48x48
+/images/old

@@ -27,10 +27,8 @@ public:
 	QTableView	*getTableView()	const	{ return tableView; }
 	QListWidget *getListWidged() const	{ return listWidged; }
 	QPushButton *getStartB() const		{ return startB; }
-	QPushButton *getOpenFileB() const	{ return openFileB; }
-	QPushButton *getSaveToFileB() const	{ return saveToFileB; }
-	//QToolButton *getopenFileTB() const	{ return openFileTB; }
-	//QToolButton *getsaveToFileTB() const	{ return saveToFileTB; }
+	QToolButton *getOpenFileTB() const	{ return openFileTB; }
+	QToolButton *getSaveToFileTB() const	{ return saveToFileTB; }
 	QToolButton *getNewTB() const		{ return newTB; }
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	const SudokuThread *getThread() const		{ return &thread; }
@@ -78,19 +76,15 @@ private:
 	QListWidget *listWidged;
 
 
-	//QToolButton *openFileTB;
-	//QToolButton *saveToFileTB;
+	QToolButton *openFileTB;
+	QToolButton *saveToFileTB;
 	QToolButton *confirmTB;
 	QToolButton *newTB;
-	QToolButton *startTB;
-	QToolButton *parametersTB;
 	QToolButton *listTB;
 	QIcon *confirmIcon;
 	QIcon *unconfirmIcon;
 
 	QPushButton *startB;
-	QPushButton *openFileB;
-	QPushButton *saveToFileB;
 	QLineEdit	*progresLE;
 	QPushButton *easyB;
 	QPushButton *mediumB;
