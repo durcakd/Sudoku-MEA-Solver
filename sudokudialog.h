@@ -13,6 +13,7 @@
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QStatusBar>
 
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
@@ -33,6 +34,7 @@ public:
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	const SudokuThread *getThread() const		{ return &thread; }
 	QProgressBar *getTriesPB() const	{ return triesPB; }
+	QStatusBar	*getStatusBar() const	{ return statusBar; }
 
 	void setTableModel( QAbstractTableModel *model );
 	void setTableItemDelegate( QAbstractItemDelegate *delegate );
@@ -74,6 +76,7 @@ private:
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
 	QListWidget *listWidged;
+	QStatusBar	*statusBar;
 
 
 	QToolButton *openFileTB;

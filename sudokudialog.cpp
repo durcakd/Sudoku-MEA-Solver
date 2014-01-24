@@ -15,6 +15,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	sudokuTableModel = NULL;
 
+	statusBar	= new QStatusBar;
+	statusBar->setSizeGripEnabled(false);
+
 	startB		= new QPushButton(tr("Start"));
 	statusBarLE	= new QLineEdit;
 	listWidged	= new QListWidget;
@@ -115,8 +118,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	mainGridLayout->addLayout( buttonUpLayout,			1, 0 );
 	mainGridLayout->addLayout( buttonDownLayout,		2, 0 );
 	mainGridLayout->addLayout( buttonProfilesLayout,	1, 1 );
-	mainGridLayout->addWidget( statusBarLE,				3, 0, 1, 0  );
-	mainGridLayout->addWidget( listWidged,				4, 0, 1, 0 );
+	mainGridLayout->addWidget( statusBar,				3, 0, 1, 0  );
+	mainGridLayout->addWidget( statusBarLE,				4, 0, 1, 0  );
+	mainGridLayout->addWidget( listWidged,				5, 0, 1, 0 );
 
 
 	setLayout( mainGridLayout );
