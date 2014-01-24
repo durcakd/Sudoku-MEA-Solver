@@ -43,6 +43,7 @@ signals:
 	void requestForReadFile(const QString &);
 	void requestForSaveFile(const QString &);
 	void requestForConfirm(const bool ok);
+	void sentStatusMsg( const QString &msg, int timeout ) const;
 
 public slots:
 	void addStrToListWidged(const QString &str);

@@ -53,7 +53,11 @@ void SudokuController::createConnections(){
 					  mSudokuTableModel, SLOT(setGridData(QStringList)));
 
 	// progress in statusBar
-	QObject::connect( resultEmiter, SIGNAL(sentTempMsg(QString, int)),
+	QObject::connect( mSudokuDialog->getThread(), SIGNAL(sentStatusMsg(QString,int)),
+					  mSudokuDialog->getStatusBar(), SLOT(showMessage(QString,int)) );
+	QObject::connect( mSudokuDialog, SIGNAL(sentStatusMsg(QString,int)),
+					  mSudokuDialog->getStatusBar(), SLOT(showMessage(QString,int)) );
+	QObject::connect( resultEmiter, SIGNAL(sentStatusMsg(QString,int)),
 					  mSudokuDialog->getStatusBar(), SLOT(showMessage(QString,int)) );
 
 	// progress
