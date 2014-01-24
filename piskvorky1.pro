@@ -9,7 +9,8 @@ HEADERS += \
     MEAsudoku/agentsudoku.h \
     MEAsudoku/mea.h \
     sudokuthread.h \
-    resultemitersigleton.h
+    resultemitersigleton.h \
+    sudokuitemdelegate.h
 
 SOURCES += \
 	main.cpp \
@@ -20,7 +21,8 @@ SOURCES += \
     MEAsudoku/agentsudoku.cpp \
     MEAsudoku/mea.cpp \
     sudokuthread.cpp \
-    resultemitersigleton.cpp
+    resultemitersigleton.cpp \
+    sudokuitemdelegate.cpp
 
 RESOURCES += \
     resources.qrc

@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QFileDialog>
 
+
 // constructor
 SudokuDialog::SudokuDialog(QWidget *parent) :
 	QDialog(parent)
@@ -11,13 +12,19 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	autoParams = true;
 
 	tableView = new QTableView;
+
 	sudokuTableModel = NULL;
-	//openFileTB	= new QToolButton;
-	//saveToFileTB = new QToolButton;
-	startTB		= new QToolButton;
+
+	statusBar	= new QStatusBar;
+	statusBar->setSizeGripEnabled(false);
+
+	startB		= new QPushButton(tr("Start"));
+	listWidged	= new QListWidget;
+
+	openFileTB	= new QToolButton;
+	saveToFileTB = new QToolButton;
 	confirmTB	= new QToolButton;
 	newTB		= new QToolButton;
-	parametersTB = new QToolButton;
 	listTB		= new QToolButton;
 
 	easyB		= new QPushButton(tr("Easy"));
@@ -28,19 +35,13 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	confirmIcon		= new QIcon(":/images/confirm.png");
 	unconfirmIcon	= new QIcon(":/images/unconfirm.png");
-	//openFileTB->setIcon(QIcon(":/images/open.png"));
-	//saveToFileTB->setIcon(QIcon(":/images/save.png"));
-	startTB->setIcon(QIcon(":/images/start.png"));
+	openFileTB->setIcon(QIcon(":/images/open.png"));
+	saveToFileTB->setIcon(QIcon(":/images/save.png"));
 	confirmTB->setIcon(*confirmIcon);
 	newTB->setIcon(QIcon(":/images/new.png"));
-	parametersTB->setIcon(QIcon(":/images/parameters.png"));
 	listTB->setIcon(QIcon(":/images/list.png"));
 
-	startB		= new QPushButton(tr("Start"));
-	openFileB	= new QPushButton(tr("Open from file"));
-	saveToFileB	= new QPushButton(tr("Save to File"));
-	statusBarLE	= new QLineEdit;
-	listWidged	= new QListWidget;
+
 
 
 	popSizeLE		= new QLineEdit;
@@ -63,7 +64,9 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	triesPB->setRange( 0, NUMTESTS );
 	triesPB->setSizePolicy( QSizePolicy());
 
-	// layovting
+
+	// LAYOUTING
+
 	QGridLayout *paramLayout = new QGridLayout;
 	paramLayout->addWidget( popSizeL,0,0 );
 	paramLayout->addWidget( elitSizeL,1,0 );
@@ -72,7 +75,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	paramLayout->addWidget( milestonePeriodL,4,0 );
 	paramLayout->addWidget( localTrialsL,5,0 );
 	paramLayout->addWidget( maxCallsL,6,0 );
-	//labelLayout->addStretch();
 
 	paramLayout->addWidget( popSizeLE,0,1 );
 	paramLayout->addWidget( elitSizeLE,1,1 );
@@ -81,60 +83,48 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	paramLayout->addWidget( milestonePeriodLE,4,1 );
 	paramLayout->addWidget( localTrialsLE,5,1 );
 	paramLayout->addWidget( maxCallsLE,6,1 );
-	//editLineLayout->addStretch();
 
 	parametersGroup = new QGroupBox("MEA parameters" );
 	parametersGroup->setLayout(paramLayout);
 
 
-	QHBoxLayout *controlLayout = new QHBoxLayout;
-	controlLayout->addWidget( tableView );
-	controlLayout->addWidget( parametersGroup);
+	// buttons layouting
+	QHBoxLayout *buttonUpLayout = new QHBoxLayout;
+	buttonUpLayout->addWidget( newTB );
+	buttonUpLayout->addWidget( confirmTB );
+	buttonUpLayout->addWidget( openFileTB );
+	buttonUpLayout->addWidget( saveToFileTB );
+	buttonUpLayout->addWidget( listTB );
+	buttonUpLayout->addStretch();
+	buttonUpLayout->addWidget( autoCB );
+	listTB->hide();
 
-	// ----
+	QHBoxLayout *buttonDownLayout = new QHBoxLayout;
+	buttonDownLayout->addWidget( triesPB );
+	buttonDownLayout->addStretch();
+	buttonDownLayout->addWidget( startB );
 
-	QHBoxLayout *buttonLayout = new QHBoxLayout;
-	buttonLayout->addWidget( newTB );
-	//buttonLayout->addWidget( openFileTB );
-	//buttonLayout->addWidget( saveToFileTB );
-	buttonLayout->addWidget( confirmTB );
-
-	buttonLayout->addWidget( openFileB );
-	buttonLayout->addWidget( saveToFileB );
-	buttonLayout->addWidget( parametersTB );
-	buttonLayout->addStretch();
-
-	buttonLayout->addWidget( easyB );
-	buttonLayout->addWidget( mediumB );
-	buttonLayout->addWidget( hardB );
-
-
-	QHBoxLayout *button2Layout = new QHBoxLayout;
-	button2Layout->addWidget( startTB );
-	button2Layout->addWidget( startB );
-	button2Layout->addWidget( triesPB );
-	button2Layout->addWidget( autoCB );
-	button2Layout->addStretch();
-	button2Layout->addWidget( listTB );
+	QHBoxLayout *buttonProfilesLayout = new QHBoxLayout;
+	buttonProfilesLayout->addWidget( easyB );
+	buttonProfilesLayout->addWidget( mediumB );
+	buttonProfilesLayout->addWidget( hardB );
 
 
-	// -----
+	// main layout
+	QGridLayout *mainGridLayout = new QGridLayout;
+	mainGridLayout->addWidget( tableView,				0, 0 );
+	mainGridLayout->addWidget( parametersGroup,			0, 1 );
+	mainGridLayout->addLayout( buttonUpLayout,			1, 0 );
+	mainGridLayout->addLayout( buttonDownLayout,		2, 0 );
+	mainGridLayout->addLayout( buttonProfilesLayout,	1, 1 );
+	mainGridLayout->addWidget( statusBar,				3, 0, 1, 0  );
+	mainGridLayout->addWidget( listWidged,				4, 0, 1, 0 );
 
 
-
-	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addLayout( controlLayout );
-	mainLayout->addLayout( buttonLayout );
-	mainLayout->addLayout( button2Layout );
-	mainLayout->addWidget( statusBarLE );
-	mainLayout->addWidget( listWidged );
-
-	setLayout(mainLayout);
+	setLayout( mainGridLayout );
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
 	//
-	parametersTB->setCheckable(true);
 	parametersGroup->hide();
 
 	listTB->setCheckable(true);
@@ -144,25 +134,15 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	mediumB->hide();
 	hardB->hide();
 
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 parametersGroup, SLOT(setVisible(bool)));
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 easyB, SLOT(setVisible(bool)));
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 mediumB, SLOT(setVisible(bool)));
-	connect( this->parametersTB, SIGNAL(toggled(bool)),
-			 hardB, SLOT(setVisible(bool)));
-
-
 
 	connect( listTB, SIGNAL(toggled(bool)),
 			 listWidged, SLOT(setVisible(bool)));
 
 
 	// contect slots
-	connect( openFileB, SIGNAL(clicked()),
+	connect( openFileTB, SIGNAL(clicked()),
 			 this, SLOT(open()));
-	connect( saveToFileB, SIGNAL(clicked()),
+	connect( saveToFileTB, SIGNAL(clicked()),
 			 this, SLOT(save()));
 
 	confirmTB->setCheckable(true);
@@ -172,8 +152,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 			 this, SLOT(on_newTB_clicked()));
 
 	connect( startB, SIGNAL(clicked()),
-			 this, SLOT(start()));
-	connect( startTB, SIGNAL(clicked()),
 			 this, SLOT(start()));
 
 	// parrameters
@@ -272,6 +250,7 @@ void SudokuDialog::setEasy(){
 	milestonePeriodLE->setText( QString::number( EMILESTONEPERIOD ));
 	localTrialsLE->setText( QString::number( ELOCALTRIALS ));
 	maxCallsLE->setText( QString::number( EMAXCALLS ));
+	emit sentStatusMsg( tr("Easy profile  enabled"), 2000 );
 }
 void SudokuDialog::setMedium(){
 	popSizeLE->setText( QString::number( MPOPSIZE ));
@@ -281,6 +260,7 @@ void SudokuDialog::setMedium(){
 	milestonePeriodLE->setText( QString::number( MMILESTONEPERIOD ));
 	localTrialsLE->setText( QString::number( MLOCALTRIALS ));
 	maxCallsLE->setText( QString::number( MMAXCALLS ));
+	emit sentStatusMsg( tr("Medium profile  enabled"), 2000 );
 }
 void SudokuDialog::setHard(){
 	popSizeLE->setText( QString::number( HPOPSIZE ));
@@ -290,6 +270,7 @@ void SudokuDialog::setHard(){
 	milestonePeriodLE->setText( QString::number( HMILESTONEPERIOD ));
 	localTrialsLE->setText( QString::number( HLOCALTRIALS ));
 	maxCallsLE->setText( QString::number( HMAXCALLS ));
+	emit sentStatusMsg( tr("Hard profile  enabled"), 2000 );
 }
 
 void SudokuDialog::autoChangeState( bool checked ){
@@ -300,7 +281,7 @@ void SudokuDialog::autoChangeState( bool checked ){
 		hardB->setEnabled( false );
 		setEasy();
 		autoParams = true;
-
+		emit sentStatusMsg( tr("Auto profile  enabled"), 2000 );
 	} else {
 		parametersGroup->setEnabled( true );
 		easyB->setEnabled( true );
@@ -308,6 +289,10 @@ void SudokuDialog::autoChangeState( bool checked ){
 		hardB->setEnabled( true );
 		autoParams = false;
 	}
+	parametersGroup->setVisible( ! checked );
+	easyB->setVisible( ! checked );
+	mediumB->setVisible( ! checked );
+	hardB->setVisible( ! checked );
 }
 
 
@@ -328,6 +313,11 @@ void SudokuDialog::setTableModel( QAbstractTableModel *model ){
 
 }
 
+
+void SudokuDialog::setTableItemDelegate( QAbstractItemDelegate *delegate ){
+	tableView->setItemDelegate( delegate );
+}
+
 // SLOT add str to list widged
 void SudokuDialog::addStrToListWidged(const QString &str){
 	if(!str.isEmpty()){
@@ -346,6 +336,7 @@ bool SudokuDialog::open(){
 	QString fileName =
 			QFileDialog::getOpenFileName(this, tr("Open"), ".", fileFilters);
 	if (fileName.isEmpty()){
+		emit sentStatusMsg( tr("File name is wrong"), 5000 );
 		return false;
 	}
 
@@ -363,6 +354,7 @@ bool SudokuDialog::save(){
 	QString fileName =
 			QFileDialog::getSaveFileName(this, tr("Save"), ".", fileFilters);
 	if (fileName.isEmpty()){
+		emit sentStatusMsg( tr("File name is wrong"), 5000 );
 		return false;
 	}
 
@@ -374,8 +366,12 @@ bool SudokuDialog::save(){
 void SudokuDialog::confirm(const bool ok){
 	if(ok){
 		confirmTB->setIcon(*unconfirmIcon);
+		startB->setEnabled( false );
+		emit sentStatusMsg( tr("Edit mode"), 2000 );
 	}else{
 		confirmTB->setIcon(*confirmIcon);
+		startB->setEnabled( true );
+		emit sentStatusMsg( tr("Solve mode"), 2000 );
 	}
 	emit requestForConfirm(!ok);
 }
@@ -392,21 +388,36 @@ void  SudokuDialog::start(){
 		return;
 	}
 
-	startB->setEnabled(false);
-	startTB->setEnabled(false);
-	autoCB->setEnabled(false);
+	if( thread.isRunning()){
+		thread.setAbort();	// Tell the thread to abort
+		//thread.wait();	// wait could block event loop
 
-	if( !thread.isRunning()){
+	} else {
+		newTB->setEnabled( false );
+		confirmTB->setEnabled( false );
+		openFileTB->setEnabled( false );
+		saveToFileTB->setEnabled( false );
+		autoCB->setEnabled(false);
+
+		startB->setText(tr("Stop"));
+
 		thread.setParameters( parm, sudokuTableModel->givenData(), autoParams);
 		thread.start();
 	}
 }
+
 // get result from thread
 void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
-	startB->setEnabled(true);
-	startTB->setEnabled(true);
+
+	newTB->setEnabled( true );
+	confirmTB->setEnabled( true );
+	openFileTB->setEnabled( true );
+	saveToFileTB->setEnabled( true );
 	autoCB->setEnabled(true);
+
+	startB->setText(tr("Start"));
+
 
 }
 

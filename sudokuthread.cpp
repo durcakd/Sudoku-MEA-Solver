@@ -5,14 +5,19 @@
 
 SudokuThread::SudokuThread()
 {
-	autoParams = false;
+	mAutoParams = false;
+	mAbort		= false;
 }
 
 void SudokuThread::setParameters(const PARAMETERS &parm,  int *givenData , bool autoParams){
 	this->parm = parm;
 	this->givenData = givenData;
-	this->autoParams = autoParams;
+	this->mAutoParams = autoParams;
 
+}
+
+void SudokuThread::setAbort(){
+	mAbort = true;
 }
 
 void SudokuThread::run(){
@@ -22,11 +27,12 @@ void SudokuThread::run(){
 	QTime time;
 	time.start();
 
+	emit sendProgress( countTrials );
+	emit sentStatusMsg( tr("Processing...")  );
+	mAbort = false;
+	while(result <= 0  &&  countTrials < NUMTESTS  &&  !mAbort ){
 
-
-	while(result <= 0 && countTrials < NUMTESTS ){
-
-		if( autoParams ){
+		if( mAutoParams ){
 			computeParams( countTrials );
 		}
 
@@ -52,12 +58,16 @@ void SudokuThread::run(){
 
 	QString msg;
 	if(result <= 0){
-		msg = "Solution was not found. \nTry again with different parameters.";
+		msg = tr("Solution not found, try again");
+		if( mAbort ){
+			msg = tr("Aborted");
+		}
 	} else {
-		msg = QString::number(countTrials) + ". pokus  -- " + QString::number(runTime, 'f', 2) + " s";
+		msg = QString::number(countTrials) + tr(". attempt  in time ") + QString::number(runTime, 'f', 2) + tr(" s") ;
 	}
 
 	emit done( msg);
+	emit sentStatusMsg( msg );
 }
 
 void SudokuThread::computeParams(int trial){

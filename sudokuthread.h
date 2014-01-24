@@ -12,17 +12,20 @@ public:
 	explicit SudokuThread();
 
 	void setParameters( const PARAMETERS &parm, int *givenData, bool autoParams);
+	void setAbort();
 	MEA *getMea() const { return mea; }
 
 signals:
 	void done(const QString msg);
 	void sendProgress( int tryStep );
+	void sentStatusMsg( const QString &msg, int timeout = 0 ) const;
 
 protected:
 	void run();
 
 private:
-	bool autoParams;
+	bool mAutoParams;
+	bool mAbort;
 	PARAMETERS parm;
 	int *givenData;
 	MEA *mea;
