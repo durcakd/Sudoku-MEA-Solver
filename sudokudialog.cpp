@@ -19,7 +19,6 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	statusBar->setSizeGripEnabled(false);
 
 	startB		= new QPushButton(tr("Start"));
-	statusBarLE	= new QLineEdit;
 	listWidged	= new QListWidget;
 
 	openFileTB	= new QToolButton;
@@ -119,13 +118,11 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	mainGridLayout->addLayout( buttonDownLayout,		2, 0 );
 	mainGridLayout->addLayout( buttonProfilesLayout,	1, 1 );
 	mainGridLayout->addWidget( statusBar,				3, 0, 1, 0  );
-	mainGridLayout->addWidget( statusBarLE,				4, 0, 1, 0  );
-	mainGridLayout->addWidget( listWidged,				5, 0, 1, 0 );
+	mainGridLayout->addWidget( listWidged,				4, 0, 1, 0 );
 
 
 	setLayout( mainGridLayout );
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
 	//
 	parametersGroup->hide();

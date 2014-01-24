@@ -88,7 +88,6 @@ private:
 	QIcon *unconfirmIcon;
 
 	QPushButton *startB;
-	QLineEdit	*progresLE;
 	QPushButton *easyB;
 	QPushButton *mediumB;
 	QPushButton *hardB;
@@ -96,7 +95,6 @@ private:
 
 	QCheckBox *autoCB;
 
-	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;
 	QLineEdit	*elitSizeLE;
 	QLineEdit	*lifespanLE;
