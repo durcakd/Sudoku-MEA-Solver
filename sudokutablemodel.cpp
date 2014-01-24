@@ -142,6 +142,7 @@ void SudokuTableModel::setGivenData(const int *givenData){
 		}
 	}
 	reset();
+	emit sentStatusMsg( tr("Sudoku successfully loaded"), 5000 );
 }
 
 // get given data
@@ -158,6 +159,7 @@ bool SudokuTableModel::openFile(const QString &fileName){
 	if (!file.open(QIODevice::ReadOnly)) {
 		qDebug() << "Cannot open file for reading: "
 				 << qPrintable(file.errorString());
+		emit sentStatusMsg( tr("Can not open file for reading"), 5000 );
 		return false;
 	}
 
@@ -198,6 +200,7 @@ bool SudokuTableModel::saveToFile(const QString &fileName){
 	if (!outFile.open(QIODevice::WriteOnly)) {
 		qDebug() << "Cannot open file for writing: "
 				 << qPrintable(outFile.errorString());
+		emit sentStatusMsg( tr("Can not open file for writing"), 5000 );
 		return false;
 	}
 
@@ -217,6 +220,7 @@ bool SudokuTableModel::saveToFile(const QString &fileName){
 	}
 
 	outFile.close();
+	emit sentStatusMsg( tr("Sudoku successfully saved"), 5000 );
 	return true;
 }
 
@@ -227,6 +231,7 @@ void SudokuTableModel::clean(){
 		mGridData[i] = "";
 	}
 	reset();
+	emit sentStatusMsg( tr("Empty Sudoku prepared"), 5000 );
 }
 
 // confirm

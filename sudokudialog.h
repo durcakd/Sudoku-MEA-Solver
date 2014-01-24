@@ -13,6 +13,7 @@
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QStatusBar>
 
 #include "sudokutablemodel.h"
 #include "sudokuthread.h"
@@ -33,6 +34,7 @@ public:
 	QToolButton *getConfirmTB() const	{ return confirmTB; }
 	const SudokuThread *getThread() const		{ return &thread; }
 	QProgressBar *getTriesPB() const	{ return triesPB; }
+	QStatusBar	*getStatusBar() const	{ return statusBar; }
 
 	void setTableModel( QAbstractTableModel *model );
 	void setTableItemDelegate( QAbstractItemDelegate *delegate );
@@ -41,6 +43,7 @@ signals:
 	void requestForReadFile(const QString &);
 	void requestForSaveFile(const QString &);
 	void requestForConfirm(const bool ok);
+	void sentStatusMsg( const QString &msg, int timeout = 0 ) const;
 
 public slots:
 	void addStrToListWidged(const QString &str);
@@ -74,6 +77,7 @@ private:
 	QTableView	*tableView;
 	SudokuTableModel *sudokuTableModel;
 	QListWidget *listWidged;
+	QStatusBar	*statusBar;
 
 
 	QToolButton *openFileTB;
@@ -85,7 +89,6 @@ private:
 	QIcon *unconfirmIcon;
 
 	QPushButton *startB;
-	QLineEdit	*progresLE;
 	QPushButton *easyB;
 	QPushButton *mediumB;
 	QPushButton *hardB;
@@ -93,7 +96,6 @@ private:
 
 	QCheckBox *autoCB;
 
-	QLineEdit	*statusBarLE;
 	QLineEdit	*popSizeLE;
 	QLineEdit	*elitSizeLE;
 	QLineEdit	*lifespanLE;

@@ -7,8 +7,6 @@
 
 #define dd(r,c) ((r)*COLS + (c))
 
-
-
 class SudokuTableModel : public QAbstractTableModel
 	{
 	Q_OBJECT
@@ -24,6 +22,9 @@ public:
 
 	void setGivenData(const int *givenData);
 	int *givenData() const;
+
+signals:
+	void sentStatusMsg( const QString &msg, int timeout = 0 ) const;
 
 public slots:
 	bool openFile(const QString &fileName);

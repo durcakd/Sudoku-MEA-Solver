@@ -15,8 +15,10 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	sudokuTableModel = NULL;
 
+	statusBar	= new QStatusBar;
+	statusBar->setSizeGripEnabled(false);
+
 	startB		= new QPushButton(tr("Start"));
-	statusBarLE	= new QLineEdit;
 	listWidged	= new QListWidget;
 
 	openFileTB	= new QToolButton;
@@ -115,13 +117,12 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 	mainGridLayout->addLayout( buttonUpLayout,			1, 0 );
 	mainGridLayout->addLayout( buttonDownLayout,		2, 0 );
 	mainGridLayout->addLayout( buttonProfilesLayout,	1, 1 );
-	mainGridLayout->addWidget( statusBarLE,				3, 0, 1, 0  );
+	mainGridLayout->addWidget( statusBar,				3, 0, 1, 0  );
 	mainGridLayout->addWidget( listWidged,				4, 0, 1, 0 );
 
 
 	setLayout( mainGridLayout );
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	statusBarLE->setEnabled(false);
 	setWindowTitle(tr("Sudoku MEA Solver"));
 	//
 	parametersGroup->hide();
@@ -249,6 +250,7 @@ void SudokuDialog::setEasy(){
 	milestonePeriodLE->setText( QString::number( EMILESTONEPERIOD ));
 	localTrialsLE->setText( QString::number( ELOCALTRIALS ));
 	maxCallsLE->setText( QString::number( EMAXCALLS ));
+	emit sentStatusMsg( tr("Easy profile  enabled"), 2000 );
 }
 void SudokuDialog::setMedium(){
 	popSizeLE->setText( QString::number( MPOPSIZE ));
@@ -258,6 +260,7 @@ void SudokuDialog::setMedium(){
 	milestonePeriodLE->setText( QString::number( MMILESTONEPERIOD ));
 	localTrialsLE->setText( QString::number( MLOCALTRIALS ));
 	maxCallsLE->setText( QString::number( MMAXCALLS ));
+	emit sentStatusMsg( tr("Medium profile  enabled"), 2000 );
 }
 void SudokuDialog::setHard(){
 	popSizeLE->setText( QString::number( HPOPSIZE ));
@@ -267,6 +270,7 @@ void SudokuDialog::setHard(){
 	milestonePeriodLE->setText( QString::number( HMILESTONEPERIOD ));
 	localTrialsLE->setText( QString::number( HLOCALTRIALS ));
 	maxCallsLE->setText( QString::number( HMAXCALLS ));
+	emit sentStatusMsg( tr("Hard profile  enabled"), 2000 );
 }
 
 void SudokuDialog::autoChangeState( bool checked ){
@@ -277,7 +281,7 @@ void SudokuDialog::autoChangeState( bool checked ){
 		hardB->setEnabled( false );
 		setEasy();
 		autoParams = true;
-
+		emit sentStatusMsg( tr("Auto profile  enabled"), 2000 );
 	} else {
 		parametersGroup->setEnabled( true );
 		easyB->setEnabled( true );
@@ -332,6 +336,7 @@ bool SudokuDialog::open(){
 	QString fileName =
 			QFileDialog::getOpenFileName(this, tr("Open"), ".", fileFilters);
 	if (fileName.isEmpty()){
+		emit sentStatusMsg( tr("File name is wrong"), 5000 );
 		return false;
 	}
 
@@ -349,6 +354,7 @@ bool SudokuDialog::save(){
 	QString fileName =
 			QFileDialog::getSaveFileName(this, tr("Save"), ".", fileFilters);
 	if (fileName.isEmpty()){
+		emit sentStatusMsg( tr("File name is wrong"), 5000 );
 		return false;
 	}
 
@@ -360,8 +366,10 @@ bool SudokuDialog::save(){
 void SudokuDialog::confirm(const bool ok){
 	if(ok){
 		confirmTB->setIcon(*unconfirmIcon);
+		emit sentStatusMsg( tr("Edit mode"), 2000 );
 	}else{
 		confirmTB->setIcon(*confirmIcon);
+		emit sentStatusMsg( tr("Solve mode"), 2000 );
 	}
 	emit requestForConfirm(!ok);
 }
