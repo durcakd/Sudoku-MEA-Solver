@@ -3,6 +3,8 @@
 #include <QFont>
 #include <QBrush>
 #include <QFile>
+#include <QRegExp>
+#include <QRegExpValidator>
 
 // constructor
 SudokuTableModel::SudokuTableModel(QObject *parent)
@@ -131,6 +133,7 @@ Qt::ItemFlags SudokuTableModel::flags(const QModelIndex & index) const
 
 // set given data
 void SudokuTableModel::setGivenData(const int *givenData){
+	// data must be controled before
 	if(givenData != NULL){
 		memcpy(mGivenData, givenData, N4*sizeof(int));
 	}
@@ -167,10 +170,19 @@ bool SudokuTableModel::openFile(const QString &fileName){
 	int counter = 0;
 	int given[N4];
 
-	while (!in.atEnd()) {
-		QString line = in.readLine();
+	for ( int i = 0; i < N2; i++ ) {  // !in.atEnd() is not enought
+		QString line = in.readLine().trimmed();
+
+		// controling data and their format
+		QRegExp rx("\\d \\d \\d \\d \\d \\d \\d \\d \\d");
+		if( !rx.exactMatch( line ) ){
+			qDebug() << "SudokuTableModel::openFile(): \'" << line << "\' is no valid";
+			emit sentStatusMsg( tr("File has wrong format"), 5000 );
+			return false;
+		}
+
 		QStringList fields = line.trimmed().split(' ');
-		//qDebug() << line.trimmed() << " size: " << fields.size();
+		qDebug() << line << " size: " << fields.size();
 		if (fields.size() == N2) {
 			for (int j = 0; j < N2; j++){
 				given[counter++] = fields.at(j).toInt();
