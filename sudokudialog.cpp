@@ -366,9 +366,11 @@ bool SudokuDialog::save(){
 void SudokuDialog::confirm(const bool ok){
 	if(ok){
 		confirmTB->setIcon(*unconfirmIcon);
+		startB->setEnabled( false );
 		emit sentStatusMsg( tr("Edit mode"), 2000 );
 	}else{
 		confirmTB->setIcon(*confirmIcon);
+		startB->setEnabled( true );
 		emit sentStatusMsg( tr("Solve mode"), 2000 );
 	}
 	emit requestForConfirm(!ok);
@@ -391,7 +393,12 @@ void  SudokuDialog::start(){
 		//thread.wait();	// wait could block event loop
 
 	} else {
+		newTB->setEnabled( false );
+		confirmTB->setEnabled( false );
+		openFileTB->setEnabled( false );
+		saveToFileTB->setEnabled( false );
 		autoCB->setEnabled(false);
+
 		startB->setText(tr("Stop"));
 
 		thread.setParameters( parm, sudokuTableModel->givenData(), autoParams);
@@ -402,7 +409,13 @@ void  SudokuDialog::start(){
 // get result from thread
 void  SudokuDialog::threadDone(const QString msg){
 	addStrToListWidged(msg);
+
+	newTB->setEnabled( true );
+	confirmTB->setEnabled( true );
+	openFileTB->setEnabled( true );
+	saveToFileTB->setEnabled( true );
 	autoCB->setEnabled(true);
+
 	startB->setText(tr("Start"));
 
 
