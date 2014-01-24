@@ -18,7 +18,7 @@ public:
 signals:
 	void done(const QString msg);
 	void sendProgress( int tryStep );
-	void sentStatusMsg( const QString &msg, int timeout ) const;
+	void sentStatusMsg( const QString &msg, int timeout = 0 ) const;
 
 protected:
 	void run();

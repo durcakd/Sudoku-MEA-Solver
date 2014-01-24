@@ -14,7 +14,7 @@ public:
 
 signals:
 	void sentResult(const QStringList &list) const;
-	void sentStatusMsg( const QString &msg, int timeout ) const;
+	void sentStatusMsg( const QString &msg, int timeout = 0) const;
 
 private:
 	ResultEmiterSigleton() {
