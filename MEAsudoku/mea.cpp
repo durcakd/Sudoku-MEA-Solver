@@ -304,7 +304,6 @@ int MEA:: birthNewAgent(){
 		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, parMaxTrials, tabuList));
 
 	++counterAgents;
-	agents.back()->setName(counterAgents);
 	//outstr.Format("agent back %3d.  F %3d   CS  %p,",agents.back()->getName(), agents.back()->getCurrentFitness(), agents.back()->getCurrentState()); m_listbox->AddString(outstr);
 	//CLogger::Instance()->write("agent birt");
 	return 0;

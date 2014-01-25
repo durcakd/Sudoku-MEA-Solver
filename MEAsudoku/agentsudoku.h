@@ -51,7 +51,7 @@ private:
 	int *mutFitnessList;
 	int *localBestMutState;
 	int *localBestMutFitnessList;
-	int name;
+
 
 	// Parameters
 	int parMaxTrials;
@@ -63,58 +63,34 @@ public:
 	~AgentSudoku();
 
 
-
-
 	// CurrentState & fitness
 	int  getCurrentFitness();
-	void setCurrentFitness();
-	void setCurrentFitness(int newFitness);
 
 	int *getCurrentState();
 	void setCurrentState(int *newState);
 	static QStringList printState(int *state);
-	static void scprintState(int *state, int *fixed);
 
-
-	//LifePoints
-	void setLifePoints(int points);
-	int getLifePoints();
 	void addLifePoints();
 	int decLifePoints();
 
 	// BestMilestoneState
 	int getBestMilestoneFitness();
-	void setBestMilestoneFitness(int newFitness);
 	int *getBestMilestoneState();
 	void setBestMilestoneState(int *newState);
-	void copyToBestMilestoneState(int *state);
 	int  resetMilestoneState();
 
-
-	int getName();
-	void setName(int newName);
-
-	// most importatnt metods
-
+	// local search (edited hill climing algorithm)
+	int	localSearchUseHeuristic();
 	// generate new state for new agents
 	int generateNewState();
+
+
+private:
+
 	// fitness funcion
 	static int fitnessFunctionAllOverState(int *actualState, int *fitnessList);
 	// mutation + heuristic + fast fitness function (via change)
 	int	 mutationUseHeurRetFitness(int *newState, int *newFitnessList);
-	// local search (edited hill climing algorithm)
-	int	localSearchUseHeuristic();
-	// 2. version of local search, not use in final version
-	int localSearchUseFitList();
-
-
-	// old methods (dont use some features (are slower, than new))
-
-	/// int mutation(int *newState);
-	/// int	 mutationReturnFitness(int *newState, int *newFitnessList);
-	/// static int fitnessFunction(int *actualState);
-	/// int localSearch();
-
 
 };
 

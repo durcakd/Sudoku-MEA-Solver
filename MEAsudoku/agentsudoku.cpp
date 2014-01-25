@@ -80,12 +80,7 @@ AgentSudoku:: ~AgentSudoku(){
 int  AgentSudoku:: getCurrentFitness(){
 	return currentFitness;
 }
-void AgentSudoku:: setCurrentFitness(){
-	currentFitness = fitnessFunctionAllOverState(currentState, currentFitnessList);
-}
-void AgentSudoku:: setCurrentFitness(int newFitness){
-	currentFitness = newFitness;
-}
+
 
 int	*AgentSudoku:: getCurrentState(){
 	return currentState;
@@ -127,53 +122,7 @@ QStringList AgentSudoku:: printState(int *state){
 
 }
 
-void AgentSudoku:: scprintState(int *state, int *fixed){
-	int i;
-	QString outstr = "";
-	//HANDLE hConsole;
 
-	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
-	if(NULL == state){
-		qDebug() << "ERROR printState(): state is NULLL";
-		return;
-	}
-
-
-	outstr = "";
-	for(i = 0; i < NN*NN; ++i){
-		if(i % 3 == 0 && 0 != i)
-			outstr += "   ";
-		if(i % NN == 0 && 0 != i ){
-			qDebug() << outstr;
-			outstr = "";
-		}
-		if(i % (NN*3) == 0 && 0 != i) {
-			qDebug() << " ";
-		}
-		outstr += state[i] ;
-		// color
-		/*
-		if(0 != fixed[i]){
-			SetConsoleTextAttribute(hConsole, 8);
-			printf(" %d", state[i]);
-			SetConsoleTextAttribute(hConsole, 4);
-
-		}else
-			printf(" %d", state[i]);
-			*/
-	}
-	qDebug() << outstr;
-	//SetConsoleTextAttribute(hConsole, 7);
-
-}
-
-// LifePoints
-void AgentSudoku:: setLifePoints(int points){
-	lifePoints = points;
-}
-int  AgentSudoku:: getLifePoints(){
-	return lifePoints;
-}
 void AgentSudoku:: addLifePoints(){
 	lifePoints++;
 }
@@ -189,19 +138,14 @@ int  AgentSudoku:: decLifePoints(){
 int  AgentSudoku:: getBestMilestoneFitness(){
 	return bestMilestoneFitness;
 }
-void AgentSudoku:: setBestMilestoneFitness(int newFitness){
-	bestMilestoneFitness = newFitness;
-}
+
 int *AgentSudoku:: getBestMilestoneState(){
 	return bestMilestoneState;
 }
 void AgentSudoku:: setBestMilestoneState(int *newState){
 	bestMilestoneState = newState;
 }
-void AgentSudoku:: copyToBestMilestoneState(int *state){
 
-	memcpy(bestMilestoneState, state, NN_NN * sizeof(int));
-}
 int  AgentSudoku:: resetMilestoneState(){
 
 	if(currentFitness <= bestMilestoneFitness){
@@ -212,12 +156,6 @@ int  AgentSudoku:: resetMilestoneState(){
 	return 0;
 }
 
-int  AgentSudoku:: getName(){
-	return name;
-}
-void AgentSudoku:: setName(int newName){
-	name = newName;
-}
 
 
 // most importatnt metods
@@ -563,321 +501,7 @@ int  AgentSudoku:: localSearchUseHeuristic(){
 }
 
 
-// 2. version of local search, not use in final version
-int  AgentSudoku:: localSearchUseFitList(){
-	int trial,
-			mutFitness,
-			reward;
-	int *swapState;
-
-	reward = currentFitness;
-	//maxTrials = 1 + (parLifePoints - lifePoints)*10/parLifePoints;
-	for(trial = 0; trial < parMaxTrials; ++trial  ){
-		//mutFitness = mutationReturnFitness( mutState, mutFitnessList);
-		mutFitness = mutationUseHeurRetFitness( mutState, mutFitnessList);
-		MEA::	addCounterTrials();
-		/*if(mutFitness != fitnessFunction(mutState)){
-				CLogger::Instance()->write("ERROR:: NEROVNA SA ");
-				int rFitness, s;
-					rFitness = 0;
-					for(s = 0; s < 2*NN; s++ ){
-						rFitness += currentFitnessList[s];
-					}
-				//mutFitness = AgentSudoku::fitnessFunction(mutState);
-			}*/
-		// preco memcopy?????  -> memcopy if parallelism
-		if(mutFitness <= getCurrentFitness() ){
-			memcpy(currentFitnessList, mutFitnessList, 2*NN*sizeof(int));
-
-			reward = currentFitness + 1;
-
-			currentFitness = mutFitness;
-
-			swapState = mutState;
-			mutState = currentState;
-			currentState = swapState;
 
 
 
-			//memcpy(agent->getCurrentState(), mutState, NN_NN * sizeof(int));
-			//reward = 1;
-		}
-	}
-	if(reward > currentFitness)
-		return 1;
-	else
-		return 0;
-}
-
-/*
-// old
-
-int	 AgentSudoku:: mutation(int *newState)          // mutation  MUT-3  only 1 row WITHOUT probability using fixedList
-{
-	int i,
-		position1,
-		position2,
-		offset,
-		swap,
-		counter;
-	//CString outstr;
-
-	memcpy(newState, currentState, NN_NN*sizeof(int));
-
-	// random row with nofixed positions >= 2
-	do{
-		i = (rand() % NN);
-		offset = i * NN;
-		counter = fixedList[offset + i];
-	}while(counter < 2);
-
-	// random 2 not the same positions
-	position1 = (rand() % counter);
-	do{
-		position2 = (rand() % counter);
-	}while(position1 == position2);
-
-	// get positions from fixedList
-	position1 = fixedList[offset + i + position1 + 1];
-	position2 = fixedList[offset + i + position2 + 1];
-
-	// swap positions
-	swap = newState[position1 + offset];
-	newState[position1 + offset] = newState[position2 + offset];
-	newState[position2 + offset] = swap;
-	//outstr.Format("Mut %d ->   %d >< %d", i, position1, position2  );
-	//CLogger::Instance()->write(outstr);
-
-
-	return 0;
-}
-int  AgentSudoku:: fitnessFunction(int *actualState){
-	int existArray[NN];
-	int fitness = 0,
-		k,
-		i,
-		j,
-		position,
-		offset;
-	//CString outstr;
-
-	// evaluate for column
-	for(offset = 0; offset < NN; ++offset){
-		// clear existArray
-		for(i = 0; i < NN; ++i)
-			existArray[i] = NOT_USED;
-		position = offset;
-		for(i = 0; i < NN; ++i){
-			if(existArray[ actualState[position] - 1 ])
-				++fitness;
-			else
-				existArray[ actualState[position] - 1 ] = USED;
-			position += NN;
-		}
-		//outstr.Format( "fit %d", fitness    ); CLogger::Instance()->write(outstr);
-	}
-
-
-	// evaluate for blocks
-	for(k = 0; k < N; ++k){
-		// clear existArray
-		for(j = 0; j < N; ++j){
-			offset = k * NN * N  + j * N;
-
-
-			for(i = 0; i < NN; ++i)
-				existArray[i] = NOT_USED;
-
-			for(i = 0; i < NN; ++i){
-				if(i == N)
-					offset = offset + N + N;
-				if(i == N + N)
-					offset = offset + N + N;
-				//position = i  + offset;
-
-				if(existArray[ actualState[i  + offset] - 1 ])
-					++fitness;
-				else
-					existArray[ actualState[i  + offset] - 1 ] = USED;
-			}
-			//outstr.Format( "fit %d", fitness    ); CLogger::Instance()->write(outstr);
-		}
-	}
-
-	return fitness;
-}
-int  AgentSudoku:: localSearch(){
-	int trial,
-		mutFitness,
-		reward;
-	int *swapState;
-
-	reward = currentFitness;
-	for(trial = 0; trial < parMaxTrials; ++trial  ){
-			mutation(mutState);
-			mutFitness = AgentSudoku::fitnessFunction(mutState);
-
-			// preco memcopy?????  -> memcopy if parallelism
-			if(mutFitness <= getCurrentFitness()){
-				currentFitness = mutFitness;
-
-				swapState = mutState;
-				mutState = currentState;
-				currentState = swapState;
-
-				//memcpy(agent->getCurrentState(), mutState, NN_NN * sizeof(int));
-				//reward = 1;
-			}
-		}
-	if(reward > currentFitness)
-		return 1;
-	else
-		return 0;
-}
-int	 AgentSudoku:: mutationReturnFitness(int *newState, int *newFitnessList){          // all row with probability using fixedList, new fitness
-	int i,
-		position1,
-		position2,
-		offset,
-		swap,
-		counter;
-	int existArray[NN];
-	//CString outstr;
-	int fc1, fc2, fb1, fb2, fit, k, j1, j2, c, pos, offs, mutFitness;
-
-	memcpy(newState, currentState, NN_NN*sizeof(int));
-	memcpy(newFitnessList, currentFitnessList, 2*NN*sizeof(int));
-
-
-	// row with probability, that has nofixed positions >= 2
-	mutFitness = currentFitness;
-
-	for(i = 0; i < NN; ++i){
-		if( (rand() % 100  <  (int)(parMutProbability * 100)) && 1 < fixedList[i * NN + i] ){
-
-			offset = i * NN;
-			counter = fixedList[offset + i];
-
-			// random 2 not the same positions
-			position1 = (rand() % counter);
-			do{
-				position2 = (rand() % counter);
-			}while(position1 == position2);
-
-			// get positions from fixedList
-			position1 = fixedList[offset + i + position1 + 1];
-			position2 = fixedList[offset + i + position2 + 1];
-
-			// swap positions
-			swap = newState[position1 + offset];
-			newState[position1 + offset] = newState[position2 + offset];
-			newState[position2 + offset] = swap;
-			//outstr.Format("Mut %d ->   %d >< %d", i, position1, position2  ); CLogger::Instance()->writeg(outstr);
-
-			//  Fitness , evaluate only changes------------------------------------------
-
-
-			if(3 > i) k = 0;
-			else if(5 < i) k = 2;
-			else k = 1;
-
-			if(3 > position1) j1 = 0;
-			else if(5 < position1) j1 = 2;
-			else j1 = 1;
-
-			if(3 > position2) j2 = 0;
-			else if(5 < position2) j2 = 2;
-			else j2 = 1;
-
-			// column 1
-			fit = 0;
-			for(c = 0; c < NN; ++c)
-				existArray[c] = NOT_USED;
-			pos = position1;
-			for(c = 0; c < NN; ++c){
-				if(existArray[ newState[pos] - 1 ])
-					++fit;
-				else
-					existArray[ newState[pos] - 1 ] = USED;
-				pos += NN;
-			}
-			fc1 = fit - mutFitnessList[position1];
-			mutFitnessList[position1] += fc1; ;
-
-			// column 2
-			fit = 0;
-			for(c = 0; c < NN; ++c)
-				existArray[c] = NOT_USED;
-			pos = position2;
-			for(c = 0; c < NN; ++c){
-				if(existArray[ newState[pos] - 1 ])
-					++fit;
-				else
-					existArray[ newState[pos] - 1 ] = USED;
-				pos += NN;
-			}
-			fc2 = fit - mutFitnessList[position2];
-			mutFitnessList[position2] += fc2; ;
-			//fitnessList[offset] = rowFitness;
-
-
-			// block1
-			offs = k * NN * N  + j1 * N;
-			fit = 0;
-			for(c = 0; c < NN; ++c)
-				existArray[c] = NOT_USED;
-
-			for(c = 0; c < NN; ++c){
-				if(c == N)
-					offs = offs + N + N;
-				if(c == N + N)
-					offs = offs + N + N;
-				pos = c  + offs;
-
-				if(existArray[ newState[pos] - 1 ])
-					++fit;
-				else
-					existArray[ newState[pos] - 1 ] = USED;
-			}
-			fb1 = fit - mutFitnessList[k*3 + j1 + NN];
-			mutFitnessList[k*3 + j1 + NN] += fb1; ;
-
-			// block2
-			fb2 = 0;
-			if(j1 != j2 ){
-				//printf(" <> ");
-				offs = k * NN * N  + j2 * N;
-				fit = 0;
-
-				for(c = 0; c < NN; ++c)
-					existArray[c] = NOT_USED;
-
-				for(c = 0; c < NN; ++c){
-					if(c == N)
-						offs = offs + N + N;
-					if(c == N + N)
-						offs = offs + N + N;
-					pos = c  + offs;
-
-					if(existArray[ newState[pos] - 1 ])
-						++fit;
-					else
-						existArray[ newState[pos] - 1 ] = USED;
-				}
-				fb2 = fit - mutFitnessList[k*3 + j2 + NN];
-				mutFitnessList[k*3 + j2 + NN] += fb2;
-			}
-
-			// fitness
-			//outstr.format(" %d  %d  %d  %d,.. %d  %d  %d  %d",currentFitnessList[position1]+fc1, currentFitnessList[position2]+fc2, currentFitnessList[k*3 + j1 + NN]+fb1,currentFitnessList[k*3 + j2 + NN] + fb2,fc1, fc2, fb1, fb2);
-			//CLogger::Instance()->write(outstr);
-			mutFitness = mutFitness + fc1 + fc2 + fb1 + fb2 ;
-
-		}
-	}
-	return mutFitness;
-}
-
-*/
-// new methods
 
