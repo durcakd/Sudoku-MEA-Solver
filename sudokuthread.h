@@ -27,10 +27,11 @@ private:
 	bool mAutoParams;
 	bool mAbort;
 	PARAMETERS parm;
+	PARAMETERS originParm;
 	int *givenData;
 	MEA *mea;
 
-
+	void copyOriginParams();
 	void computeParams(int trial);
 	};
 
