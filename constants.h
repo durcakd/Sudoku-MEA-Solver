@@ -6,7 +6,16 @@ enum { N	= 3 ,
 	   N2	= N*N ,
 	   N4	= N2*N2 ,
 	   COLS	= N2 ,
-	   ROWS = N2 };
+	   ROWS = N2,
+
+	   TABU				= 1,
+	   MAX_FITNESS		= 243,
+	   OPTIMAL_FITNESS	= 0,
+	   USED				= 1,
+	   NOT_USED			= 0
+
+
+	 };
 
 // MEA deafault parameters
 enum { NUMTESTS			= 100,
