@@ -10,7 +10,6 @@
 #ifndef MEA_H
 #define MEA_H
 
-#include <QObject>
 #include <QStringList>
 
 #include <cstdio>
@@ -28,85 +27,63 @@
   Elite_list object represent elite list data structure.
 * autor: David Durcak
 */
-class MEA : public QObject
-{
-	Q_OBJECT
-
-private:
-	EliteList eliteList;   // elite list
-	//int *fixedState;
-	//std::list< AgentSudoku * >  agents;
-
-	int counterAgents;
-	static int counterTrial;
-
-
-	// Parameters
-	int		parNumAgents,
-			parMaxGenrations,
-			parMaxTrials,
-			parStartLifePoints,
-			parBirthStep,
-			parMilestoneStep,
-			parElitelistSize; //// ??
-
-
-
-	int *tabuList;
-	int *fixedState;
-	int *fixedLists;
-
-	bool testMode;
-
-
-
+class MEA
+	{
 public:
-	std::list< AgentSudoku * >  agents;    // list of agents
-
-
-
 
 	// Constructor & Destructor
+
 	MEA();
 	~MEA();
-	void setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
-							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
-							int nelitelistSize, bool ntestMode);
 
-
+	void	setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
+						   int	nlifePoints,int	nbirthStep,int nmilestoneStep,
+						   int nelitelistSize);
 
 	// main MEA optimalization method ( function of MEA)
-	int optimize();
-	// start initialization, load & prepare data
-	int initialization();
-	// generate initial ppopulation of agents
-	int generateAgents();
-	// chceck if solution was found
-	int *controlFitness();
-	// decrease of lifespan and elimination of agents, that don't have any life points
-	// (push bestmilestone state to Elit List)
-	int decLifePointsAndEliminate();
-	// birth new agent(get state from elit list)
-	int birthNewAgent();
-	//   local search
-	int localSearch(int generation);
+	int		optimize();
+
+	static	void	addCounterTrials()		{ counterTrial++; }
 
 	// aux methods
-
-	// aux print agents information
-	void printAgents();
-	// statistics information about all agents
-	void printBestMeanFitAndAgentsSize();
-	// testing metod
-	void testEliteList();
-
-	static void addCounterTrials();
-	QStringList  printState(const int *state);
-
-signals:
-	void pushMsg(QString msg);
-
-};
+	QStringList		printState( const int *state ) const;
 
 
+private:
+	// start initialization, load & prepare data
+	int		initialization();
+	// generate initial ppopulation of agents
+	int		generateAgents();
+	// chceck if solution was found
+	const	int		*controlFitness() const;
+	// decrease of lifespan and elimination of agents, that don't have any life points
+	// (push bestmilestone state to Elit List)
+	int		decLifePointsAndEliminate();
+	// birth new agent(get state from elit list)
+	int		birthNewAgent();
+	//   local search
+	int		localSearch( int generation ) const;
+
+private:
+
+	EliteList	eliteList;   // elite list
+	std::list< AgentSudoku * >  agents;    // list of agents
+
+	static int	counterTrial;
+	int			counterAgents;
+
+	int		*tabuList;
+	int		*fixedState;
+	int		*fixedLists;
+
+	// Parameters
+	int		parNumAgents;
+	int		parMaxGenrations;
+	int		parMaxTrials;
+	int		parStartLifePoints;
+	int		parBirthStep;
+	int		parMilestoneStep;
+	int		parElitelistSize; //// ??
+
+	};
 #endif // MEA_H

@@ -44,8 +44,8 @@ void SudokuThread::run(){
 							parm.lifespan,			// lifePoints
 							parm.birthPeriod,		// birthStep
 							parm.milestonePeriod,	// milestoneStep
-							parm.elitSize,			// elitelistSize,
-							false );			// testMode ----!!!! VYHODIT ????
+							parm.elitSize			// elitelistSize,
+							);
 
 
 		result = mea->optimize();
@@ -58,7 +58,7 @@ void SudokuThread::run(){
 
 	QString msg;
 	if(result <= 0){
-		msg = tr("Solution not found, try again");
+		msg = tr("Solution not found, try again (") + QString::number(runTime, 'f', 2) + tr(" s)") ;
 		if( mAbort ){
 			msg = tr("Aborted");
 		}

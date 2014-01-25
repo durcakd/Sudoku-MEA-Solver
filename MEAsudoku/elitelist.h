@@ -16,18 +16,20 @@
 
 // compare methods
 struct compare
-{
-  bool operator()(const std::pair< int, int*>& left, const std::pair< int, int*>& right)
-  {
-	  return left.first > right.first ;  }
-};
+	{
+	bool operator()(const std::pair< int, int*>& left,
+					const std::pair< int, int*>& right)
+	{
+		return left.first > right.first ;  }
+	};
 
 
 
 typedef struct structState{
 	int fitness;
 	int *state;
-}STATE;
+	}STATE;
+
 
 /*
 * Class EliteList represent Elite list data structure, which is used by MEA Sudoku algorithm.
@@ -35,40 +37,29 @@ typedef struct structState{
 * autor: David Durcak
 */
 class EliteList
-{
-private:
-	int parElitelistSize;
-	int fitnessSum;
-	//std::vector< std::pair< int, int*>  >  list;
-	//std::priority_queue< std::pair< int, int*> , std::vector< std::pair< int, int*> > ,  compare> list;
+	{
 
 public:
-	std::vector< std::pair< int, int*>  >  list;
-
 	// Constructor & Destructor
 	EliteList();
-	EliteList(int nparElitelistSize);
 	~EliteList();
-	void setParameters(int nparElitelistSize);
+	void	setParameters(int nparElitelistSize);
 
 	// push state to Elit list, (deleting the worst state, if new is better)
 	// states are sorted
-	int pushState(int fitness, int *state);
+	int		pushState(int fitness, int *state);
 	// get random state
-	STATE getRandomState();
+	STATE	getRandomState() const ;
 	// get state using Rulet selection
-	STATE EliteList:: getRuletState();
-	// get state using tournament selection
-	STATE EliteList:: getTournamentState();
-
-	// aux methods & getters
-	std::vector< std::pair< int, int*>  > getList();
-	int getNumberOfEliteStates();
-	int getBestFitness();
-	int getMeanFitness();
-	void printEliteList();
-
-};
 
 
+private:
+	int		parElitelistSize;
+	int		fitnessSum;
+	std::vector< std::pair< int, int*>  >  list;
+
+	//std::vector< std::pair< int, int*>  >  list;
+	//std::priority_queue< std::pair< int, int*> , std::vector< std::pair< int, int*> > ,  compare> list;
+
+	};
 #endif // ELITELIST_H
