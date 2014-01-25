@@ -102,7 +102,7 @@ int MEA:: optimize(){
 		if(NULL != solution){
 			if(! testMode){
 				AgentSudoku::printState(solution);
-				emit pushMsg("jopjopok");
+				//emit pushMsg("jopjopok");
 			}
 			return counterTrial;
 		}
@@ -343,129 +343,6 @@ int MEA:: localSearch(int generation){
 
 
 
-
-// aux methods
-
-// aux print agents information
-void MEA:: printAgents(){
-	std::list< AgentSudoku * >::iterator  itAgent;
-	QString outstr;
-
-	qDebug() << "Agents count = " << agents.size();
-
-
-	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
-		outstr ="  agent " + (*itAgent)->getName();
-		outstr += ":  life " + (*itAgent)->getLifePoints();
-		outstr +=  ",  F "		+ (*itAgent)->getCurrentFitness();
-		outstr +=  ",  M "		+ (*itAgent)->getBestMilestoneFitness();
-		outstr +=  ",  CS "	;
-		QString pStr;
-		pStr.sprintf("%08p",  (*itAgent)->getCurrentState()) ;
-		qDebug() << outstr << pStr;
-	}
-
-}
-
-// statistics information about all agents
-void MEA:: printBestMeanFitAndAgentsSize(){
-	std::list< AgentSudoku * >::iterator  itAgent;
-	QString outstr;
-
-	int bestFit,
-		meanFit = 0,
-		bestElitFit,
-		meanElitFit = 0,
-		elitCounter = 0;
-
-
-	if(agents.empty()){
-		qDebug() << "Warning  : agents.size() == 0,  (printBestMeanFitAndAgentsSize())";
-		return;
-	}
-
-	bestElitFit = bestFit = MAX_FITNESS;
-	bestElitFit = agents.front()->getBestMilestoneFitness();
-
-	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
-		if(bestFit > (*itAgent)->getCurrentFitness()){
-			bestFit = (*itAgent)->getCurrentFitness();
-		}
-		meanFit += (*itAgent)->getCurrentFitness();
-
-		if(MAX_FITNESS != (*itAgent)->getBestMilestoneFitness()){
-			elitCounter++;
-			if(bestElitFit > (*itAgent)->getBestMilestoneFitness() ){
-				bestElitFit = (*itAgent)->getBestMilestoneFitness();
-			}
-			meanElitFit += (*itAgent)->getBestMilestoneFitness();
-		}
-	}
-
-	meanFit = meanFit / agents.size();
-	if(0 < elitCounter){
-		meanElitFit = meanElitFit / elitCounter;
-	}else{
-		bestElitFit = 0;
-		meanElitFit = 0;
-	}
-	outstr = " ; " +  bestFit;
-	outstr +=  " ; " + meanFit;
-	outstr +=  " ; " + bestElitFit;
-	outstr +=  " ; " + meanElitFit;
-	outstr +=  ";  " + agents.size();
-	outstr += ";  " + eliteList.getBestFitness();
-	outstr += "; " +  eliteList.getNumberOfEliteStates();
-	qDebug() << outstr;
-}
-
-// testing metod
-void MEA:: testEliteList(){
-	QString outstr;
-	std::list< AgentSudoku * >::iterator  itAgent;
-
-	qDebug() << "TEST Elite List";
-
-	eliteList.setParameters(parElitelistSize);
-	eliteList.printEliteList();
-	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
-		eliteList.pushState((*itAgent)->getCurrentFitness(),(*itAgent)->getCurrentState());
-		//eliteList.printEliteList();
-	}
-	eliteList.printEliteList();
-
-
-
-	//===============================================================
-	// test decAndEliminate---------------------
-	std::list< AgentSudoku * >::iterator   auxIt;
-	int i;
-	qDebug() << "TEST decAndEliminate()  LIFE POINTS:";
-	i = 0;
-	for(itAgent = agents.begin(); itAgent != agents.end(); ++itAgent){
-		//if(i %3 == 0)
-		if(i %3 == 0 || i %3 == 2)
-		//if(i  != 14)
-			(*itAgent)->setLifePoints(0);
-		i++;
-	}
-	for(itAgent = agents.begin(); itAgent != agents.end();  ){
-		auxIt = itAgent;
-		++itAgent;
-		outstr = "M(" + (*auxIt)->getName();
-		outstr += ")***" + (*auxIt)->getLifePoints();
-		outstr += "  ";
-
-		if(0 >= (*auxIt)->decLifePoints()){
-			agents.erase(auxIt);
-			//printf("-> agent kaput");
-			outstr += "-> agent kaput";
-		}
-		qDebug() << outstr;
-	}
-	//=========================
-
-}
 
 void MEA::	addCounterTrials(){
 	MEA::counterTrial++;
