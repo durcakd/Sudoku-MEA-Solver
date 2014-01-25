@@ -12,19 +12,7 @@
 
 
 #include <cstdio>
-
-
-
-#define TABU				1
-#define MAX_FITNESS			243
-#define OPTIMAL_FITNESS		0
-#define N					3
-#define NN					9
-#define	NN_NN				81
-//#define MUTATION_PROBABILITY	0.2
-#define OPTIMAL_FITNESS		0
-#define USED				1
-#define NOT_USED			0
+#include "constants.h"
 
 
 /*

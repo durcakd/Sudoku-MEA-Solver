@@ -55,12 +55,12 @@ void MEA:: setParameters( const int* givenData, int nnumAgents,int nmaxGenration
 
 	testMode = ntestMode;
 
-	if(NULL == (fixedState = new int[NN_NN + NN])){
+	if(NULL == (fixedState = new int[N4 + N2])){
 		qDebug() << "Error: malloc - fixedState in setParameters()";
 
 		return;
 	}
-	memcpy(fixedState, givenData, NN_NN * sizeof(int));
+	memcpy(fixedState, givenData, N4 * sizeof(int));
 
 }
 
@@ -141,18 +141,18 @@ int MEA:: initialization(){
 	//===================================================
 	// initialization of fixedLists
 	// its matrix NN rows x (NN+1) columns ,  1. in column is count non fixed positions in row
-	if(NULL == (fixedLists = new int[NN_NN + NN])){
+	if(NULL == (fixedLists = new int[N4 + N2])){
 		qDebug() << "Error: malloc - fixedLists in initialization()";
 
 		return 1;
 	}
 
 	offset = 0;
-	for(i = 0; i < NN; i++){
+	for(i = 0; i < N2; i++){
 		counter = 0;
 		k = offset + i;   // = i * (NN + 1);
 
-		for(j = 0; j < NN; j++){
+		for(j = 0; j < N2; j++){
 			if(0 == fixedState[offset + j]){
 				k++;
 				fixedLists[k] = j;
@@ -160,7 +160,7 @@ int MEA:: initialization(){
 			}
 		}
 		fixedLists[offset + i] = counter;
-		offset += NN;
+		offset += N2;
 	}
 	/*// test
 	offset = 0;
@@ -177,31 +177,31 @@ int MEA:: initialization(){
 	// =====================================================
 	// initialization of TabuList
 	// it NNxNNxNN 3D array where is check for each cell, if every number can be there
-	if(NULL == (tabuList = new int[NN_NN*NN])){
+	if(NULL == (tabuList = new int[N4*N2])){
 		qDebug() << "Error: malloc - tabuLists in initialization()";
 
 		return 1;
 	}
 		// make tabu cube2
-	memset( tabuList, 0,  (NN_NN)*NN * sizeof(int));
+	memset( tabuList, 0,  (N4)*N2 * sizeof(int));
 
 	offset = 0;
-	for(i = 0; i < NN; i++){
-		for(j = 0; j < NN; j++){
-			oneFixed = fixedState[i*NN + j] - 1;
+	for(i = 0; i < N2; i++){
+		for(j = 0; j < N2; j++){
+			oneFixed = fixedState[i*N2 + j] - 1;
 			if(0 <= oneFixed){
 				// TABUing in column
-				for(k = 0; k < NN; k++){
-					tabuList[(k*NN + j)*NN + oneFixed] = TABU;
+				for(k = 0; k < N2; k++){
+					tabuList[(k*N2 + j)*N2 + oneFixed] = TABU;
 				}
 				// TABUing in block
-				offset = (i/N) * NN * N  + (j/3) * N;
-				for(k = 0; k < NN; ++k){
+				offset = (i/N) * N2 * N  + (j/3) * N;
+				for(k = 0; k < N2; ++k){
 					if(k == N)
 						offset = offset + N + N;
 					if(k == N + N)
 						offset = offset + N + N;
-					tabuList[(k  + offset)*NN + oneFixed] = TABU;
+					tabuList[(k  + offset)*N2 + oneFixed] = TABU;
 				}
 			}
 		}
@@ -358,7 +358,7 @@ QStringList MEA:: printState(const int *state){
 		return list;
 	}
 
-	for(int i = 0; i < NN*NN; ++i){
+	for(int i = 0; i < N4; ++i){
 		list << QString::number(state[i]) ;
 	}
 	return list;
