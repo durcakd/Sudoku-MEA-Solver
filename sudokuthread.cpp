@@ -21,8 +21,10 @@ void SudokuThread::setAbort(){
 }
 
 void SudokuThread::run(){
-	int result = 0,
-			countTrials = 0;
+	int result = 0;
+	int countTrials = 0;
+
+	copyOriginParams();   // save original parameters
 
 	QTime time;
 	time.start();
@@ -70,22 +72,33 @@ void SudokuThread::run(){
 	emit sentStatusMsg( msg );
 }
 
+// copy original parameters
+void SudokuThread::copyOriginParams(){
+	originParm.popSize = parm.popSize;
+	originParm.elitSize = parm.elitSize;
+	originParm.lifespan = parm.lifespan;
+	originParm.birthPeriod = parm.birthPeriod;
+	originParm.milestonePeriod = parm.milestonePeriod;
+	originParm.localTrials = parm.localTrials;
+	originParm.maxCalls = parm.maxCalls;
+}
+
+// compute new stronger parameters
 void SudokuThread::computeParams(int trial){
 	if( trial < 0 || trial >= NUMTESTS ){
 		qDebug() << "Warning: SudokuThread.computeParams(): wrong parameter: trial = " << trial;
 		return;
 	}
 
-	parm.popSize		= parm.popSize	+ trial * 3;
-	parm.elitSize		= parm.elitSize + trial * 3;
+	parm.popSize		= originParm.popSize	+ trial * 4;
+	parm.elitSize		= originParm.elitSize + trial * 4;
+	parm.lifespan		= originParm.lifespan + trial * 3;
 
-	parm.lifespan		= parm.lifespan + trial * 3;
+	//parm.birthPeriod		= originParm.birthPeriod		;//+ trial / 5;
+	//parm.milestonePeriod	= originParm.milestonePeriod	;//+ trial / 5;
 
-	parm.birthPeriod		= parm.birthPeriod		;//+ trial / 5;
-	parm.milestonePeriod	= parm.milestonePeriod	;//+ trial / 5;
-
-	parm.localTrials	= parm.localTrials	+ trial / 25;
-	parm.maxCalls		= parm.maxCalls		+ trial * 10000;
+	parm.localTrials	= originParm.localTrials	+ trial / 25;
+	parm.maxCalls		= originParm.maxCalls		+ trial * 20000;
 
 }
 
