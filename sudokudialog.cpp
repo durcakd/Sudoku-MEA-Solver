@@ -123,7 +123,8 @@ SudokuDialog::SudokuDialog(QWidget *parent) :
 
 	setLayout( mainGridLayout );
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	setWindowTitle(tr("Sudoku MEA Solver"));
+	setWindowTitle( tr("Sudoku MEA Solver") );
+	setWindowIcon( QIcon(":/images/icon.png") );
 	//
 	parametersGroup->hide();
 
