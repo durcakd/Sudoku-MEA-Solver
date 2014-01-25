@@ -32,7 +32,6 @@ void EliteList:: setParameters(int nparElitelistSize){
 // push state to Elit list, (deleting the worst state, if new is better)
 // states are sorted
 int EliteList:: pushState(int fitness, int *state){
-	QString outstr;
 
 	if(list.size() < (unsigned) parElitelistSize){
 		list.push_back(std::make_pair(fitness, state));
@@ -41,7 +40,6 @@ int EliteList:: pushState(int fitness, int *state){
 	}else{
 
 		if(fitness <= list[0].first){
-			//outstr.Format( "elitelist.pustState(), delete state %3d, %p",list[0].first, list[0].second    ); CLogger::Instance()->write(outstr);
 			fitnessSum = fitnessSum - list[0].first + fitness;
 
 			delete list[0].second;
@@ -56,10 +54,9 @@ int EliteList:: pushState(int fitness, int *state){
 }
 
 // get random state
-STATE EliteList:: getRandomState(){
+STATE EliteList:: getRandomState() const {
 	int generateNumber;
 	STATE randomState;
-	//CString outstr;
 
 	if(list.empty()){
 		qWarning() << "Warning: EliteList:: getRandomState(): list is empty";
@@ -71,7 +68,6 @@ STATE EliteList:: getRandomState(){
 
 	randomState.fitness = list[generateNumber].first;
 	randomState.state = list[generateNumber].second;
-	//outstr.Format( "EliteList:: getRandomState() will return %2d.state %3d %p", generateNumber,randomState.fitness, randomState.state   ); CLogger::Instance()->write(outstr);
 	return randomState;
 }
 

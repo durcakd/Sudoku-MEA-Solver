@@ -44,8 +44,8 @@ void SudokuThread::run(){
 							parm.lifespan,			// lifePoints
 							parm.birthPeriod,		// birthStep
 							parm.milestonePeriod,	// milestoneStep
-							parm.elitSize,			// elitelistSize,
-							false );			// testMode ----!!!! VYHODIT ????
+							parm.elitSize			// elitelistSize,
+							);
 
 
 		result = mea->optimize();

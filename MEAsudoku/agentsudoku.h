@@ -23,10 +23,48 @@
 */
 
 class AgentSudoku
-{
+	{
+
+public:
+	//AgentSudoku();
+	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, int *parTabuList);
+	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials,  int *parTabuList);
+	~AgentSudoku();
+
+	static	QStringList	printState( const int *state);
+
+	void	addLifePoints()					{ lifePoints++; }
+	int		decLifePoints()					{ lifePoints--;
+											  return lifePoints; }
+
+	// CurrentState & fitness
+	int		getCurrentFitness() const		{ return currentFitness; }
+	int	   *getCurrentState()	const		{ return currentState; }
+	void	setCurrentState(int *newState){ currentState = newState; }
+
+	// BestMilestoneState
+	int		getBestMilestoneFitness() const			{ return bestMilestoneFitness; }
+	int	   *getBestMilestoneState()	  const			{ return bestMilestoneState; }
+	void	setBestMilestoneState( int *newState)	{ bestMilestoneState = newState; }
+	int		resetMilestoneState();
+
+	// local search (edited hill climing algorithm)
+	int		localSearchUseHeuristic();
+	// generate new state for new agents
+	int		generateNewState();
+
+
 private:
-	int *fixed;
-	int *tabuList;
+
+	// fitness funcion
+	static	int		fitnessFunctionAllOverState( const int *actualState, int *fitnessList);
+
+	// mutation + heuristic + fast fitness function (via change)
+	int		mutationUseHeurRetFitness( int *newState, const int *newFitnessList) const;
+
+private:
+	int	*fixed;
+	int	*tabuList;
 	int *fixedList;
 	int *currentState;
 	int *currentFitnessList;
@@ -44,45 +82,5 @@ private:
 	// Parameters
 	int parMaxTrials;
 
-public:
-	//AgentSudoku();
-	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials, int *parTabuList);
-	AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int* newCurrentState, int newCurrentFitness, int nparMaxTrials,  int *parTabuList);
-	~AgentSudoku();
-
-
-	// CurrentState & fitness
-	int  getCurrentFitness();
-
-	int *getCurrentState();
-	void setCurrentState(int *newState);
-	static QStringList printState(int *state);
-
-	void addLifePoints();
-	int decLifePoints();
-
-	// BestMilestoneState
-	int getBestMilestoneFitness();
-	int *getBestMilestoneState();
-	void setBestMilestoneState(int *newState);
-	int  resetMilestoneState();
-
-	// local search (edited hill climing algorithm)
-	int	localSearchUseHeuristic();
-	// generate new state for new agents
-	int generateNewState();
-
-
-private:
-
-	// fitness funcion
-	static int fitnessFunctionAllOverState(int *actualState, int *fitnessList);
-	// mutation + heuristic + fast fitness function (via change)
-	int	 mutationUseHeurRetFitness(int *newState, int *newFitnessList);
-
-};
-
-
-
-
+	};
 #endif // AGENTSUDOKU_H

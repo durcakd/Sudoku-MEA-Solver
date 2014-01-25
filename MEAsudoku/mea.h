@@ -36,30 +36,45 @@ public:
 	MEA();
 	~MEA();
 
-	void setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
-						int	nlifePoints,int	nbirthStep,int nmilestoneStep,
-						int nelitelistSize, bool ntestMode);
+	void	setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
+						   int	nlifePoints,int	nbirthStep,int nmilestoneStep,
+						   int nelitelistSize);
 
 	// main MEA optimalization method ( function of MEA)
-	int optimize();
+	int		optimize();
 
-	static void addCounterTrials();
+	static	void	addCounterTrials()		{ counterTrial++; }
 
 	// aux methods
-	QStringList  printState(const int *state);
+	QStringList		printState( const int *state ) const;
 
 
 private:
+	// start initialization, load & prepare data
+	int		initialization();
+	// generate initial ppopulation of agents
+	int		generateAgents();
+	// chceck if solution was found
+	const	int		*controlFitness() const;
+	// decrease of lifespan and elimination of agents, that don't have any life points
+	// (push bestmilestone state to Elit List)
+	int		decLifePointsAndEliminate();
+	// birth new agent(get state from elit list)
+	int		birthNewAgent();
+	//   local search
+	int		localSearch( int generation ) const;
 
-	EliteList eliteList;   // elite list
+private:
+
+	EliteList	eliteList;   // elite list
 	std::list< AgentSudoku * >  agents;    // list of agents
 
-	int *tabuList;
-	int *fixedState;
-	int *fixedLists;
+	static int	counterTrial;
+	int			counterAgents;
 
-	static int counterTrial;
-	int counterAgents;
+	int		*tabuList;
+	int		*fixedState;
+	int		*fixedLists;
 
 	// Parameters
 	int		parNumAgents;
@@ -70,25 +85,5 @@ private:
 	int		parMilestoneStep;
 	int		parElitelistSize; //// ??
 
-	bool testMode;
-
-
-private:
-	// start initialization, load & prepare data
-	int initialization();
-	// generate initial ppopulation of agents
-	int generateAgents();
-	// chceck if solution was found
-	int *controlFitness();
-	// decrease of lifespan and elimination of agents, that don't have any life points
-	// (push bestmilestone state to Elit List)
-	int decLifePointsAndEliminate();
-	// birth new agent(get state from elit list)
-	int birthNewAgent();
-	//   local search
-	int localSearch(int generation);
-
 	};
-
-
 #endif // MEA_H

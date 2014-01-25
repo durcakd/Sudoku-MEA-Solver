@@ -17,7 +17,6 @@
 #include "agentsudoku.h"
 #include "resultemitersigleton.h"
 
-// ================================================
 
 // Constructors & Destructors
 AgentSudoku:: AgentSudoku(int newLifePoints, int *fixedState, int *nfixedLists, int nparMaxTrials,  int *parTabuList){
@@ -71,18 +70,8 @@ AgentSudoku:: ~AgentSudoku(){
 
 
 // CurrentState & fitness
-int  AgentSudoku:: getCurrentFitness(){
-	return currentFitness;
-}
 
-
-int	*AgentSudoku:: getCurrentState(){
-	return currentState;
-}
-void AgentSudoku:: setCurrentState(int *newState){
-	currentState = newState;
-}
-QStringList AgentSudoku:: printState(int *state){
+QStringList AgentSudoku:: printState( const int *state) {
 	int i;
 	QString outstr;
 	QStringList list;
@@ -117,32 +106,11 @@ QStringList AgentSudoku:: printState(int *state){
 }
 
 
-void AgentSudoku:: addLifePoints(){
-	lifePoints++;
-}
-int  AgentSudoku:: decLifePoints(){
-	lifePoints--;
-	return lifePoints;
-}
-
-// BestMilestoneState
-int  AgentSudoku:: getBestMilestoneFitness(){
-	return bestMilestoneFitness;
-}
-
-int *AgentSudoku:: getBestMilestoneState(){
-	return bestMilestoneState;
-}
-void AgentSudoku:: setBestMilestoneState(int *newState){
-	bestMilestoneState = newState;
-}
-
 int  AgentSudoku:: resetMilestoneState(){
 
 	if(currentFitness <= bestMilestoneFitness){
 		bestMilestoneFitness = currentFitness;
 		memcpy(bestMilestoneState, currentState, N4 * sizeof(int));
-
 	}
 	return 0;
 }
@@ -185,7 +153,7 @@ int	 AgentSudoku:: generateNewState(){
 }
 
 // fitness funcion
-int  AgentSudoku:: fitnessFunctionAllOverState(int *actualState, int *fitnessList){
+int  AgentSudoku:: fitnessFunctionAllOverState(const int *actualState, int *fitnessList) {
 	int existArray[N2];
 	int fitness = 0,
 			rowFitness,
@@ -247,7 +215,7 @@ int  AgentSudoku:: fitnessFunctionAllOverState(int *actualState, int *fitnessLis
 }
 
 // mutation + heuristic + fast fitness function (via change)
-int	 AgentSudoku:: mutationUseHeurRetFitness(int *newState, int *newFitnessList){          // mutation  MUT-5  only 1 row WITHOUT probability using fixedList, new fitness
+int	 AgentSudoku:: mutationUseHeurRetFitness(int *newState, const int *newFitnessList) const {          // mutation  MUT-5  only 1 row WITHOUT probability using fixedList, new fitness
 	int i,
 			position1,
 			position2,
@@ -259,7 +227,7 @@ int	 AgentSudoku:: mutationUseHeurRetFitness(int *newState, int *newFitnessList)
 	int existArray[N2];
 
 	memcpy(newState, currentState, N4 * sizeof(int));
-	memcpy(newFitnessList, currentFitnessList, 2*N2*sizeof(int));
+	memcpy((void *)newFitnessList, currentFitnessList, 2*N2*sizeof(int));
 
 
 	// random row with nofixed positions >= 2

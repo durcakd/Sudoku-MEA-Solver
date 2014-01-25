@@ -19,8 +19,9 @@ int MEA:: counterTrial;
 
 // Constructor & Destructor
 MEA::MEA(){
-	counterTrial = 0;
 	srand((unsigned int)time(NULL));
+
+	counterTrial = 0;
 	fixedState	= NULL;
 	fixedLists	= NULL;
 	tabuList	= NULL;
@@ -31,19 +32,16 @@ MEA::~MEA(){
 	delete fixedState;
 	delete fixedLists;
 	delete tabuList;
-	eliteList.~EliteList();
 
 	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
-		//(*itAgent)->~AgentSudoku();
 		delete (*itAgent);
 	}
 	agents.clear();
 
 }
 void MEA:: setParameters( const int* givenData, int nnumAgents,int nmaxGenrations,int nmaxTrials,
-							int	nlifePoints,int	nbirthStep,int nmilestoneStep,
-							int nelitelistSize, bool ntestMode){
-
+						  int	nlifePoints,int	nbirthStep,int nmilestoneStep,
+						  int nelitelistSize ){
 
 	parNumAgents		= nnumAgents;
 	parMaxGenrations	= nmaxGenrations;
@@ -53,15 +51,12 @@ void MEA:: setParameters( const int* givenData, int nnumAgents,int nmaxGenration
 	parMilestoneStep	= nmilestoneStep;
 	parElitelistSize	= nelitelistSize;
 
-	testMode = ntestMode;
-
 	if(NULL == (fixedState = new int[N4 + N2])){
 		qDebug() << "Error: malloc - fixedState in setParameters()";
 
 		return;
 	}
 	memcpy(fixedState, givenData, N4 * sizeof(int));
-
 }
 
 
@@ -70,26 +65,15 @@ void MEA:: setParameters( const int* givenData, int nnumAgents,int nmaxGenration
 
 // main MEA optimalization method ( function of MEA)
 int MEA:: optimize(){
-	int generation;//, i;
-	int *solution;
-	//int meanPopSize = 0;
-	//CString outstr;
-
+	int generation;
+	const int *solution;
 
 	eliteList.setParameters(parElitelistSize);
 
-
-	//printf("\n=========INITIALIZATION========");
 	if(initialization())
 		return -1;
 
-	//printf("\n=========GENERATE AGENTS=======");
 	generateAgents();
-	//CLogger::Instance()->write("SOLVING ...");
-
-	//testEliteList();
-
-
 
 	counterTrial = 0;
 	int maxFitTrias = parMaxGenrations-2*parNumAgents;
@@ -100,42 +84,28 @@ int MEA:: optimize(){
 		solution = controlFitness();
 
 		if(NULL != solution){
-			if(! testMode){
-				AgentSudoku::printState(solution);
-				//emit pushMsg("jopjopok");
-			}
+			AgentSudoku::printState(solution);
 			return counterTrial;
 		}
 
 		decLifePointsAndEliminate();
 
 		if( (0 == generation % parBirthStep ) && ( agents.size() < (unsigned)parNumAgents )){
-				birthNewAgent();
+			birthNewAgent();
 		}
-		//printAgents();
 
 		localSearch(generation);
 
-		//meanPopSize += agents.size();
-		//printBestMeanFitAndAgentsSize();
 	}
-	//outstr.Format("CT   %.3d   Gen %5d", counterTrial, generation); CLogger::Instance()->write(outstr);
-	//CString outstr;
-	//outstr.Format("mean Pop size  (%.3lf)", ((double)meanPopSize)/parMaxGenrations); CLogger::Instance()->write(outstr);
-	//outstr.Format("NOT found Solution  (%d)", counterTrial); CLogger::Instance()->write(outstr);
-	//CLogger::Instance()->write("     not");
 	return 0;
 }
 
 
 // start initialization, load & prepare data
-int MEA:: initialization(){
+int MEA:: initialization() {
 	int oneFixed,
-		i = 0;
+			i = 0;
 	int offset, j, k, counter;
-
-
-
 
 
 	//===================================================
@@ -162,17 +132,6 @@ int MEA:: initialization(){
 		fixedLists[offset + i] = counter;
 		offset += N2;
 	}
-	/*// test
-	offset = 0;
-	for(i = 0; i < NN; i++){
-		counter = fixedLists[offset];
-		printf("%d = ", counter);
-		for(j = 0; j < counter; j++){
-			printf(" %d", fixedLists[offset + j+1]);
-		}
-		putchar('\n');
-		offset += (NN + 1);
-	}*/
 
 	// =====================================================
 	// initialization of TabuList
@@ -182,7 +141,7 @@ int MEA:: initialization(){
 
 		return 1;
 	}
-		// make tabu cube2
+	// make tabu cube2
 	memset( tabuList, 0,  (N4)*N2 * sizeof(int));
 
 	offset = 0;
@@ -206,34 +165,14 @@ int MEA:: initialization(){
 			}
 		}
 	}
-	/*
-	// test prints
-	offset = 0;
-	for(i = 0; i < NN; i++){
-		outstr = "";
-		for(j = 0; j < NN; j++){
-			counter = NN;
-
-			for(k = 0; k < NN; k++){
-				if(TABU == tabuList[(i*NN + j)*NN + k])
-					counter--;
-			}
-			oneFixed = fixedState[offset + j];
-			outstr.Format(outstr + "%c ", oneFixed != 0 ? '.' : counter + 48);
-
-		}
-		CLogger::Instance()->write(outstr);
-		offset += NN;
-	}
-	*/
 	return 0;
 }
 
 
 // generate initial ppopulation of agents
-int MEA:: generateAgents(){
+int MEA:: generateAgents() {
 	int i;
-	std::list< AgentSudoku * >::iterator  itAgent;
+	std::list< AgentSudoku * >::const_iterator  itAgent;
 
 	for(i = 0; i < parNumAgents;  ++i)
 		agents.push_back(new AgentSudoku(parStartLifePoints, fixedState, fixedLists, parMaxTrials, tabuList));
@@ -246,8 +185,8 @@ int MEA:: generateAgents(){
 }
 
 // chceck if solution was found
-int * MEA:: controlFitness(){
-	std::list< AgentSudoku * >::iterator  itAgent;
+const int *MEA::controlFitness() const{
+	std::list< AgentSudoku * >::const_iterator  itAgent;
 
 	for(itAgent = agents.begin(); itAgent != agents.end();  ++itAgent){
 		if(OPTIMAL_FITNESS == (*itAgent)->getCurrentFitness()){
@@ -263,8 +202,6 @@ int * MEA:: controlFitness(){
 int MEA:: decLifePointsAndEliminate(){
 	std::list< AgentSudoku * >::iterator  itAgent, auxIt;
 	//QString outstr;
-
-	//CLogger::Instance()->write("LIFE POINTS:");
 
 	for(itAgent = agents.begin(); itAgent != agents.end();  ){
 		auxIt = itAgent;
@@ -294,8 +231,6 @@ int MEA:: birthNewAgent(){
 	//QString outstr;
 
 	STATE randomState = eliteList.getRandomState();
-	//STATE randomState = eliteList.getRandomStateUsingRulet();
-	//STATE randomState = eliteList.getRandomStateUsingTournament();
 	//outstr.Format("EliteList:: getRandomState() get state %3d %p", randomState.fitness, randomState.state); CLogger::Instance()->write(outstr);
 
 	if(NULL != randomState.state)
@@ -305,14 +240,12 @@ int MEA:: birthNewAgent(){
 
 	++counterAgents;
 	//outstr.Format("agent back %3d.  F %3d   CS  %p,",agents.back()->getName(), agents.back()->getCurrentFitness(), agents.back()->getCurrentState()); m_listbox->AddString(outstr);
-	//CLogger::Instance()->write("agent birt");
 	return 0;
 }
 
 //   local search
-int MEA:: localSearch(int generation){
-	//int reward;
-	std::list< AgentSudoku * >::iterator  itAgent;
+int MEA:: localSearch(int generation) const{
+	std::list< AgentSudoku * >::const_iterator  itAgent;
 
 	//CLogger::Instance()->write("LOCAL SEARCH ");
 
@@ -320,17 +253,10 @@ int MEA:: localSearch(int generation){
 
 
 		// reward or punishment
-		//if((*itAgent)->localSearch()){
-		//if(  (*itAgent)->localSearchUseFitList()){
 		if(  (*itAgent)->localSearchUseHeuristic()){
 			(*itAgent)->addLifePoints();
-			//reward = 1;
 		}
 		// punishment hasnt be
-		/*else{
-			(*itAgent)->decLifePoints();
-
-		}*/
 
 		if(0 != generation && 0 == generation % parMilestoneStep ){
 			(*itAgent)->resetMilestoneState();
@@ -341,17 +267,8 @@ int MEA:: localSearch(int generation){
 }
 
 
-
-
-void MEA::	addCounterTrials(){
-	MEA::counterTrial++;
-}
-
-
-
-QStringList MEA:: printState(const int *state){
+QStringList MEA:: printState(const int *state) const {
 	QStringList list;
-	//CLogger::Instance()->write(" PRINT STATE-----------------------------);
 
 	if(NULL == state){
 		qDebug() << "ERROR printState(): state is NULLL";
