@@ -16,8 +16,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <list>
-#include "agentsudoku.h"
-#include "elitelist.h"
+#include "MEAsudoku/agentsudoku.h"
+#include "MEAsudoku/elitelist.h"
 
 
 /*
