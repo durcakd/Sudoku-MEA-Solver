@@ -1,11 +1,32 @@
 cmake_minimum_required(VERSION 2.6)
 
 SET(3DSOFTVIZ_NAME MEASudokuSolver)
-PROJECT( ${3DSOFTVIZ_NAME} )
+PROJECT( ${3DSOFTVIZ_NAME} C CXX )
+
 
 # Install destinations
 SET( CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/_install CACHE PATH "Installation Destination" FORCE)
 SET( INSTALL_DES ./ CACHE PATH "Where to install to." )
+
+# Min size release is default
+if( NOT CMAKE_BUILD_TYPE )
+	SET( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "" FORCE )
+endif()
+
+if(WIN32)
+	SET(GUI_TYPE WIN32)
+endif(WIN32)
+# Set some Apple MacOS Specific settings
+if(APPLE)
+	SET(GUI_TYPE MACOSX_BUNDLE)
+endif(APPLE)
+
+#define USE_DEBUG // for debuging
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	MESSAGE("built with USE_DEBUG definition")
+	ADD_DEFINITIONS(-DUSE_DEBUG)
+	SET(GUI_TYPE "")			# console on Debug mode
+endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 
 # ============================================
@@ -43,6 +64,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
 FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 ADD_DEFINITIONS(${QT_DEFINITIONS})
+SET(QT_USE_QMAIN true)
 
 #invoke moc
 QT4_ADD_RESOURCES( SOURCES_QRC_MOC ${QRC})
@@ -54,14 +76,14 @@ SET( SRCS 	${INCL}
 			${SRC}
 			${SOURCES_H_MOC}
 			${SOURCES_QRC_MOC})
+
 IF(WIN32)
-  ADD_EXECUTABLE(${3DSOFTVIZ_NAME} ${SRCS} ${RC})
+  ADD_EXECUTABLE(${3DSOFTVIZ_NAME} ${GUI_TYPE} ${SRCS} ${RC} )
 ELSE(WIN32)
   ADD_EXECUTABLE(${3DSOFTVIZ_NAME} ${SRCS} )
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(${3DSOFTVIZ_NAME}  ${QT_LIBRARIES})
-
+TARGET_LINK_LIBRARIES(${3DSOFTVIZ_NAME}  ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY} )
 
 
 # =============================================
