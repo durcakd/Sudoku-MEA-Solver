@@ -13,8 +13,8 @@
 #include <QString>
 #include <QDebug>
 
-#include "mea.h"
-#include "agentsudoku.h"
+#include "MEAsudoku/mea.h"
+#include "MEAsudoku/agentsudoku.h"
 #include "resultemitersigleton.h"
 
 

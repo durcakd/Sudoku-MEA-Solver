@@ -9,7 +9,7 @@
 
 #include <QString>
 #include <QDebug>
-#include "mea.h"
+#include "MEAsudoku/mea.h"
 
 #include "resultemitersigleton.h"
 

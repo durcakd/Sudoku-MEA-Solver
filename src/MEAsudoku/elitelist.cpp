@@ -8,7 +8,7 @@
 */
 
 
-#include "elitelist.h"
+#include "MEAsudoku/elitelist.h"
 #include <QString>
 #include <QDebug>
 
