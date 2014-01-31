@@ -16,7 +16,6 @@
 
 // Constructor & Destructor
 EliteList::EliteList(){
-	fitnessSum = 0;
 }
 
 EliteList::~EliteList(){
@@ -36,11 +35,8 @@ int EliteList:: pushState(int fitness, int *state){
 	if(list.size() < (unsigned) parElitelistSize){
 		list.push_back(std::make_pair(fitness, state));
 		std::push_heap( list.begin(), list.end(), compare() );
-		fitnessSum += fitness;
-
 	}else{
 		if(fitness <= list[0].first){
-			fitnessSum = fitnessSum - list[0].first + fitness;
 			delete list[0].second;
 
 			list[0].first  = fitness;					// replace old state by new state
