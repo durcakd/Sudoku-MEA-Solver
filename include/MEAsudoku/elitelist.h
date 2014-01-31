@@ -55,11 +55,7 @@ public:
 
 private:
 	int		parElitelistSize;
-	int		fitnessSum;
-	std::vector< std::pair< int, int*>  >  list;
-
-	//std::vector< std::pair< int, int*>  >  list;
-	//std::priority_queue< std::pair< int, int*> , std::vector< std::pair< int, int*> > ,  compare> list;
+	std::vector< std::pair< int, int*> >  list;
 
 	};
 #endif // ELITELIST_H
