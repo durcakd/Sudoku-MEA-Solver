@@ -11,11 +11,11 @@
 #include "MEAsudoku/elitelist.h"
 #include <QString>
 #include <QDebug>
+#include <algorithm>
 
 
 // Constructor & Destructor
 EliteList::EliteList(){
-	fitnessSum = 0;
 }
 
 EliteList::~EliteList(){
@@ -25,27 +25,25 @@ EliteList::~EliteList(){
 	list.clear();
 }
 void EliteList:: setParameters(int nparElitelistSize){
-	 parElitelistSize = nparElitelistSize;
+	parElitelistSize = nparElitelistSize;
 }
 
 
 // push state to Elit list, (deleting the worst state, if new is better)
 // states are sorted
 int EliteList:: pushState(int fitness, int *state){
-
 	if(list.size() < (unsigned) parElitelistSize){
 		list.push_back(std::make_pair(fitness, state));
-		fitnessSum += fitness;
-		std::sort(list.begin(), list.end(), compare());
+		std::push_heap( list.begin(), list.end(), compare() );
 	}else{
-
 		if(fitness <= list[0].first){
-			fitnessSum = fitnessSum - list[0].first + fitness;
-
 			delete list[0].second;
-			list[0].first  = fitness;
+
+			list[0].first  = fitness;					// replace old state by new state
 			list[0].second = state;
-			std::sort(list.begin(), list.end(), compare());
+			std::pop_heap ( list.begin(),list.end(), compare() );	// move min state form start to end
+			std::push_heap( list.begin(),list.end(), compare() );	// sort new state in heap
+
 		}else{
 			delete state ;
 		}
@@ -70,4 +68,6 @@ STATE EliteList:: getRandomState() const {
 	randomState.state = list[generateNumber].second;
 	return randomState;
 }
+
+
 
